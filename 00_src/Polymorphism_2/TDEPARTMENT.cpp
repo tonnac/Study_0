@@ -1,0 +1,12 @@
+#include "TDEPARTMENT.h"
+
+
+
+TDEPARTMENT::TDEPARTMENT()
+{
+}
+
+
+TDEPARTMENT::~TDEPARTMENT()
+{
+}

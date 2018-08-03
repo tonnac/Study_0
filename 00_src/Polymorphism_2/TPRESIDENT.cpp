@@ -1,0 +1,12 @@
+#include "TPRESIDENT.h"
+
+
+
+TPRESIDENT::TPRESIDENT()
+{
+}
+
+
+TPRESIDENT::~TPRESIDENT()
+{
+}

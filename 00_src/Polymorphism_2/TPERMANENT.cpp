@@ -1,0 +1,12 @@
+#include "TPERMANENT.h"
+
+
+
+TPERMANENT::TPERMANENT()
+{
+}
+
+
+TPERMANENT::~TPERMANENT()
+{
+}

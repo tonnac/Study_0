@@ -1,0 +1,12 @@
+#include "TTEMPORARY.h"
+
+
+
+TTEMPORARY::TTEMPORARY()
+{
+}
+
+
+TTEMPORARY::~TTEMPORARY()
+{
+}
