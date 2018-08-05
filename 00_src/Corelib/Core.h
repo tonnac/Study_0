@@ -1,30 +1,30 @@
 #pragma once
+#include "Std.h"
 #include "WindowClass.h"
 #include "Timer.h"
 #include "Input.h"
 #include "Bitmap.h"
 
-class Core : public Window
+class KCore : public KWindow
 {
-protected:
-	HDC				m_hScreenDC;
-	HDC				m_hOffScreenDC;
-	HBITMAP			m_hoffScreenBitmap;
-	HBRUSH			m_hbrBack;
 public:
-	bool			GameInit();
-	bool			GameRun();
-	bool			GameRelease();
-private:
-	bool			GameFrame();
-	bool			GameRender();
-	bool			GamePreRender();
-	bool			GamePostRender();
+	virtual	bool				GameInit();
+	virtual	bool				GameFrame();
+	virtual bool				GameRender();
+	virtual bool				GameRelease();
 public:
-	virtual bool	Init();
-	virtual bool	Frame();
-	virtual bool	Render();
-	virtual bool	Relaese();
+	virtual bool				Init();
+	virtual bool				Frame();
+	virtual bool				Render();
+	virtual bool				Release();
 private:
-	Timer m_Timer;
+	bool						GamePreRender();
+	bool						GamePostRender();
+private:
+	KTimer						m_Timer;
+private:
+	HDC							m_hOnScreenDC;
+	HDC							m_hOffScreenDC;
+	HBITMAP						m_hOffBitmap;
+	HBRUSH						m_hBkColor;
 };

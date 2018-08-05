@@ -2,81 +2,72 @@
 
 HDC	g_hOffScreenDC = nullptr;
 
-bool Core::GameInit()
+bool KCore::GameInit()
 {
-	m_hScreedDC = GetDC(g_hWnd);
-	m_hOffScreenDC = CreateCompatibleDC(m_hScreedDC);
-	g_hOffScreenDC = m_hOffScreenDC;
-	m_hoffScreenBitmap = CreateCompatibleBitmap(m_hOffScreenDC, m_rtClient.right, m_rtClient.bottom);
-	SelectObject(m_hOffScreenDC, m_hoffScreenBitmap);
-	COLORREF bkColor = RGB(0, 0, 0);
-	m_hbrBack = CreateSolidBrush(bkColor);
-	SelectObject(m_hOffScreenDC, m_hbrBack);
+	m_hOnScreenDC = GetDC(g_hWnd);
+	m_hOffScreenDC = g_hOffScreenDC = CreateCompatibleDC(m_hOnScreenDC);
+	m_hOffBitmap = CreateCompatibleBitmap(m_hOnScreenDC, m_rtWindow.right, m_rtWindow.bottom);
+	SelectObject(m_hOffScreenDC, m_hOffBitmap);
+
+	COLORREF ref = RGB(255, 255, 153);
+	m_hBkColor = CreateSolidBrush(ref);
+	SelectObject(m_hOffScreenDC, m_hBkColor);
+
 	m_Timer.Init();
-	I_input.Init();
+	I_KInput.Init();
 	Init();
 	return true;
 }
-bool Core::GameRun()
-{
-	GameFrame();
-	GameRender();
-	return true;
-}
-bool Core::GameRelease()
-{
-	Relaese();
-	m_Timer.Release();
-	I_input.Release();
-
-	DeleteObject(m_hoffScreenBitmap);
-	DeleteDC(m_hOffScreenDC);
-	ReleaseDC(g_hWnd, m_hScreedDC);
-	return true;
-}
-
-bool Core::GameFrame()
+bool KCore::GameFrame()
 {
 	m_Timer.Frame();
-	I_input.Frame();
+	I_KInput.Frame();
 	Frame();
 	return true;
 }
-bool Core::GameRender()
+bool KCore::GameRender()
 {
 	if (GamePreRender())
 	{
 		Render();
 		m_Timer.Render();
-		I_input.Render();
+		I_KInput.Render();
 	}
-	GamePostRender();
-	return true;
+	return GamePostRender();
 }
-bool Core::GamePreRender()
+bool KCore::GameRelease()
 {
-	PatBlt(m_hOffScreenDC, 0, 0, m_rtClient.right, m_rtClient.bottom, PATCOPY);
+	Release();
+	m_Timer.Release();
+	I_KInput.Release();
 	return true;
 }
-bool Core::GamePostRender()
-{
-	BitBlt(m_hScreedDC, 0, 0, m_rtClient.right, m_rtClient.bottom, m_hOffScreenDC, 0, 0, SRCCOPY);
-	return true;
-}
-
-bool Core::Init()
+bool KCore::Init()
 {
 	return true;
 }
-bool Core::Frame()
+bool KCore::Frame()
 {
 	return true;
 }
-bool Core::Render()
+bool KCore::Render()
 {
 	return true;
 }
-bool Core::Relaese()
+bool KCore::Release()
 {
+	DeleteDC(m_hOffScreenDC);
+	DeleteObject(m_hOffBitmap);
+	ReleaseDC(g_hWnd, m_hOnScreenDC);
+	return true;
+}
+bool KCore::GamePreRender()
+{
+	PatBlt(m_hOffScreenDC, 0, 0, m_rtWindow.right, m_rtWindow.bottom, PATCOPY);
+	return true;
+}
+bool KCore::GamePostRender()
+{
+	BitBlt(m_hOnScreenDC, 0, 0, m_rtClient.right, m_rtClient.bottom, m_hOffScreenDC, 0, 0, SRCCOPY);
 	return true;
 }

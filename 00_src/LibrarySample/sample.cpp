@@ -1,69 +1,69 @@
-#include "Bitmap.h"
 #include "Core.h"
 
-
-
-struct KPOINT
+struct KPoint
 {
 	float x, y;
 };
 
-class Simple : public Core
+class KSample : public KCore
 {
-	Bitmap m_Bitmap;
-	KPOINT m_pos;
+	KPoint m_pos;
+	Bitmap m_bBitmap;
 public:
 	bool Init()
 	{
-		m_pos.x = 100;
-		m_pos.y = 100;
-		m_Bitmap.Load(L"../../data/bitmap1.bmp");
+		m_bBitmap.Init();
+		m_bBitmap.LoadFile(L"../../01_data/Number.bmp");
+		m_pos.x = m_pos.y = 80.0f;
 		return true;
 	}
 	bool Frame()
 	{
-		if (I_input.getKey('W'))
+		if (I_KInput.getKey('A'))
 		{
-			m_pos.y += (-1 * g_fSecPerFrame)*300.f;
+			m_pos.x += (-1 * g_fSecPerFrame * 200.0f);
 		}
-		if (I_input.getKey('S'))
+		if (I_KInput.getKey('D'))
 		{
-			m_pos.y += (1 * g_fSecPerFrame)*300.f;
+			m_pos.x += (1 * g_fSecPerFrame * 200.0f);
 		}
-		if (I_input.getKey('A'))
+		if (I_KInput.getKey('W'))
 		{
-			m_pos.x += (-1 * g_fSecPerFrame)*300.f;
+			m_pos.y += (-1 * g_fSecPerFrame * 200.0f);
 		}
-		if (I_input.getKey('D'))
+		if (I_KInput.getKey('S'))
 		{
-			m_pos.x += (1 * g_fSecPerFrame)*300.f;
+			m_pos.y += (1 * g_fSecPerFrame * 200.0f);
 		}
+		if (I_KInput.getMouse(VK_MBUTTON) == KEY_PUSH)
+		{
+			MessageBox(nullptr, L"KEY_PUSH", L"LBUTTON", MB_OK);
+		}
+		m_bBitmap.Frame();
 		return true;
 	}
 	bool Render()
 	{
-		BitBlt(m_hOffScreenDC,
-			static_cast<int>(m_pos.x),
-			static_cast<int>(m_pos.y),
-			68,
-			79,
-			m_Bitmap.m_hMemDC,
-			46,
-			62,
-			SRCCOPY);
-		return true;
+		static DWORD frame = 0;
+		HDC MemDC = m_bBitmap.getMemDC();
+		//	Sleep(10);
+		BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), 47, 48, MemDC, 1 + (frame * 48), 0, SRCCOPY);
+		frame = (++frame) % 12;
+		return m_bBitmap.Render();
 	}
 	bool Release()
 	{
-		return true;
+		return m_bBitmap.Release();
 	}
+private:
 };
 
-int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE prev, LPWSTR szCmdLine, int cmd)
-{
-	Simple wd;
-	wd.setWindow(hinst);
-	wd.Run();
 
+
+int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE prevhInst, LPWSTR szCmdLine, int nCmdShow)
+{
+	KSample wd;
+	wd.SetWindow(hInst);
+	wd.Run();
 	return 0;
 }

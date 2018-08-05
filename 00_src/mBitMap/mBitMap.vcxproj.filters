@@ -15,6 +15,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="Input.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -24,17 +27,20 @@
     <ClCompile Include="WindowClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="WinM.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Core.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Bitmap.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BitmapMgr.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -47,10 +53,10 @@
     <ClInclude Include="WindowClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Core.h">
+    <ClInclude Include="Bitmap.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Bitmap.h">
+    <ClInclude Include="BitmapMgr.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

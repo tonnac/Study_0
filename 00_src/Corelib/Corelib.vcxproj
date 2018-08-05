@@ -19,19 +19,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="BitmapMgr.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="WindowClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="BitmapMgr.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Std.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="WindowClass.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Bitmap.cpp" />
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="WindowClass.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -87,7 +89,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)\../output\$(SolutionName)\</OutDir>
+    <OutDir>$(ProjectDir)</OutDir>
     <IntDir>$(SolutionDir)\../output\$(SolutionName)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -114,11 +116,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h"  "$(SolutionDir)../include"
-copy "*.lib"  "$(SolutionDir)../lib"</Command>
+      <Command>copy "*.h"  "$(SolutionDir)../02_include/"
+copy "*.lib"  "$(SolutionDir)../03_lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

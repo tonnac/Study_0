@@ -18,6 +18,24 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Bitmap.cpp" />
+    <ClCompile Include="BitmapMgr.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="WindowClass.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bitmap.h" />
+    <ClInclude Include="BitmapMgr.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Std.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="WindowClass.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{290529FC-7FAE-4979-AEE0-8242DCA62D74}</ProjectGuid>
@@ -144,22 +162,6 @@
       <SubSystem>Windows</SubSystem>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Bitmap.cpp" />
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="WindowClass.cpp" />
-    <ClCompile Include="WinM.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Bitmap.h" />
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Std.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="WindowClass.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

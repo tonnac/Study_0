@@ -2,26 +2,33 @@
 #include "Std.h"
 #include "Input.h"
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
+LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
-class Window
+class KWindow
 {
 public:
-	Window();
+	KWindow();
 public:
-	bool			setWindow(HINSTANCE);
-	bool			Run();
-public:
-	virtual LRESULT CALLBACK MsgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
-protected:
-	virtual bool	GameInit();
-	virtual bool	GameRun();
-	virtual bool	GameRelease();
+	RECT						getrtClient();
+	bool						SetWindow(HINSTANCE);
+	bool						Run();
+	virtual LRESULT	CALLBACK	MsgProc(HWND, UINT, WPARAM, LPARAM);
 private:
-	void			CenterWindow();
-	void			MsgEvent(MSG msg);
+	virtual	bool				GameInit();
+	virtual	bool				GameFrame();
+	virtual bool				GameRender();
+	virtual bool				GameRelease();
+private:
+	void						CenterWindow();
+private:
+	virtual bool				Init();
+	virtual bool				Frame();
+	virtual bool				Render();
+	virtual bool				Release();
 protected:
-	HWND			m_hWnd;
-	RECT			m_rtClient;
-	RECT			m_rtWindow;
+	RECT						m_rtClient;
+	RECT						m_rtWindow;
+	WNDCLASSEX					m_wdClass;
+	HINSTANCE					m_hInstance;
+	HWND						m_hWnd;
 };

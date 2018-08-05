@@ -1,7 +1,6 @@
 #pragma once
 #include "Std.h"
 
-
 class Bitmap
 {
 public:
@@ -9,11 +8,13 @@ public:
 	bool			Frame();
 	bool			Render();
 	bool			Release();
-public:
 	bool			LoadFile(T_STR);
 public:
+	T_STR			getName() const;
+	HDC				getMemDC() const;
+private:
+	T_STR			m_szName;
 	HDC				m_hMemDC;
-	BITMAP			m_bBitInfo;
 	HBITMAP			m_hBitmap;
-	T_STR			szFilename;
+	BITMAP			m_bBmpInfo;
 };
