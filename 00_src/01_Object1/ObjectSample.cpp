@@ -23,9 +23,10 @@ public:
 	}
 	bool				Redner()
 	{
+	//	m_BackGround.Draw(LR_ROTATION,&m_BackGround.m_rtDraw);
+	//	m_Hero.DrawColorKey(RGB(255, 255, 255));
 		m_BackGround.Render();
-	//	m_Hero.Render();
-		m_Hero.Draw(RGB(255, 255, 255));
+		m_Hero.Render();
 		return true;
 	}
 	bool				Release()

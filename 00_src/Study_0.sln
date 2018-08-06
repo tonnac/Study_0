@@ -542,6 +542,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "043_Days", "043_Days", "{62DCA9D8-3FCF-433B-A0FE-60DA9159DB5E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_Object1", "01_Object1\01_Object1.vcxproj", "{AD995BAD-05D5-466F-B3B5-4DEF9814A306}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CEBB8CE9-D9A1-4E2F-841F-D3AD03688FFF} = {CEBB8CE9-D9A1-4E2F-841F-D3AD03688FFF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2493,7 +2496,7 @@ Global
 		{AD995BAD-05D5-466F-B3B5-4DEF9814A306} = {62DCA9D8-3FCF-433B-A0FE-60DA9159DB5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

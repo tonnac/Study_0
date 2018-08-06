@@ -1,10 +1,5 @@
 #include "Core.h"
 
-struct KPoint
-{
-	float x, y;
-};
-
 class KSample : public KCore
 {
 	KPoint m_pos;
