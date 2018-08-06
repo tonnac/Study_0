@@ -6,10 +6,17 @@
 #include <map>
 #include <list>
 
-using T_STR = std::basic_string<TCHAR>;
-
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"Corelib.lib")
+
+struct KPoint
+{
+	float x, y;
+};
+
+using T_STR = std::basic_string<TCHAR>;
+
+
 
 
 template <class K>
