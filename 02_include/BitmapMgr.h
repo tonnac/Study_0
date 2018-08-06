@@ -18,6 +18,8 @@ private:
 	Bitmap *							getCache(int iKey);
 	int									getCache(T_STR szName);
 public:
+	bool								Release();
+public:
 	int									Load(T_STR szLoadFile);
 	Bitmap *							getPtr(int iKey);
 public:
@@ -29,4 +31,4 @@ private:
 	BitmapMgr();
 };
 
-#define I_BitmapMgr BitmapMgr::getInst()
+#define I_BitmapMgr BitmapMgr::getInstance()

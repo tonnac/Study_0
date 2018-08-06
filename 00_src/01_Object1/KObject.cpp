@@ -5,10 +5,12 @@
 bool KObject::Load(const TCHAR* pszColor,
 				   const TCHAR*pszMask)
 {
-	m_ColorBitmap.LoadFile(pszColor);
+	int iIndex = I_BitmapMgr.Load(pszColor); 
+	m_pColorBitmap = I_BitmapMgr.getPtr(iIndex);
 	if (pszMask != nullptr)
 	{
-		m_MaskBitmap.LoadFile(pszMask);
+		iIndex = I_BitmapMgr.Load(pszMask);
+		m_pMaskBitmap = I_BitmapMgr.getPtr(iIndex);
 	}
 	return true;
 }
@@ -22,24 +24,23 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 	switch (sType)
 	{
 	case LR_ROTATION:
-		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x)+ rtDraw.right, static_cast<int>(m_pos.y), -m_rtDraw.right, m_rtDraw.bottom, hMemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, SRCCOPY);
+		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x)+ rtDraw.right, static_cast<int>(m_pos.y), -rtDraw.right, rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
 		break;
 	case TB_ROTATION:
-		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + rtDraw.bottom, m_rtDraw.right, -m_rtDraw.bottom, MemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, SRCCOPY);
+		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + rtDraw.bottom, rtDraw.right, -rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
 		break;
 	case LRTB_ROTATION:
-		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x) + rtDraw.right, static_cast<int>(m_pos.y) + rtDraw.bottom, -m_rtDraw.right, -m_rtDraw.bottom, MemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, SRCCOPY);
+		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x) + rtDraw.right, static_cast<int>(m_pos.y) + rtDraw.bottom, -rtDraw.right, -rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
 		break;
 	default:
-		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), rtDraw.right, rtDraw.bottom, MemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
+		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), rtDraw.right, rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
 		break; // 스케일만 조정
 	}
 	return true;
 }
 bool KObject::DrawColorKey(DWORD dwMaskColor)
 {
-	HDC MemDC = m_ColorBitmap.getMemDC();
-//	TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, MemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, dwMaskColor);
+	TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pColorBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom, dwMaskColor);
 	return true;
 }
 void KObject::Set(KPoint pos)
@@ -58,7 +59,6 @@ void KObject::Set(float x, float y, DWORD l, DWORD t, DWORD r, DWORD b)
 }
 bool KObject::Init()
 {
-	m_ColorBitmap.Init();
 	return true;
 }
 bool KObject::Frame()
@@ -83,31 +83,30 @@ bool KObject::Frame()
 	{
 		MessageBox(nullptr, L"KEY_PUSH", L"LBUTTON", MB_OK);
 	}
-	m_ColorBitmap.Frame();
 	return true;
 }
 bool KObject::Render()
 {
-	//	Sleep(10);
-	// TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, MemDC, m_rtDraw.left, m_rtDraw.top, m_rtDraw.right, m_rtDraw.bottom,RGB(255,255,255));  쓰지말자하
-	if (m_MaskBitmap.m_hBitmap == nullptr)
+	if (m_pMaskBitmap->m_hBitmap == nullptr)
 	{
-		BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_ColorBitmap.m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCCOPY);
+		BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pColorBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCCOPY);
 		return true;
 	}
-	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_MaskBitmap.m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCAND);
-	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_ColorBitmap.m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCINVERT);  // SRCINVERT = XOR
-	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_MaskBitmap.m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCINVERT);
+	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pMaskBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCAND);
+	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pColorBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCINVERT);  // SRCINVERT = XOR
+	BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pMaskBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCINVERT);
 	//47, 48, MemDC, 1 + (frame * 48), 0
-	return m_ColorBitmap.Render();
+	return true;
 }
 bool KObject::Release()
 {
-	return m_ColorBitmap.Release();
+	return true;
 }
 
 KObject::KObject()
 {
+	m_pColorBitmap = nullptr;
+	m_pMaskBitmap = nullptr;
 	m_pos.x = 0;
 	m_pos.y = 0;
 }

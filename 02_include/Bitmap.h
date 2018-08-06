@@ -10,11 +10,7 @@ public:
 	bool			Release();
 	bool			LoadFile(T_STR);
 public:
-	T_STR			getName() const;
-	HDC				getMemDC() const;
-private:
 	T_STR			m_szName;
-public:
 	HDC				m_hMemDC;
 	HBITMAP			m_hBitmap;
 	BITMAP			m_bBmpInfo;

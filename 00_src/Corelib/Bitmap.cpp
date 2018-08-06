@@ -37,11 +37,3 @@ bool Bitmap::LoadFile(T_STR szLoadFile)
 	ReleaseDC(g_hWnd, hdc);
 	return true;
 }
-T_STR Bitmap::getName() const
-{
-	return m_szName;
-}
-HDC Bitmap::getMemDC() const
-{
-	return m_hMemDC;
-}

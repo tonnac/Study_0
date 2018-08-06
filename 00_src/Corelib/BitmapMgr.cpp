@@ -51,7 +51,7 @@ int BitmapMgr::Load(T_STR szLoadFile)
 	for (iter = m_map.begin(); iter != m_map.end(); iter++)
 	{
 		Bitmap * pBitmap = static_cast<Bitmap*>((*iter).second);
-		if (pBitmap->getName() == szName)
+		if (pBitmap->m_szName == szName)
 		{
 			AddCache(iter->first, szLoadFile, iter->second);
 			return (*iter).first;
@@ -83,9 +83,21 @@ Bitmap * BitmapMgr::getPtr(int iKey)
 	return static_cast<Bitmap*>(iter->second);
 }
 
+bool BitmapMgr::Release()
+{
+	for (auto it : m_map)
+	{
+		Bitmap * pDelMap = it.second;
+		pDelMap->Release();
+		delete pDelMap;
+	}
+	m_map.clear();
+	return true;
+}
 BitmapMgr::BitmapMgr() : m_iIndex(0)
 {
 }
 BitmapMgr::~BitmapMgr()
 {
+	Release();
 }

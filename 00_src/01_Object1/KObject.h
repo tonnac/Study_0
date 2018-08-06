@@ -1,5 +1,6 @@
 #pragma once
 #include "Core.h"
+#include "BitmapMgr.h"
 
 #define LR_ROTATION 0x01
 #define TB_ROTATION 0x02
@@ -8,8 +9,8 @@
 class KObject
 {
 	KPoint					m_pos;
-	Bitmap					m_ColorBitmap;
-	Bitmap					m_MaskBitmap;
+	Bitmap*					m_pColorBitmap;
+	Bitmap*					m_pMaskBitmap;
 public:
 	RECT					m_rtDraw;
 public:
