@@ -8,10 +8,10 @@ class KSample : public KCore
 public:
 	bool				Init()
 	{
-		m_BackGround.Init();
-		m_BackGround.Set(0, 0, 0, 0, 800, 600);
-		m_BackGround.Load(L"../../01_data/Number.bmp");
-		m_Hero.Set(300, 300, 90, 2, 130, 60);
+//		m_BackGround.Init();
+//		m_BackGround.Set(0, 0, 0, 0, 800, 600);
+//		m_BackGround.Load(L"../../01_data/Number.bmp");
+		m_Hero.Set(100, 100, 47, 48, 1, 0);
 		m_Hero.Load(L"../../01_data/Number.bmp");
 		return true;
 	}

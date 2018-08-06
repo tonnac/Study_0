@@ -1,9 +1,9 @@
 #include "KObject.h"
 
-//#pragma comment(lib,"msimg32,lib")
+#pragma comment(lib,"msimg32.lib")
 
 bool KObject::Load(const TCHAR* pszColor,
-				   const TCHAR*pszMask)
+				   const TCHAR* pszMask)
 {
 	int iIndex = I_BitmapMgr.Load(pszColor); 
 	m_pColorBitmap = I_BitmapMgr.getPtr(iIndex);
@@ -24,7 +24,7 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 	switch (sType)
 	{
 	case LR_ROTATION:
-		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x)+ rtDraw.right, static_cast<int>(m_pos.y), -rtDraw.right, rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
+		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x) + rtDraw.right, static_cast<int>(m_pos.y), -rtDraw.right, rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
 		break;
 	case TB_ROTATION:
 		TransparentBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y) + rtDraw.bottom, rtDraw.right, -rtDraw.bottom, m_pColorBitmap->m_hMemDC, rtDraw.left, rtDraw.top, rtDraw.right, rtDraw.bottom, SRCCOPY);
