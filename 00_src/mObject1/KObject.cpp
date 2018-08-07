@@ -162,12 +162,12 @@ bool KObject::Render()
 	// collision rect
 	if (m_bDebugRect)
 	{
-		int prevMode = SetROP2(g_hOffScreenDC, R2_NOTMASKPEN);
+		int prevMode = SetROP2(g_hOffScreenDC, R2_MASKPEN);
 		Rectangle(g_hOffScreenDC,
 			static_cast<int>(m_posDraw.x),
 			static_cast<int>(m_posDraw.y),
-			m_posDraw.x + m_rtDraw.right,
-			m_posDraw.y + m_rtDraw.bottom);
+			static_cast<int>(m_posDraw.x + m_rtDraw.right),
+			static_cast<int>(m_posDraw.y + m_rtDraw.bottom));
 		SetROP2(g_hOffScreenDC, prevMode);
 	}
 	return true;
@@ -177,12 +177,13 @@ bool KObject::Release()
 	return true;
 }
 
-KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr), m_fSpeed(50.0f)
+KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)
 {
 	m_posDraw.x = 0;
 	m_posDraw.y = 0;
 	m_fDir[0] = m_fDir[1] = 1.0f;
 	m_bDebugRect = false;
+	m_fSpeed = rand() % 150 + 70.f;
 }
 KObject::~KObject()
 {
