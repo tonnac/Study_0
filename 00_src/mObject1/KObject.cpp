@@ -13,8 +13,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 	{
 	case LR_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			static_cast<int>(m_pos.x + rtDraw.right), 
-			static_cast<int>(m_pos.y),
+			static_cast<int>(m_posDraw.x + rtDraw.right), 
+			static_cast<int>(m_posDraw.y),
 			-rtDraw.right,rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -23,8 +23,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	case TB_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			static_cast<int>(m_pos.x),
-			static_cast<int>(m_pos.y + rtDraw.bottom),
+			static_cast<int>(m_posDraw.x),
+			static_cast<int>(m_posDraw.y + rtDraw.bottom),
 			rtDraw.right, -rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -33,8 +33,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	case LRTB_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			static_cast<int>(m_pos.x + rtDraw.right),
-			static_cast<int>(m_pos.y + rtDraw.bottom),
+			static_cast<int>(m_posDraw.x + rtDraw.right),
+			static_cast<int>(m_posDraw.y + rtDraw.bottom),
 			-rtDraw.right, -rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -43,8 +43,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	default:
 		StretchBlt(g_hOffScreenDC,
-			static_cast<int>(m_pos.x),
-			static_cast<int>(m_pos.y),
+			static_cast<int>(m_posDraw.x),
+			static_cast<int>(m_posDraw.y),
 			rtDraw.right, rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -56,8 +56,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 bool KObject::DrawColorKey(DWORD)
 {
 	TransparentBlt(g_hOffScreenDC,
-		static_cast<int>(m_pos.x),
-		static_cast<int>(m_pos.y),
+		static_cast<int>(m_posDraw.x),
+		static_cast<int>(m_posDraw.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_ColorBitmap->m_hMemDC,
 		m_rtDraw.right, m_rtDraw.bottom,
@@ -68,16 +68,20 @@ bool KObject::DrawColorKey(DWORD)
 
 void KObject::Set(KPoint pos)
 {
-	m_pos = pos;
+	m_posDraw = pos;
 }
 void KObject::Set(float x, float y, DWORD l, DWORD t, DWORD r, DWORD b)
 {
 	m_pos.x = x;
 	m_pos.y = y;
+	m_posDraw.x = m_pos.x - (r / 2);
+	m_posDraw.y = m_pos.y - (b / 2);
 	m_rtDraw.left = l;
 	m_rtDraw.top = t;
 	m_rtDraw.right = r;
 	m_rtDraw.bottom = b;
+	//m_fDir[0] = (rand() % 2) ? 1.0f : -1.0f;   //¹æÇâ·£´ý
+	//m_fDir[1] = (rand() % 2) ? 1.0f : -1.0f;
 }
 
 bool KObject::LoadFile(const TCHAR* szColorFile, const TCHAR* szMaskFile)
@@ -126,8 +130,8 @@ bool KObject::Render()
 	if (m_MaskBitmap == nullptr)
 	{
 		BitBlt(g_hOffScreenDC, 
-			static_cast<int>(m_pos.x), 
-			static_cast<int>(m_pos.y),
+			static_cast<int>(m_posDraw.x), 
+			static_cast<int>(m_posDraw.y),
 			m_rtDraw.right, m_rtDraw.bottom, 
 			m_ColorBitmap->m_hMemDC, 
 			m_rtDraw.left, m_rtDraw.top, 
@@ -135,26 +139,37 @@ bool KObject::Render()
 		return true;
 	}
 	BitBlt(g_hOffScreenDC,
-		static_cast<int>(m_pos.x),
-		static_cast<int>(m_pos.y),
+		static_cast<int>(m_posDraw.x),
+		static_cast<int>(m_posDraw.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_MaskBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
 		SRCAND);
 	BitBlt(g_hOffScreenDC,
-		static_cast<int>(m_pos.x),
-		static_cast<int>(m_pos.y),
+		static_cast<int>(m_posDraw.x),
+		static_cast<int>(m_posDraw.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_ColorBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
 		SRCINVERT);
 	BitBlt(g_hOffScreenDC,
-		static_cast<int>(m_pos.x),
-		static_cast<int>(m_pos.y),
+		static_cast<int>(m_posDraw.x),
+		static_cast<int>(m_posDraw.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_MaskBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
 		SRCINVERT);
+	// collision rect
+	if (m_bDebugRect)
+	{
+		int prevMode = SetROP2(g_hOffScreenDC,R2_XORPEN);
+		Rectangle(g_hOffScreenDC,
+			static_cast<int>(m_posDraw.x),
+			static_cast<int>(m_posDraw.y),
+			m_posDraw.x + m_rtDraw.right,
+			m_posDraw.y + m_rtDraw.bottom);
+		SetROP2(g_hOffScreenDC, prevMode);
+	}
 	return true;
 }
 bool KObject::Release()
@@ -162,10 +177,12 @@ bool KObject::Release()
 	return true;
 }
 
-KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)
+KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr), m_fSpeed(50.0f)
 {
-	m_pos.x = 0;
-	m_pos.y = 0;
+	m_posDraw.x = 0;
+	m_posDraw.y = 0;
+	m_fDir[0] = m_fDir[1] = 1.0f;
+	m_bDebugRect = false;
 }
 KObject::~KObject()
 {

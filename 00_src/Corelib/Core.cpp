@@ -13,6 +13,10 @@ bool KCore::GameInit()
 	m_hBkColor = CreateSolidBrush(ref);
 	SelectObject(m_hOffScreenDC, m_hBkColor);
 
+	m_hPen = CreatePen(PS_SOLID,0,RGB(255,0,0));
+	SelectObject(m_hOffScreenDC, m_hPen);
+
+
 	m_Timer.Init();
 	I_KInput.Init();
 	Init();
@@ -58,6 +62,7 @@ bool KCore::Release()
 {
 	DeleteDC(m_hOffScreenDC);
 	DeleteObject(m_hOffBitmap);
+	DeleteObject(m_hPen);
 	ReleaseDC(g_hWnd, m_hOnScreenDC);
 	return true;
 }

@@ -24,12 +24,24 @@
     <ClCompile Include="KbkObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="NPCObj.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="KbkObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="NPCObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

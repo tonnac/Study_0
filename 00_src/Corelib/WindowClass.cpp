@@ -3,6 +3,7 @@
 KWindow *	g_pWindow = nullptr;
 HWND		g_hWnd = nullptr;
 HINSTANCE	g_hInstance = nullptr;
+RECT		g_rtClient;
 
 LRESULT	CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -40,14 +41,17 @@ bool KWindow::SetWindow(HINSTANCE hInst)
 	{
 		return false;
 	}
+	// 클라이언트 영역 수정
+	RECT rt = { 0,0,1024,768 };
+	AdjustWindowRect(&rt, m_wdClass.style, FALSE);
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW,
 		m_wdClass.lpszClassName,
 		m_wdClass.lpszMenuName,
 		WS_OVERLAPPEDWINDOW,
 		0,
 		0,
-		1024,
-		768,
+		rt.right - rt.left,
+		rt.bottom - rt.top,
 		nullptr,
 		nullptr,
 		m_wdClass.hInstance,
@@ -58,6 +62,7 @@ bool KWindow::SetWindow(HINSTANCE hInst)
 	}
 	g_hWnd = m_hWnd;
 	GetClientRect(m_hWnd, &m_rtClient);
+	g_rtClient = m_rtClient;
 	GetWindowRect(m_hWnd, &m_rtWindow);
 	CenterWindow();
 	return true;

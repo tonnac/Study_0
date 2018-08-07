@@ -27,4 +27,5 @@ private:
 	HDC							m_hOffScreenDC;
 	HBITMAP						m_hOffBitmap;
 	HBRUSH						m_hBkColor;
+	HANDLE						m_hPen;
 };

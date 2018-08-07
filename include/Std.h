@@ -5,6 +5,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include <vector>
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"Corelib.lib")
@@ -37,3 +38,4 @@ extern HWND					g_hWnd;					//  Timer::Render()
 extern HINSTANCE			g_hInstance;			//	Bitmap::LoadFile()
 extern HDC					g_hOffScreenDC;			//  Render()
 extern float				g_fSecPerFrame;			//  Sample::Frame()
+extern RECT					g_rtClient;				//

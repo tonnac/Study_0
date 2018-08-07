@@ -147,13 +147,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="KbkObject.cpp" />
     <ClCompile Include="KObject.cpp" />
+    <ClCompile Include="NPCObj.cpp" />
     <ClCompile Include="oMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision.h" />
     <ClInclude Include="KbkObject.h" />
     <ClInclude Include="KObject.h" />
+    <ClInclude Include="NPCObj.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
