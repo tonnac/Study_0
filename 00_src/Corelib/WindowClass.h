@@ -9,8 +9,7 @@ class KWindow
 public:
 	KWindow();
 public:
-	RECT						getrtClient();
-	bool						SetWindow(HINSTANCE);
+	bool						SetWindow(HINSTANCE, UINT, UINT);
 	bool						Run();
 	virtual LRESULT	CALLBACK	MsgProc(HWND, UINT, WPARAM, LPARAM);
 private:

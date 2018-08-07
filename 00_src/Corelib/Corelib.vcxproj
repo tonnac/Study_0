@@ -116,11 +116,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h"  "$(SolutionDir)../include"
-copy "*.lib"  "$(SolutionDir)../lib"</Command>
+      <Command>copy /Y "$(ProjectDir)*.h"  "$(SolutionDir)../include"
+copy /Y "$(TargetDir)\$(ProjectName).lib"  "$(SolutionDir)../lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

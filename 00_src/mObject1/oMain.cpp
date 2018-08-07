@@ -7,38 +7,38 @@ const int g_iMaxNpcCount = 10;
 class KSample : public KCore
 {
 	std::vector<NPCObj>	m_npcList;
-	KObject				m_oHero;
-	KbkObject			m_bBackGround;
+	KObject				m_Hero;
+	KbkObject			m_BackGround;
 public:
 	bool Init()
 	{
 		m_npcList.resize(10);
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
-			m_npcList[iObj].LoadFile();
-			m_npcList[iObj].Set(100 + rand() % 600, 100 + rand() % 700, 46, 62, 68, 79);
+			m_npcList[iObj].LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+			m_npcList[iObj].Set(100 + rand() % 500, 100 + rand() % 400, 115, 62, 36, 35);
 			m_npcList[iObj].Init();
 		}
-		m_bBackGround.LoadFile(L"../../data/bk.bmp");
-		m_oHero.LoadFile(L"../../data/86754.bmp", L"../../data/86755.bmp");
-		m_oHero.Set(100, 100, 1, 75, 48, 48);
-		m_bBackGround.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 800, 600);
-		m_bBackGround.Init();
-		m_oHero.Init();
+		m_BackGround.LoadFile(L"../../data/bk.bmp");
+//		m_Hero.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+//		m_Hero.Set(100, 100, 133, 1, 42, 59);
+		m_BackGround.Set(0, 0, 0, 0, 800, 600);
+		m_BackGround.Init();
+//		m_Hero.Init();
 		return true;
 	}
 	bool Frame()
 	{
 		if (I_KInput.getKey('0') == KEY_PUSH)
 		{
-			m_oHero.m_bDebugRect = !m_oHero.m_bDebugRect;
+			m_Hero.m_bDebugRect = !m_Hero.m_bDebugRect;
 			for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 			{
 				m_npcList[iObj].m_bDebugRect = !m_npcList[iObj].m_bDebugRect;
 			}
 		}
-		m_bBackGround.Frame();
-		m_oHero.Frame();
+		m_BackGround.Frame();
+//		m_Hero.Frame();
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
 			m_npcList[iObj].Frame();
@@ -53,15 +53,12 @@ public:
 		rt.bottom = 768;
 		rt.left = 0;
 		rt.top = 0;
+		m_BackGround.Render();
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
 			m_npcList[iObj].Render();
 		}
-
-		m_bBackGround.Draw(0, &rt);
-		m_oHero.Render();
-//		m_npc.Render();
-		//m_oHero.Draw(LR_ROTATION, &rt);
+//		m_Hero.Render();
 		return true;
 	}
 	bool Release()
@@ -70,8 +67,8 @@ public:
 		{
 			m_npcList[iObj].Release();
 		}
-		m_bBackGround.Release();
-		m_oHero.Release();
+		m_BackGround.Release();
+		m_Hero.Release();
 //		m_npc.Release();
 		return true;
 	}
@@ -83,7 +80,7 @@ private:
 int WINAPI wWinMain(HINSTANCE hInst, HINSTANCE prevhInst, LPWSTR szCmdLine, int nCmdShow)
 {
 	KSample wd;
-	wd.SetWindow(hInst);
+	wd.SetWindow(hInst,800,600);
 	wd.Run();
 	return 0;
 }
