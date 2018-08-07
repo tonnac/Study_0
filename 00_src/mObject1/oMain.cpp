@@ -11,7 +11,7 @@ public:
 	bool Init()
 	{
 		m_bBackGround.LoadFile(L"../../data/Domino.bmp");
-		m_oHero.LoadFile(L"../../data/86754.bmp", L"../../02_data/86755.bmp");
+		m_oHero.LoadFile(L"../../data/86754.bmp", L"../../data/86755.bmp");
 		m_oHero.Set(100, 100, 1, 75, 48, 48);
 		m_bBackGround.Set(0, 0, 0, 0, 1024, 768);
 		m_bBackGround.Init();
