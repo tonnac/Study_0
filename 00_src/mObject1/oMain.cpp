@@ -10,10 +10,10 @@ class KSample : public KCore
 public:
 	bool Init()
 	{
-		m_bBackGround.LoadFile(L"../../data/Domino.bmp");
+		m_bBackGround.LoadFile(L"../../data/bk.bmp");
 		m_oHero.LoadFile(L"../../data/86754.bmp", L"../../data/86755.bmp");
 		m_oHero.Set(100, 100, 1, 75, 48, 48);
-		m_bBackGround.Set(0, 0, 0, 0, 1024, 768);
+		m_bBackGround.Set(0, 0, 0, 0, 800, 600);
 		m_bBackGround.Init();
 		m_oHero.Init();
 		return true;
@@ -27,11 +27,11 @@ public:
 	bool Render()
 	{
 		RECT rt;
-		rt.right = 200;
-		rt.bottom = 200;
-		rt.left = 100;
-		rt.top = 100;
-		m_bBackGround.Render();
+		rt.right = 1024;
+		rt.bottom = 768;
+		rt.left = 0;
+		rt.top = 0;
+		m_bBackGround.Draw(0, &rt);
 		m_oHero.Render();
 		//m_oHero.Draw(LR_ROTATION, &rt);
 		return true;
