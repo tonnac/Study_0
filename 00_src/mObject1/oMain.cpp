@@ -20,11 +20,11 @@ public:
 			m_npcList[iObj].Init();
 		}
 		m_BackGround.LoadFile(L"../../data/bk.bmp");
-//		m_Hero.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-//		m_Hero.Set(100, 100, 133, 1, 42, 59);
+		m_Hero.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+		m_Hero.Set(100, 100, 133, 1, 42, 59);
 		m_BackGround.Set(0, 0, 0, 0, 800, 600);
 		m_BackGround.Init();
-//		m_Hero.Init();
+		m_Hero.Init();
 		return true;
 	}
 	bool Frame()
@@ -38,12 +38,11 @@ public:
 			}
 		}
 		m_BackGround.Frame();
-//		m_Hero.Frame();
+		m_Hero.Frame();
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
 			m_npcList[iObj].Frame();
 		}
-//		m_npc.Frame();
 		return true;
 	}
 	bool Render()
@@ -58,7 +57,7 @@ public:
 		{
 			m_npcList[iObj].Render();
 		}
-//		m_Hero.Render();
+		m_Hero.Render();
 		return true;
 	}
 	bool Release()
@@ -69,7 +68,6 @@ public:
 		}
 		m_BackGround.Release();
 		m_Hero.Release();
-//		m_npc.Release();
 		return true;
 	}
 private:

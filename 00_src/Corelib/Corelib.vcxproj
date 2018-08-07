@@ -120,7 +120,7 @@
     </Lib>
     <PostBuildEvent>
       <Command>copy /Y "$(ProjectDir)*.h"  "$(SolutionDir)../include"
-copy /Y "$(TargetDir)\$(ProjectName).lib"  "$(SolutionDir)../lib"</Command>
+copy /Y "$(TargetDir)\$(TargetName).lib"  "$(SolutionDir)../lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

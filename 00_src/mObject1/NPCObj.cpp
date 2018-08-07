@@ -25,10 +25,12 @@ bool NPCObj::Frame()
 		m_fDir[1] *= -1.0f;
 		m_CenterPos.y = g_rtClient.top + iHalfY;
 	}
-	m_posDraw.x += m_fDir[0] * m_fSpeed * g_fSecPerFrame;
-	m_posDraw.y += m_fDir[1] * m_fSpeed * g_fSecPerFrame;
-	m_CenterPos.x = m_posDraw.x + iHalfX;
-	m_CenterPos.y = m_posDraw.y + iHalfY;
+	m_CenterPos.x += m_fDir[0] * m_fSpeed * g_fSecPerFrame;
+	m_CenterPos.y += m_fDir[1] * m_fSpeed * g_fSecPerFrame;
+	m_posDraw.x = m_CenterPos.x - (m_rtDraw.right / 2);
+	m_posDraw.y = m_CenterPos.y - (m_rtDraw.bottom / 2);
+//	m_CenterPos.x += m_fDir[0] * m_fSpeed * g_fSecPerFrame;
+//	m_CenterPos.y += m_fDir[1] * m_fSpeed * g_fSecPerFrame;
 	return true;
 }
 
