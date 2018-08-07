@@ -547,6 +547,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01_Object1", "01_Object1\01
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mObject1", "mObject1\mObject1.vcxproj", "{5B0D3627-2A3A-4101-8A17-87F89B885B5F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CEBB8CE9-D9A1-4E2F-841F-D3AD03688FFF} = {CEBB8CE9-D9A1-4E2F-841F-D3AD03688FFF}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2507,7 +2510,7 @@ Global
 		{5B0D3627-2A3A-4101-8A17-87F89B885B5F} = {62DCA9D8-3FCF-433B-A0FE-60DA9159DB5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

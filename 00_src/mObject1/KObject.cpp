@@ -13,8 +13,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 	{
 	case LR_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			m_pos.x + rtDraw.right, 
-			m_pos.y,
+			static_cast<int>(m_pos.x + rtDraw.right), 
+			static_cast<int>(m_pos.y),
 			-rtDraw.right,rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -23,8 +23,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	case TB_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			m_pos.x,
-			m_pos.y + rtDraw.bottom,
+			static_cast<int>(m_pos.x),
+			static_cast<int>(m_pos.y + rtDraw.bottom),
 			rtDraw.right, -rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -33,8 +33,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	case LRTB_ROTATION:
 		StretchBlt(g_hOffScreenDC,
-			m_pos.x + rtDraw.right,
-			m_pos.y + rtDraw.bottom,
+			static_cast<int>(m_pos.x + rtDraw.right),
+			static_cast<int>(m_pos.y + rtDraw.bottom),
 			-rtDraw.right, -rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -43,8 +43,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 		break;
 	default:
 		StretchBlt(g_hOffScreenDC,
-			m_pos.x,
-			m_pos.y,
+			static_cast<int>(m_pos.x),
+			static_cast<int>(m_pos.y),
 			rtDraw.right, rtDraw.bottom,
 			m_ColorBitmap->m_hMemDC,
 			m_rtDraw.left, m_rtDraw.top,
@@ -56,8 +56,8 @@ bool KObject::Draw(SHORT sType, RECT* rt)
 bool KObject::DrawColorKey(DWORD)
 {
 	TransparentBlt(g_hOffScreenDC,
-		m_pos.x,
-		m_pos.y,
+		static_cast<int>(m_pos.x),
+		static_cast<int>(m_pos.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_ColorBitmap->m_hMemDC,
 		m_rtDraw.right, m_rtDraw.bottom,
@@ -126,7 +126,8 @@ bool KObject::Render()
 	if (m_MaskBitmap == nullptr)
 	{
 		BitBlt(g_hOffScreenDC, 
-			m_pos.x, m_pos.y, 
+			static_cast<int>(m_pos.x), 
+			static_cast<int>(m_pos.y),
 			m_rtDraw.right, m_rtDraw.bottom, 
 			m_ColorBitmap->m_hMemDC, 
 			m_rtDraw.left, m_rtDraw.top, 
@@ -134,19 +135,22 @@ bool KObject::Render()
 		return true;
 	}
 	BitBlt(g_hOffScreenDC,
-		m_pos.x, m_pos.y,
+		static_cast<int>(m_pos.x),
+		static_cast<int>(m_pos.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_MaskBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
 		SRCAND);
 	BitBlt(g_hOffScreenDC,
-		m_pos.x, m_pos.y,
+		static_cast<int>(m_pos.x),
+		static_cast<int>(m_pos.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_ColorBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
 		SRCINVERT);
 	BitBlt(g_hOffScreenDC,
-		m_pos.x, m_pos.y,
+		static_cast<int>(m_pos.x),
+		static_cast<int>(m_pos.y),
 		m_rtDraw.right, m_rtDraw.bottom,
 		m_MaskBitmap->m_hMemDC,
 		m_rtDraw.left, m_rtDraw.top,
