@@ -119,8 +119,8 @@
       <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h"  "$(SolutionDir)../02_include"
-copy "*.lib"  "$(SolutionDir)../03_lib"</Command>
+      <Command>copy "*.h"  "$(SolutionDir)../include"
+copy "*.lib"  "$(SolutionDir)../lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
