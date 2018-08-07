@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)../../output/$(SolutionName)/$(ProjectName)/</IntDir>
+    <IntDir>$(SolutionDir)/../../output/$(SolutionName)/$(ProjectName)/</IntDir>
     <OutDir>$(SolutionDir)../../output/$(SolutionName)/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

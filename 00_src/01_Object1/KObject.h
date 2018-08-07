@@ -8,6 +8,7 @@
 
 class KObject
 {
+public:
 	KPoint					m_pos;
 	Bitmap*					m_pColorBitmap;
 	Bitmap*					m_pMaskBitmap;

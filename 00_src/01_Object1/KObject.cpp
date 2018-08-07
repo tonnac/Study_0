@@ -87,7 +87,7 @@ bool KObject::Frame()
 }
 bool KObject::Render()
 {
-	if (m_pMaskBitmap->m_hBitmap == nullptr)
+	if (m_pMaskBitmap == nullptr)
 	{
 		BitBlt(g_hOffScreenDC, static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_rtDraw.right, m_rtDraw.bottom, m_pColorBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCCOPY);
 		return true;

@@ -90,7 +90,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)../../output/$(SolutionName)/</OutDir>
-    <IntDir>$(SolutionDir)../../output/$(SolutionName)$(ProjectName)/</IntDir>
+    <IntDir>$(SolutionDir)/../../output/$(SolutionName)/$(ProjectName)/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -116,10 +116,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
     </Lib>
     <PostBuildEvent>
-      <Command>copy "*.h"  "$(SolutionDir)../02_include/"
+      <Command>copy "*.h"  "$(SolutionDir)../02_include"
 copy "*.lib"  "$(SolutionDir)../03_lib"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
