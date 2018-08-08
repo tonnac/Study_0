@@ -3,12 +3,12 @@
 bool EndScene::Init()
 {
 	m_bNextSceneStart = false;
-	m_BackGround.LoadFile(L"../../data/bk.bmp");
-	m_BackGround.Set(0, 0, 0, 0, 800, 600);
+	m_BackGround.LoadFile(L"../../data/RAINBOW.bmp");
+	m_BackGround.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 800, 600);
 	m_BackGround.Init();
 
-	m_btnStart.LoadFile(L"../../data/bk.bmp");
-	m_btnStart.Set(0, 0, 0, 0, 800, 600);
+	m_btnStart.LoadFile(L"../../data/end.bmp");
+	m_btnStart.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 100, 50);
 	m_btnStart.Init();
 	return true;
 }
@@ -24,8 +24,8 @@ bool EndScene::Frame()
 }
 bool EndScene::Render()
 {
-	m_btnStart.Render();
 	m_BackGround.Render();
+	m_btnStart.Render();
 	return true;
 }
 bool EndScene::Release()

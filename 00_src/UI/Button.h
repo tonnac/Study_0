@@ -6,7 +6,7 @@ class Button : public KObject
 public:
 	bool					Init();
 	bool					Frame();
-	bool					Render();
+//	bool					Render();
 	bool					Release();
 public:
 	Button();

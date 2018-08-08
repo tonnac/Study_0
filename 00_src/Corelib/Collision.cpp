@@ -49,11 +49,11 @@ bool Collision::RectInPt(RECT rt, POINT pt)
 bool Collision::SphereInSphere(RECT rtDesk, RECT rtSrc)
 {
 	Sphere sphereDesk, sphereSrc;
-	sphereDesk.pCenter.x = (rtDesk.left + (rtDesk.left + rtDesk.right)) / 2;
-	sphereDesk.pCenter.y = (rtDesk.top + (rtDesk.top + rtDesk.bottom)) / 2;
+	sphereDesk.pCenter.x = (rtDesk.left + rtDesk.right) / 2;
+	sphereDesk.pCenter.y = (rtDesk.top + rtDesk.top) / 2;
 
-	sphereSrc.pCenter.x = (rtSrc.left + (rtSrc.left + rtSrc.right)) / 2;
-	sphereSrc.pCenter.y = (rtSrc.top + (rtSrc.top + rtSrc.bottom)) / 2;
+	sphereSrc.pCenter.x = (rtSrc.left + rtSrc.right) / 2;
+	sphereSrc.pCenter.y = (rtSrc.top + rtSrc.top) / 2;
 
 	LONG dwX = (rtDesk.right - rtDesk.left) / 2;
 	LONG dwY = (rtDesk.bottom - rtDesk.top) / 2;
@@ -78,8 +78,8 @@ bool Collision::SphereInSphere(RECT rtDesk, RECT rtSrc)
 bool Collision::SphereInPt(RECT rtDesk, POINT pt)
 {
 	Sphere sphereDesk;
-	sphereDesk.pCenter.x = (rtDesk.left + (rtDesk.left + rtDesk.right)) / 2;
-	sphereDesk.pCenter.y = (rtDesk.top + (rtDesk.top + rtDesk.bottom)) / 2;
+	sphereDesk.pCenter.x = (rtDesk.left + rtDesk.right) / 2;
+	sphereDesk.pCenter.y = (rtDesk.top + rtDesk.top) / 2;
 
 	LONG dwX = (rtDesk.right - rtDesk.left) / 2;
 	LONG dwY = (rtDesk.bottom - rtDesk.top) / 2;

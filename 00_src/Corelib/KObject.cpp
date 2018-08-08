@@ -72,10 +72,11 @@ void KObject::Set(KPoint pos)
 }
 void KObject::Set(float x, float y, DWORD l, DWORD t, DWORD r, DWORD b)
 {
-	m_posDraw.x = x;
-	m_posDraw.y = y;
-	m_CenterPos.x = x + (r / 2);
-	m_CenterPos.y = y + (b / 2);
+	m_CenterPos.x = x;
+	m_CenterPos.y = y;
+	m_posDraw.x = x - (r / 2);
+	m_posDraw.y = y - (b / 2);
+	
 	m_rtDraw.left = l;
 	m_rtDraw.top = t;
 	m_rtDraw.right = r;
@@ -127,8 +128,8 @@ bool KObject::Frame()
 	m_posDraw.y = m_CenterPos.y - (m_rtDraw.bottom / 2);
 	m_rtCollision.left = m_posDraw.x;
 	m_rtCollision.top = m_posDraw.y;
-	m_rtCollision.right = m_rtCollision.left+m_rtDraw.right;
-	m_rtCollision.bottom = m_rtCollision.top +m_rtDraw.bottom;
+	m_rtCollision.right = m_rtCollision.left + m_rtDraw.right;
+	m_rtCollision.bottom = m_rtCollision.top + m_rtDraw.bottom;
 	return true;
 }
 bool KObject::Render()
@@ -168,13 +169,14 @@ bool KObject::Render()
 	// collision rect
 	if (m_bDebugRect)
 	{
-		int prevMode = SetROP2(g_hOffScreenDC, R2_MASKPEN);
+		int prevMode = SetROP2(g_hOffScreenDC, R2_XORPEN);
 		Rectangle(g_hOffScreenDC,
 			static_cast<int>(m_rtCollision.left),
 			static_cast<int>(m_rtCollision.top),
-			static_cast<int>(m_rtCollision.left + m_rtCollision.right),
-			static_cast<int>(m_rtCollision.top + m_rtCollision.bottom));
+			static_cast<int>(m_rtCollision.right),
+			static_cast<int>(m_rtCollision.bottom));
 		SetROP2(g_hOffScreenDC, prevMode);
+		
 	}
 	return true;
 }

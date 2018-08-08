@@ -3,23 +3,23 @@
 #include "NPCObj.h"
 #include "EndScene.h"
 #include "Button.h"
-
+#include <memory>
 
 class KSample : public KCore
 {
-	Scene*					m_pGameScene;
-	Scene*					m_pLobbyScene;
-	Scene*					m_pCEndScene;
+	std::shared_ptr<Scene>  m_pGameScene;
+	std::shared_ptr<Scene>  m_pLobbyScene;
+	std::shared_ptr<Scene>  m_pCEndScene;
 	Scene*					m_pCurrentScene;
 	int						m_iLevel;
 public:
 	bool Init()
 	{
 		m_iLevel = 1;
-		m_pGameScene = new SceneGame;
-		m_pLobbyScene = new SceneLobby;
-		m_pCEndScene = new EndScene;
-		m_pCurrentScene = m_pGameScene;
+		m_pGameScene = std::make_shared<SceneGame>();
+		m_pLobbyScene = std::make_shared<SceneLobby>();
+		m_pCEndScene = std::make_shared<EndScene>();
+		m_pCurrentScene = m_pLobbyScene.get();
 		m_pGameScene->Init();
 		m_pLobbyScene->Init();
 		m_pCEndScene->Init();
@@ -33,7 +33,7 @@ public:
 			if (m_pCurrentScene->m_bNextSceneStart)
 			{
 				m_pCurrentScene->m_bNextSceneStart = false;
-				m_pCurrentScene = m_pGameScene;
+				m_pCurrentScene = m_pGameScene.get();
 			}
 			break;
 		case 1:
@@ -41,14 +41,14 @@ public:
 			{
 				if (++m_iLevel > g_iMaxNpcCount / 10)
 				{
-					m_pCurrentScene = m_pCEndScene;
+					m_pCurrentScene = m_pCEndScene.get();
 					m_pCurrentScene->m_iMaxNpcCount = m_iLevel * 10;
 					m_pCurrentScene->Reset();
 					m_iLevel = 0;
 				}
 				else
 				{
-					m_pCurrentScene = m_pLobbyScene;
+	//				m_pCurrentScene = m_pLobbyScene;
 					m_pCurrentScene->m_iMaxNpcCount = m_iLevel * 10;
 					m_pCurrentScene->Reset();
 				}

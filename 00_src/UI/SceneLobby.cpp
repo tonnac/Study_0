@@ -4,11 +4,11 @@ bool SceneLobby::Init()
 {
 	m_bNextSceneStart = false;
 	m_BackGround.LoadFile(L"../../data/bk.bmp");
-	m_BackGround.Set(0, 0, 0, 0, 800, 600);
+	m_BackGround.Set(g_rtClient.right / 2,g_rtClient.bottom / 2 , 0, 0, 800, 600);
 	m_BackGround.Init();
 
-	m_btnStart.LoadFile(L"../../data/bk.bmp");
-	m_btnStart.Set(0, 0, 0, 0, 800, 600);
+	m_btnStart.LoadFile(L"../../data/main_start_nor.bmp");
+	m_btnStart.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 334, 82);
 	m_btnStart.Init();
 	return true;
 }
@@ -24,8 +24,8 @@ bool SceneLobby::Frame()
 }
 bool SceneLobby::Render()
 {
-	m_btnStart.Render();
 	m_BackGround.Render();
+	m_btnStart.Render();
 	return true;
 }
 bool SceneLobby::Release()
