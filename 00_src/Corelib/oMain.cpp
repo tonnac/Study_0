@@ -41,11 +41,23 @@ public:
 			}
 		}
 		m_BackGround.Frame();
-		m_Hero.Frame();
+		
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
 			m_npcList[iObj].Frame();
 		}
+		for (int iNpc = 0; iNpc < g_iMaxNpcCount; ++iNpc)
+		{
+			if (Collision::SphereInSphere(m_npcList[iNpc].m_rtCollision, m_Hero.m_rtCollision))
+			{
+				m_npcList[iNpc].m_bDead = true;
+			}
+			if (I_KInput.getMouse(VK_LBUTTON) && Collision::SphereInPt(m_npcList[iNpc].m_rtCollision, I_KInput.m_MousePos))
+			{
+				m_npcList[iNpc].m_bDead = true;
+			}
+		}
+		m_Hero.Frame();
 
 		return true;
 	}
@@ -54,7 +66,10 @@ public:
 		m_BackGround.Render();
 		for (int iObj = 0; iObj < g_iMaxNpcCount; iObj++)
 		{
-			m_npcList[iObj].Render();
+			if (!m_npcList[iObj].m_bDead)
+			{
+				m_npcList[iObj].Render();
+			}
 		}
 		m_Hero.Render();
 		return true;

@@ -26,6 +26,7 @@ private:
 	DWORD				KeyCheck(DWORD);
 private:
 	TCHAR				m_csBuffer[256];
+public:
 	POINT				m_MousePos;
 	DWORD				m_dwKeyState[256];
 	DWORD				m_dwBeforeMouseState[3];
