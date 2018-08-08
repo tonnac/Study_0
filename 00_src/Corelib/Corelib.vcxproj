@@ -89,7 +89,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)../../output/$(SolutionName)/</OutDir>
+    <OutDir>$(SolutionDir)/../../output/$(SolutionName)/</OutDir>
     <IntDir>$(SolutionDir)/../../output/$(SolutionName)/$(ProjectName)/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -116,7 +116,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
+      <OutputFile>Corelib.lib</OutputFile>
     </Lib>
     <PostBuildEvent>
       <Command>copy "*.h"  "$(SolutionDir)../include"
