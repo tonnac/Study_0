@@ -5,37 +5,37 @@ bool NPCObj::Frame()
 {
 	int iHalfX = m_rtDraw.right / 2;
 	int iHalfY = m_rtDraw.bottom / 2;
-	if (m_pos.x + iHalfX > g_rtClient.right)
+	if (m_CenterPos.x + iHalfX > g_rtClient.right)
 	{
 		m_fDir[0] *= -1.0f;
-		m_pos.x = g_rtClient.right - iHalfX;
+		m_CenterPos.x = static_cast<float>(g_rtClient.right - iHalfX);
 	}
-	if (m_pos.y + iHalfY > g_rtClient.bottom)
+	if (m_CenterPos.y + iHalfY > g_rtClient.bottom)
 	{
 		m_fDir[1] *= -1.0f;
-		m_pos.y = g_rtClient.bottom - iHalfY;
+		m_CenterPos.y = static_cast<float>(g_rtClient.bottom - iHalfY);
 	}
-	if (m_pos.x - iHalfX < g_rtClient.left)
+	if (m_CenterPos.x - iHalfX < g_rtClient.left)
 	{
 		m_fDir[0] *= -1.0f;
-		m_pos.x = g_rtClient.left + iHalfX;
+		m_CenterPos.x = static_cast<float>(g_rtClient.left + iHalfX);
 	}
-	if (m_pos.y - iHalfY < g_rtClient.top)
+	if (m_CenterPos.y - iHalfY < g_rtClient.top)
 	{
 		m_fDir[1] *= -1.0f;
-		m_pos.y = g_rtClient.top + iHalfY;
+		m_CenterPos.y = static_cast<float>(g_rtClient.top + iHalfY);
 	}
-	m_posDraw.x += m_fDir[0] * m_fSpeed * g_fSecPerFrame;
-	m_posDraw.y += m_fDir[1] * m_fSpeed * g_fSecPerFrame;
-	m_posDraw.x = m_pos.x - (m_rtDraw.right / 2);
-	m_posDraw.y = m_pos.y - (m_rtDraw.bottom / 2);
+	m_CenterPos.x += m_fDir[0] * m_fSpeed * g_fSecPerFrame;
+	m_CenterPos.y += m_fDir[1] * m_fSpeed * g_fSecPerFrame;
+	m_posDraw.x = m_CenterPos.x - (m_rtDraw.right / 2);
+	m_posDraw.y = m_CenterPos.y - (m_rtDraw.bottom / 2);
 	return true;
 }
 
 
 NPCObj::NPCObj()
 {
-	m_fSpeed = 100.0f;
+//	m_fSpeed = 200.0f;
 }
 
 

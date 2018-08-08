@@ -10,7 +10,7 @@
 class KObject
 {
 public:
-	KPoint				m_pos;
+	KPoint				m_CenterPos;
 	KPoint				m_posDraw;
 	Bitmap*				m_ColorBitmap;
 	Bitmap*				m_MaskBitmap;

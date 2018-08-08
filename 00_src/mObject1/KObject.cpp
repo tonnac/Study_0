@@ -72,16 +72,16 @@ void KObject::Set(KPoint pos)
 }
 void KObject::Set(float x, float y, DWORD l, DWORD t, DWORD r, DWORD b)
 {
-	m_pos.x = x;
-	m_pos.y = y;
-	m_posDraw.x = m_pos.x - (r / 2);
-	m_posDraw.y = m_pos.y - (b / 2);
+	m_posDraw.x = x;
+	m_posDraw.y = y;
+	m_CenterPos.x = x + (r / 2);
+	m_CenterPos.y = y + (b / 2);
 	m_rtDraw.left = l;
 	m_rtDraw.top = t;
 	m_rtDraw.right = r;
 	m_rtDraw.bottom = b;
-	//m_fDir[0] = (rand() % 2) ? 1.0f : -1.0f;   //¹æÇâ·£´ý
-	//m_fDir[1] = (rand() % 2) ? 1.0f : -1.0f;
+	m_fDir[0] = (rand() % 2) ? 1.0f : -1.0f;   //¹æÇâ·£´ý
+	m_fDir[1] = (rand() % 2) ? 1.0f : -1.0f;
 }
 
 bool KObject::LoadFile(const TCHAR* szColorFile, const TCHAR* szMaskFile)
@@ -105,19 +105,19 @@ bool KObject::Frame()
 {
 	if (I_KInput.getKey('A'))
 	{
-		m_pos.x += (-1 * g_fSecPerFrame * 200.0f);
+		m_posDraw.x += (-1 * g_fSecPerFrame * 200.0f);
 	}
 	if (I_KInput.getKey('D'))
 	{
-		m_pos.x += (1 * g_fSecPerFrame * 200.0f);
+		m_posDraw.x += (1 * g_fSecPerFrame * 200.0f);
 	}
 	if (I_KInput.getKey('W'))
 	{
-		m_pos.y += (-1 * g_fSecPerFrame * 200.0f);
+		m_posDraw.y += (-1 * g_fSecPerFrame * 200.0f);
 	}
 	if (I_KInput.getKey('S'))
 	{
-		m_pos.y += (1 * g_fSecPerFrame * 200.0f);
+		m_posDraw.y += (1 * g_fSecPerFrame * 200.0f);
 	}
 	if (I_KInput.getMouse(VK_MBUTTON) == KEY_PUSH)
 	{
@@ -130,7 +130,7 @@ bool KObject::Render()
 	if (m_MaskBitmap == nullptr)
 	{
 		BitBlt(g_hOffScreenDC, 
-			static_cast<int>(m_posDraw.x), 
+			static_cast<int>(m_posDraw.x),
 			static_cast<int>(m_posDraw.y),
 			m_rtDraw.right, m_rtDraw.bottom, 
 			m_ColorBitmap->m_hMemDC, 
@@ -162,12 +162,12 @@ bool KObject::Render()
 	// collision rect
 	if (m_bDebugRect)
 	{
-		int prevMode = SetROP2(g_hOffScreenDC,R2_XORPEN);
+		int prevMode = SetROP2(g_hOffScreenDC, R2_MASKPEN);
 		Rectangle(g_hOffScreenDC,
 			static_cast<int>(m_posDraw.x),
 			static_cast<int>(m_posDraw.y),
-			m_posDraw.x + m_rtDraw.right,
-			m_posDraw.y + m_rtDraw.bottom);
+			static_cast<int>(m_posDraw.x + m_rtDraw.right),
+			static_cast<int>(m_posDraw.y + m_rtDraw.bottom));
 		SetROP2(g_hOffScreenDC, prevMode);
 	}
 	return true;
@@ -177,12 +177,13 @@ bool KObject::Release()
 	return true;
 }
 
-KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr), m_fSpeed(50.0f)
+KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)
 {
 	m_posDraw.x = 0;
 	m_posDraw.y = 0;
 	m_fDir[0] = m_fDir[1] = 1.0f;
 	m_bDebugRect = false;
+	m_fSpeed = rand() % 150 + 70.f;
 }
 KObject::~KObject()
 {

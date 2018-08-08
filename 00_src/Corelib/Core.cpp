@@ -34,8 +34,11 @@ bool KCore::GameRender()
 	if (GamePreRender())
 	{
 		Render();
-		m_Timer.Render();
-		I_KInput.Render();
+		if (GetKeyState(VK_HOME))
+		{
+			m_Timer.Render();
+			I_KInput.Render();
+		}
 	}
 	return GamePostRender();
 }

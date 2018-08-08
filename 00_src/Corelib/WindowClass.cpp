@@ -21,11 +21,7 @@ KWindow::KWindow()
 {
 	g_pWindow = this;
 }
-RECT KWindow::getrtClient()
-{
-	return m_rtClient;
-}
-bool KWindow::SetWindow(HINSTANCE hInst)
+bool KWindow::SetWindow(HINSTANCE hInst, UINT iWidth, UINT iHeight)
 {
 	ZeroMemory(&m_wdClass, sizeof(WNDCLASSEX));
 	m_wdClass.cbSize = sizeof(WNDCLASSEX);
@@ -42,8 +38,8 @@ bool KWindow::SetWindow(HINSTANCE hInst)
 		return false;
 	}
 	// 클라이언트 영역 수정
-	RECT rt = { 0,0,1024,768 };
-	AdjustWindowRect(&rt, m_wdClass.style, FALSE);
+	RECT rt = { 0,0,(LONG)iWidth,(LONG)iHeight };
+	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, FALSE);
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW,
 		m_wdClass.lpszClassName,
 		m_wdClass.lpszMenuName,
