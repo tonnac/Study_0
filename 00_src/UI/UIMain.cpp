@@ -29,30 +29,33 @@ public:
 	{
 		switch (m_pCurrentScene->m_iSceneID)
 		{
-		case 0:
+		case GameScene::SCENE_LOBBY:
 			if (m_pCurrentScene->m_bNextSceneStart)
 			{
 				m_pCurrentScene->m_bNextSceneStart = false;
 				m_pCurrentScene = m_pGameScene.get();
 			}
 			break;
-		case 1:
+		case GameScene::SCENE_PLAY:
 			if (m_pCurrentScene->m_bNextSceneStart)
 			{
-				if (++m_iLevel > g_iMaxNpcCount / 10)
+				if (++m_iLevel > g_iMaxLevel)
 				{
 					m_pCurrentScene = m_pCEndScene.get();
-					m_pCurrentScene->m_iMaxNpcCount = m_iLevel * 10;
+					m_pCurrentScene->SetNpcCount(m_iLevel * 50);
 					m_pCurrentScene->Reset();
 					m_iLevel = 0;
 				}
 				else
 				{
 	//				m_pCurrentScene = m_pLobbyScene;
-					m_pCurrentScene->m_iMaxNpcCount = m_iLevel * 10;
+					m_pCurrentScene->SetNpcCount(m_iLevel * 50);
 					m_pCurrentScene->Reset();
 				}
 			}
+			break;
+		case GameScene::SCENE_END:
+
 		}
 		m_pCurrentScene->Frame();
 

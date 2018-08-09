@@ -7,6 +7,7 @@ bool Scene::SetNpcCount(int iNpc)
 	{
 		m_iMaxNpcCount = g_iMaxNpcCount;
 	}
+	return true;
 }
 
 bool SceneGame::Reset()
@@ -129,8 +130,4 @@ Scene::~Scene()
 SceneGame::SceneGame()
 {
 	m_iSceneID = SCENE_PLAY;
-}
-SceneLobby::SceneLobby()
-{
-	m_iSceneID = SCENE_LOBBY;
 }

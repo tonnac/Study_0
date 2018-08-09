@@ -34,7 +34,7 @@ bool KCore::GameRender()
 	if (GamePreRender())
 	{
 		Render();
-		if (GetKeyState(VK_HOME))
+		if (GetKeyState(VK_HOME) && 0x8000)
 		{
 			m_Timer.Render();
 			I_KInput.Render();
