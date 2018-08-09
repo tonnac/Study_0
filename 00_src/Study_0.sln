@@ -566,6 +566,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "046_Days", "046_Days", "{40
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RotationBitmap", "RotationBitmap\RotationBitmap.vcxproj", "{6ACB1D6D-18EA-4747-AFC8-501524063739}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mRotate", "mRotate\mRotate.vcxproj", "{D98AAAA9-932E-4452-AD75-F3FDF9374759}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2278,6 +2280,14 @@ Global
 		{6ACB1D6D-18EA-4747-AFC8-501524063739}.Release|x64.Build.0 = Release|x64
 		{6ACB1D6D-18EA-4747-AFC8-501524063739}.Release|x86.ActiveCfg = Release|Win32
 		{6ACB1D6D-18EA-4747-AFC8-501524063739}.Release|x86.Build.0 = Release|Win32
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Debug|x64.ActiveCfg = Debug|x64
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Debug|x64.Build.0 = Debug|x64
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Debug|x86.ActiveCfg = Debug|Win32
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Debug|x86.Build.0 = Debug|Win32
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Release|x64.ActiveCfg = Release|x64
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Release|x64.Build.0 = Release|x64
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Release|x86.ActiveCfg = Release|Win32
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2553,9 +2563,10 @@ Global
 		{94765990-DEB2-4BA4-8237-2CDF9095A725} = {953907DE-5355-4BF7-B19A-8CE330589FFB}
 		{40DEE183-CAAF-42CF-A570-97C45C52992D} = {6B3ED2DD-95C1-48A0-9E7B-E98F15BAEB5A}
 		{6ACB1D6D-18EA-4747-AFC8-501524063739} = {40DEE183-CAAF-42CF-A570-97C45C52992D}
+		{D98AAAA9-932E-4452-AD75-F3FDF9374759} = {40DEE183-CAAF-42CF-A570-97C45C52992D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 	EndGlobalSection
 EndGlobal
