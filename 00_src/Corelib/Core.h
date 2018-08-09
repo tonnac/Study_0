@@ -22,7 +22,7 @@ private:
 	bool						GamePostRender();
 private:
 	KTimer						m_Timer;
-private:
+public:
 	HDC							m_hOnScreenDC;
 	HDC							m_hOffScreenDC;
 	HBITMAP						m_hOffBitmap;
