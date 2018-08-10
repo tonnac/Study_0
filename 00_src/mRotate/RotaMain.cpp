@@ -19,7 +19,6 @@ class KSample : public KCore
 	HDC									m_hMemMaskDC;
 	HDC									m_hMemColorDC;
 	float								m_fMaxDistance;
-
 public:
 	bool Init()
 	{
@@ -58,6 +57,7 @@ public:
 	}
 	bool Render()
 	{
+		m_pGameScene->Render();
 		HBITMAP hOldMask = static_cast<HBITMAP>(SelectObject(m_hMemMaskDC, m_hMaskRotateBitmap));
 		HBITMAP hOldColor = static_cast<HBITMAP>(SelectObject(m_hMemColorDC, m_hColorRotateBitmap));
 		BitBlt(g_hOffScreenDC,
@@ -86,7 +86,6 @@ public:
 			SRCINVERT);
 		SelectObject(m_hMemMaskDC, hOldMask);
 		SelectObject(m_hMemColorDC, hOldColor);
-//		m_pGameScene->Render();
 		return true;
 	}
 	bool Release()
