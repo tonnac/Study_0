@@ -83,6 +83,16 @@ void KObject::Set(float x, float y, DWORD l, DWORD t, DWORD r, DWORD b)
 	m_rtDraw.bottom = b;
 	m_fDir[0] = (rand() % 2) ? 1.0f : -1.0f;   //¹æÇâ·£´ý
 	m_fDir[1] = (rand() % 2) ? 1.0f : -1.0f;
+
+
+	Diff = sqrt(((m_rtDraw.right) * (m_rtDraw.right) + (m_rtDraw.bottom) * (m_rtDraw.bottom)));
+
+	RotaDC = CreateCompatibleDC(g_hOnScreenDC);
+	MaskDC = CreateCompatibleDC(g_hOnScreenDC);
+	ColorDC = CreateCompatibleDC(g_hOnScreenDC);
+
+	ColorBit = CreateCompatibleBitmap(g_hOnScreenDC, Diff, Diff);
+	MaskBit = CreateCompatibleBitmap(g_hOnScreenDC, Diff, Diff);
 }
 
 bool KObject::LoadFile(const TCHAR* szColorFile, const TCHAR* szMaskFile)
@@ -100,6 +110,8 @@ bool KObject::LoadFile(const TCHAR* szColorFile, const TCHAR* szMaskFile)
 
 bool KObject::Init()
 {
+	Angle = 0.0f;
+	bkBrush = CreateSolidBrush(RGB(255, 255, 255));
 	return true;
 }
 bool KObject::Frame()
@@ -182,7 +194,83 @@ bool KObject::Render()
 }
 bool KObject::Release()
 {
+
+	DeleteDC(RotaDC);
+	DeleteDC(MaskDC);
+	DeleteDC(ColorDC);
+	DeleteObject(bkBrush);
+	DeleteObject(ColorBit);
+	DeleteObject(MaskBit);
 	return true;
+}
+
+void KObject::RotationBlt(float fAngle)
+{
+	GetRotationBimap(fAngle, MaskBit, m_MaskBitmap);
+	GetRotationBimap(fAngle, ColorBit, m_ColorBitmap);
+	HBITMAP omask = (HBITMAP)SelectObject(MaskDC, MaskBit);
+	HBITMAP ocolor = (HBITMAP)SelectObject(ColorDC, ColorBit);
+	BitBlt(g_hOffScreenDC,
+		static_cast<int>(m_CenterPos.x - (Diff / 2)),
+		static_cast<int>(m_CenterPos.y - (Diff / 2)),
+		Diff,
+		Diff,
+		MaskDC,
+		0, 0,
+		SRCAND);
+	BitBlt(g_hOffScreenDC,
+		static_cast<int>(m_CenterPos.x - (Diff / 2)),
+		static_cast<int>(m_CenterPos.y - (Diff / 2)),
+		Diff,
+		Diff,
+		ColorDC,
+		0, 0,
+		SRCINVERT);
+	BitBlt(g_hOffScreenDC,
+		static_cast<int>(m_CenterPos.x - (Diff / 2)),
+		static_cast<int>(m_CenterPos.y - (Diff / 2)),
+		Diff,
+		Diff,
+		MaskDC,
+		0, 0,
+		SRCINVERT);
+	SelectObject(MaskDC, omask);
+	SelectObject(ColorDC, ocolor);
+}
+void KObject::GetRotationBimap(float fAngle, HBITMAP hBitmap, Bitmap* pSrcBitmap)
+{
+	float rad = fAngle * 3.141592f / 180.0f;
+	float fCosine = cos(rad);
+	float fSine = sin(rad);
+
+	HBRUSH hOldBrush = (HBRUSH)SelectObject(RotaDC, bkBrush);
+	HBITMAP hOldBitmap = (HBITMAP)SelectObject(RotaDC, hBitmap);
+
+	PatBlt(RotaDC, 0, 0, Diff, Diff, PATCOPY);
+
+	int OldGraphic = SetGraphicsMode(RotaDC, GM_ADVANCED);
+
+	XFORM xform1;
+
+	xform1.eM11 = fCosine;		xform1.eM12 = fSine;
+	xform1.eM21 = -fSine;		xform1.eM22 = fCosine;
+	xform1.eDx = Diff / 2;		xform1.eDy = Diff / 2;
+
+	SetWorldTransform(RotaDC, &xform1);
+
+	BitBlt(RotaDC, -(m_rtDraw.right / 2), -(m_rtDraw.bottom / 2),
+		m_rtDraw.right, m_rtDraw.bottom, pSrcBitmap->m_hMemDC, m_rtDraw.left, m_rtDraw.top, SRCCOPY);
+
+	SelectObject(RotaDC, hOldBrush);
+	SelectObject(RotaDC, hOldBitmap);
+
+	xform1.eM11 = 1;		xform1.eM12 = 0;
+	xform1.eM21 = 0;		xform1.eM22 = 1;
+	xform1.eDx = 0;			xform1.eDy = 0;
+
+	SetWorldTransform(RotaDC, &xform1);
+	SetGraphicsMode(RotaDC, OldGraphic);
+
 }
 
 KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)

@@ -19,6 +19,9 @@ class KSample : public KCore
 public:
 	bool Init()
 	{
+		m_tmbobj.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+		m_tmbobj.Set(500, 500, 133, 1, 42, 59);
+		m_tmbobj.Init();
 		m_fMaxDistance = sqrt(m_tmbobj.m_rtDraw.right * m_tmbobj.m_rtDraw.right +
 			m_tmbobj.m_rtDraw.bottom * m_tmbobj.m_rtDraw.bottom);
 
@@ -29,9 +32,7 @@ public:
 		m_hMemMaskDC = CreateCompatibleDC(m_hOnScreenDC);
 		m_hMemColorDC = CreateCompatibleDC(m_hOnScreenDC);
 
-		m_tmbobj.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-		m_tmbobj.Set(500, 500, 133, 1, 42, 59);
-		m_tmbobj.Init();
+	
 		m_pGameScene = std::make_shared<SceneGame>();
 
 		m_pGameScene->Init();
@@ -43,7 +44,7 @@ public:
 		float fCosine = cos(fRadian);
 		float fSine = sin(fRadian);
 
-		HBRUSH hbrBack = CreateSolidBrush(RGB(255, 0, 0));
+		HBRUSH hbrBack = CreateSolidBrush(RGB(255, 255, 255));
 		m_hOldBitmap = (HBITMAP)SelectObject(m_hRotationDC, hBitmap);
 		HBRUSH hOldBrush = (HBRUSH)SelectObject(m_hRotationDC, hbrBack);
 		PatBlt(m_hRotationDC, 0, 0, m_fMaxDistance, m_fMaxDistance, PATCOPY);
@@ -67,6 +68,8 @@ public:
 		xform.eDx = 0;			 xform.eDy = 0;
 		SetWorldTransform(m_hRotationDC, &xform);
 		SetGraphicsMode(m_hRotationDC, iOldGraphic);
+		SelectObject(m_hRotationDC, hOldBrush);
+		SelectObject(m_hRotationDC, m_hOldBitmap);
 	}
 	bool Frame()
 	{
@@ -81,8 +84,8 @@ public:
 	}
 	bool Render()
 	{
-		SelectObject(m_hMemMaskDC, m_hMaskRotateBitmap);
-		SelectObject(m_hMemColorDC, m_hColorRotateBitmap);
+		HBITMAP mask = (HBITMAP)SelectObject(m_hMemMaskDC, m_hMaskRotateBitmap);
+		HBITMAP Color = (HBITMAP)SelectObject(m_hMemColorDC, m_hColorRotateBitmap);
 		BitBlt(g_hOffScreenDC,
 			static_cast<int>(m_tmbobj.m_CenterPos.x - (m_fMaxDistance / 2)),
 			static_cast<int>(m_tmbobj.m_CenterPos.y - (m_fMaxDistance / 2)),
@@ -107,6 +110,8 @@ public:
 			m_hMemMaskDC,
 			0, 0,
 			SRCINVERT);
+		SelectObject(m_hMemMaskDC, mask);
+		SelectObject(m_hMemColorDC, Color);
 //		m_pGameScene->Render();
 //		m_tmbobj.Render();
 		return true;

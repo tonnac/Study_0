@@ -23,10 +23,14 @@ class KSample : public KCore
 public:
 	bool Init()
 	{
-		m_hbkBrush = CreateSolidBrush(RGB(0, 255, 0));
+		m_tmpObj.Init();
+		m_tmpObj.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
+		m_tmpObj.Set(300, 300, 133, 1, 42, 59);
 
-		m_fMaxDistance = (m_tmpObj.m_rtDraw.right) * (m_tmpObj.m_rtDraw.right) +
-			(m_tmpObj.m_rtDraw.bottom) * (m_tmpObj.m_rtDraw.right);
+		m_hbkBrush = CreateSolidBrush(RGB(255, 255, 255));
+
+		m_fMaxDistance = sqrt((m_tmpObj.m_rtDraw.right) * (m_tmpObj.m_rtDraw.right) +
+			(m_tmpObj.m_rtDraw.bottom) * (m_tmpObj.m_rtDraw.right));
 
 		m_hColorRotateBitmap = CreateCompatibleBitmap(m_hOnScreenDC, m_fMaxDistance, m_fMaxDistance);
 		m_hMaskRotateBitmap = CreateCompatibleBitmap(m_hOnScreenDC, m_fMaxDistance, m_fMaxDistance);
@@ -35,12 +39,9 @@ public:
 		m_hMemMaskDC = CreateCompatibleDC(m_hOnScreenDC);
 		m_hMemColorDC = CreateCompatibleDC(m_hOnScreenDC);
 
-		m_tmpObj.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
-		m_tmpObj.Set(300, 300, 133, 1, 42, 59);
 				
 		m_pGameScene = std::make_shared<SceneGame>();
 
-		m_tmpObj.Init();
 		m_pGameScene->Init();
 		return true;
 	}
@@ -102,7 +103,7 @@ public:
 		HBITMAP hOldBitmap = static_cast<HBITMAP>(SelectObject(m_hRotationDC, hBitmap));
 		
 		PatBlt(m_hRotationDC, 0, 0, m_fMaxDistance, m_fMaxDistance, PATCOPY);
-		SelectObject(m_hRotationDC, hOldBrush);
+	
 
 		int iOldGraphic = SetGraphicsMode(m_hRotationDC, GM_ADVANCED);
 
@@ -124,6 +125,8 @@ public:
 
 		SetWorldTransform(m_hRotationDC, &xform);
 		SetGraphicsMode(m_hRotationDC, iOldGraphic);
+		SelectObject(m_hRotationDC, hOldBrush);
+		SelectObject(m_hRotationDC, hOldBitmap);
 	}
 private:
 };

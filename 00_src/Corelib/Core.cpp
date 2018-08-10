@@ -1,10 +1,10 @@
 #include "Core.h"
 
 HDC	g_hOffScreenDC = nullptr;
-
+HDC	g_hOnScreenDC = nullptr;
 bool KCore::GameInit()
 {
-	m_hOnScreenDC = GetDC(g_hWnd);
+	m_hOnScreenDC = g_hOnScreenDC = GetDC(g_hWnd);
 	m_hOffScreenDC = g_hOffScreenDC = CreateCompatibleDC(m_hOnScreenDC);
 	m_hOffBitmap = CreateCompatibleBitmap(m_hOnScreenDC, m_rtWindow.right, m_rtWindow.bottom);
 	SelectObject(m_hOffScreenDC, m_hOffBitmap);

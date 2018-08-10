@@ -10,6 +10,15 @@
 
 class KObject
 {
+private:
+	float				Diff;
+	float				Angle;
+	HDC					RotaDC;
+	HDC					MaskDC;
+	HDC					ColorDC;
+	HBRUSH				bkBrush;
+	HBITMAP				ColorBit;
+	HBITMAP				MaskBit;
 public:
 	KPoint				m_CenterPos;
 	KPoint				m_posDraw;
@@ -33,6 +42,9 @@ public:
 	virtual bool		Frame();
 	virtual bool		Render();
 	virtual bool		Release();
+public:
+	void	RotationBlt(float fAngle);
+	void	GetRotationBimap(float fAngle, HBITMAP hBitmap,	Bitmap* pSrcBitmap);
 public:
 	KObject();
 	virtual ~KObject();
