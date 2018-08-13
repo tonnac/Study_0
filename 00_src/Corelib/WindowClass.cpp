@@ -3,7 +3,8 @@
 KWindow *	g_pWindow = nullptr;
 HWND		g_hWnd = nullptr;
 HINSTANCE	g_hInstance = nullptr;
-RECT		g_rtClient;
+RECT		g_rtClient = { 0, };
+bool		g_bActiveApp = false;
 
 LRESULT	CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
@@ -111,6 +112,9 @@ LRESULT	CALLBACK KWindow::MsgProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lpa
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+	case WM_ACTIVATEAPP:
+		g_bActiveApp = (BOOL)wparam;
+		break;
 	}
 	return 0;
 }

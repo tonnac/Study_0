@@ -4,7 +4,7 @@
 #include "EndScene.h"
 #include "Button.h"
 #include <memory>
-
+#include <fstream>
 
 using RECT_ARRAY = std::vector<RECT>;
 

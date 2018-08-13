@@ -40,3 +40,4 @@ extern HDC					g_hOffScreenDC;			//  Render()
 extern float				g_fSecPerFrame;			//  Sample::Frame()
 extern RECT					g_rtClient;				//
 extern HDC					g_hOnScreenDC;
+extern bool					g_bActiveApp;
