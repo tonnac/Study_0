@@ -11,7 +11,15 @@
 class KObject
 {
 public:
+	FLOAT				m_fAlpha;
 	FLOAT				m_fScrollSpeed;
+public:
+	virtual	bool		FadeOut() { return true; }
+	virtual	bool		FadeIn() { return true; }
+public:
+	bool AlphaBlendd(HDC dcDest, int x, int y, int cx, int cy,
+		HDC dcSrc,
+		HDC dcMaskSrc, int sx, int sy, int scx, int scy, int alpha, DWORD opMode, COLORREF rgbMask);
 private:
 	float				Diff;
 	float				Angle;
@@ -40,6 +48,7 @@ public:
 	virtual void		Set(KPoint);
 	virtual void		Set(float, float, DWORD, DWORD, DWORD, DWORD);
 	virtual bool		LoadFile(const TCHAR*, const TCHAR* = 0);
+	virtual bool		LoadFile(const TCHAR*, const TCHAR*, int iState) { return true; }
 	virtual bool		Init();
 	virtual bool		Frame();
 	virtual bool		Render();

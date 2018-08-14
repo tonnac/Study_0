@@ -3,6 +3,7 @@
 #include "KbkObject.h"
 #include "NPCObj.h"
 #include "Button.h"
+#include "Hero.h"
 
 enum GameScene
 {
@@ -54,7 +55,7 @@ public:
 class SceneGame : public Scene
 {public:
 	std::vector<NPCObj>		m_npcList;
-	KObject					m_Hero;
+	Hero					m_Hero;
 public:
 	bool					Init() override;
 	bool					Frame() override;

@@ -7,7 +7,7 @@ bool EndScene::Init()
 	m_BackGround.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 800, 600);
 	m_BackGround.Init();
 
-	m_btnStart.LoadFile(L"../../data/end.bmp");
+	m_btnStart.LoadFile(L"../../data/end.bmp",nullptr,0);
 	m_btnStart.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 100, 50);
 	m_btnStart.Init();
 	return true;

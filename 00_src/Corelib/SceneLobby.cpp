@@ -7,7 +7,10 @@ bool SceneLobby::Init()
 	m_BackGround.Set(g_rtClient.right / 2,g_rtClient.bottom / 2 , 0, 0, 800, 600);
 	m_BackGround.Init();
 
-	m_btnStart.LoadFile(L"../../data/main_start_nor.bmp");
+	m_btnStart.LoadFile(L"../../data/main_start_nor.bmp", nullptr, 0);
+	m_btnStart.LoadFile(L"../../data/main_start_dis.bmp", nullptr, 1);
+	m_btnStart.LoadFile(L"../../data/main_start_sel.bmp", nullptr, 2);
+	m_btnStart.LoadFile(L"../../data/main_start_sel.bmp", nullptr ,3);
 	m_btnStart.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 334, 82);
 	m_btnStart.Init();
 	return true;
@@ -15,7 +18,7 @@ bool SceneLobby::Init()
 bool SceneLobby::Frame()
 {
 	m_btnStart.Frame();
-	if (I_KInput.getMouse(VK_LBUTTON) && Collision::RectInPt(m_btnStart.m_rtCollision, I_KInput.m_MousePos))
+	if (I_KInput.getMouse(VK_LBUTTON) == KEY_UP && Collision::RectInPt(m_btnStart.m_rtCollision, I_KInput.m_MousePos))
 	{
 		m_bNextSceneStart = true;
 	}
