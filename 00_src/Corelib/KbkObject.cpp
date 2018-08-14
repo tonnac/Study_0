@@ -71,24 +71,33 @@ bool KbkObject::RenderScroll()
 	}
 	int iScroll = m_ColorBitmap->m_bBmpInfo.bmHeight - fStep;
 
+	TCHAR csBuffer[256];
+	
+
+
+	_stprintf_s(csBuffer, L"Pos : %f", m_rtDraw.left + fStep);
+	SetTextColor(g_hOffScreenDC, RGB(102, 255, 255));
+	SetBkColor(g_hOffScreenDC, RGB(0, 0, 0));
+	TextOut(g_hOffScreenDC, 100, 100, csBuffer, _tcslen(csBuffer));
+
 	BitBlt(g_hOffScreenDC,
-		m_rtDraw.left,
-		fStep,
+		m_posDraw.x,
+		m_posDraw.y,
 		m_rtDraw.right, 
-		m_rtDraw.bottom - fStep,
+		m_rtDraw.bottom,
 		m_ColorBitmap->m_hMemDC,
-		m_rtDraw.left, 
+		m_rtDraw.left + fStep,
 		m_rtDraw.top,
 		SRCCOPY);
-	BitBlt(g_hOffScreenDC,
-		m_rtDraw.left,
-		m_rtDraw.top,
-		m_rtDraw.right, 
-		fStep,
-		m_ColorBitmap->m_hMemDC,
-		m_rtDraw.left, 
-		iScroll,
-		SRCCOPY);
+	//BitBlt(g_hOffScreenDC,
+	//	m_rtDraw.left,
+	//	m_rtDraw.top,
+	//	m_rtDraw.right, 
+	//	m_rtDraw.bottom,
+	//	m_ColorBitmap->m_hMemDC,
+	//	m_rtDraw.left, 
+	//	m_rtDraw.top,
+	//	SRCCOPY);
 
 	///////////////////////////////////////////////////////////////
 

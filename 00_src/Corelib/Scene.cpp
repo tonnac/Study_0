@@ -35,10 +35,10 @@ bool SceneGame::Init()
 			115, 62, 36, 35);
 		m_npcList[iObj].Init();
 	}
-	m_BackGround.LoadFile(L"../../data/binglybongly_wallpaper.bmp");
+	m_BackGround.LoadFile(L"../../data/1920.bmp");
 	m_Hero.LoadFile(L"../../data/bitmap1.bmp", L"../../data/bitmap2.bmp");
 	m_Hero.Set(500, 500, 133, 1, 42, 59);
-	m_BackGround.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 800, 600);
+	m_BackGround.Set(g_rtClient.right / 2, g_rtClient.bottom / 2, 0, 0, 1920, 1080);
 	m_BackGround.Init();
 	m_Hero.Init();
 	return true;
