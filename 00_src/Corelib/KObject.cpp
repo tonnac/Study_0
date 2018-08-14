@@ -281,6 +281,7 @@ KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)
 	m_bDebugRect = false;
 	m_fSpeed = rand() % 150 + 70.f;
 	m_bDead = false;
+	m_fScrollSpeed = 100.0f;
 }
 KObject::~KObject()
 {

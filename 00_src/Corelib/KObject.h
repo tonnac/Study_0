@@ -10,6 +10,8 @@
 
 class KObject
 {
+public:
+	FLOAT				m_fScrollSpeed;
 private:
 	float				Diff;
 	float				Angle;

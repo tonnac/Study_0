@@ -3,5 +3,7 @@
 class KbkObject : public KObject
 {
 public:
-	bool			Frame() override;
+	bool			Frame		() override;
+	bool			Render		() override;
+	bool			RenderScroll();
 };
