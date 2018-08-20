@@ -1,21 +1,12 @@
 #pragma once
-#include "WindowClass.h"
-#include <cmath>
+#include "Std.h"
 
-struct Sphere
-{
-	POINT pCenter;
-	float fRadius;
-};
-
-class Collision
+class CollisionClass
 {
 public:
-	static bool			RectInRect(RECT rtDesk, RECT rtSrc);
-	static bool			RectInPt(RECT rt, POINT pt);
-	static bool			SphereInSphere(RECT rtDesk, RECT rtSrc);
-	static bool			SphereInPt(RECT rtDesk, POINT pt);
-public:
-	Collision();
-	virtual ~Collision();
+	static bool					RectInPt(RECT, POINT);
+	static bool					RectInRect(RECT, RECT);
+	static bool					SphereInPt(RECT, POINT);
+	static bool					SphereInSphere(RECT, RECT);
+private:
 };

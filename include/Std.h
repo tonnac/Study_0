@@ -1,43 +1,146 @@
 #pragma once
 #include <windows.h>
-#include <assert.h>
+#include <cassert>
 #include <tchar.h>
 #include <string>
-#include <map>
 #include <list>
 #include <vector>
+#include <map>
+#include <cstdlib>
+#include <cmath>
+#include <sstream>
+#include <fstream>
+#include <array>
 
 #pragma comment(lib,"winmm.lib")
-#pragma comment(lib,"Corelib.lib")
+#pragma comment(lib,"msimg32.lib")
+#pragma comment(lib,"MomodoraCore.lib")
 
-struct KPoint
+#define New new(__FILE__,__LINE__)
+#define PI 3.141592
+#define DegreeToRadian(x) (x) * PI / 180.0f
+
+struct MEMINFO
 {
-	float x, y;
+	std::string  filename;
+	INT			 line;
+	DWORD		 dwAllocateTime;
+	void*		 addr;
 };
 
 using T_STR = std::basic_string<TCHAR>;
+using MEM_MAP = std::map<void *, MEMINFO>;
+using RECT_VECTOR = std::vector<RECT>;
 
+enum class KEYSTATE : unsigned char
+{
+	KEY_FREE,
+	KEY_PUSH,
+	KEY_HOLD,
+	KEY_UP
+};
+enum class SCENE : unsigned char
+{
+	LOBBY,
+	GAME,
+	END
+};
+enum class INVERSE : unsigned char
+{
+	LR_ROTATION,
+	TB_ROTATION,
+	LRTB_ROTATION,
+	DEFAULT
+};
+enum class LOBBYSTATE : unsigned char
+{
+	DEFAULT,
+	START,
+	MAINMENU,
+	SETTING,
+	KEYSETTING,
+	SELECT
+};
 
-
-
-template <class K>
+template <typename K>
 class Singleton
 {
 protected:
-	Singleton() {}
+	Singleton() {};
 public:
-	static K & getInstance()
+	static K& getInstance()
 	{
 		static K inst;
 		return inst;
 	}
 };
 
+struct FloatPoint
+{
+	FLOAT x, y;
+};
 
-extern HWND					g_hWnd;					//  Timer::Render()
-extern HINSTANCE			g_hInstance;			//	Bitmap::LoadFile()
-extern HDC					g_hOffScreenDC;			//  Render()
-extern float				g_fSecPerFrame;			//  Sample::Frame()
-extern RECT					g_rtClient;				//
-extern HDC					g_hOnScreenDC;
+struct Sphere
+{
+	FLOAT fRadius;
+	POINT CenterPos;
+};
+
+
+extern HWND					g_hWnd;
+extern HINSTANCE            g_hInstance;
+extern HDC					g_hOffScreenDC;
+extern HDC					g_hScreenDC;
+extern RECT					g_rtClient;
+extern float				g_fSpeed;
+extern float				g_fPerSecFrame;
 extern bool					g_bActiveApp;
+
+
+extern INT					g_iNewCount;
+extern MEM_MAP				MemoryMap;
+
+
+
+//	KahoAttack1 7
+//	KahoAttack2 7
+//	KahoAttack3 11
+//	AirAttack 7
+//	LandAttack 7
+//	Leaf1 7
+//	Leaf2 7
+//	Leaf3 9
+//	AirLeaf 6
+//	Bow 6
+//	Airbow 6
+//	CrouchBow 6
+//	Run 10
+//	Brake 7
+//	Turn 3
+//	Crouch 4
+//	Rise 2
+//	Death 24
+//	Defensive 3
+//	EndingDeath 35
+//	EndingDeath2 28
+//	Jump  3
+//	Fall 5
+//	ToPraying  6
+//	Praying 4
+//	FromPraying 9
+//	HeadBob 4
+//	HeadBobBack 4
+//	Hurt 1
+//	Idle 6
+//	Look 14
+//	Item 11
+//	LadderUp 6
+//	LadderDown 3
+//	LadderEnter 6
+//	LadderLeave 6
+//	Roll 8
+//	MiscEffect 3
+//	Shine 1
+//	Icon 1
+//	ArrowS 1
+//	ArrowL 1

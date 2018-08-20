@@ -1,70 +1,52 @@
 #pragma once
 #include "Core.h"
-#include "KbkObject.h"
-#include "NPCObj.h"
+#include "BKObject.h"
+#include "SpriteMgr.h"
+#include "Player.h"
+#include "Scroll.h"
+#include "TerrainObject.h"
 #include "Button.h"
-#include "Hero.h"
-
-enum GameScene
-{
-	SCENE_LOBBY,
-	SCENE_PLAY,
-	SCENE_END
-};
-
-
-const int g_iMaxLevel = 10;
-const int g_iMaxNpcCount = 100;
 
 class Scene
 {
 public:
-	GameScene				m_iSceneID;
-	KbkObject				m_BackGround;
-	bool					m_bNextSceneStart;
-	int						m_iMaxNpcCount;
-public:
-	virtual	bool			Init() { return true; }
-	virtual	bool			Frame() { return true; }
-	virtual	bool			Render() { return true; }
-	virtual bool			Release() { return true; }
-	virtual bool			isDead() { return m_iSceneID; }
-	virtual bool			Reset() { return true; }
-	virtual bool			SetNpcCount(int iNpc) final;
-public:
 	Scene();
-	virtual ~Scene();
+public:
+	virtual bool	Init		() = 0;
+	virtual bool	Frame		() = 0;
+	virtual bool	Render		() = 0;
+	virtual bool	Release		() = 0;
+	virtual bool	inverseSet	();
+	bool			getNextScene();
+public:
+	void * operator new(size_t sz, const char* FileName, int iLine);
+	void operator delete(void * p);
+protected:
+	BKObject		m_BKObject;
+	bool			m_bNextSceneStart;
 };
 
-class SceneLobby : public Scene
+class LobbyScene : public Scene
 {
 public:
-	Button					m_btnStart;
+	LobbyScene();
 public:
-	virtual	bool			Init() override;
-	virtual	bool			Frame() override;
-	virtual	bool			Render() override;
-	virtual bool			Release() override;
-	virtual bool			Reset() { return true; }
-//	virtual bool			isDead();
-public:
-	SceneLobby();
-	virtual ~SceneLobby();
+	bool			Init		() override;
+	bool			Frame		() override;
+	bool			Render		() override;
+	bool			Release		() override;
+	bool			BKState		();
+	void			PosSet		();
+	void			AKeyReact	(const INT&);
+protected:
+	INT				m_nEffectVolume;
+	INT				m_nBGMVolume;
+	INT				m_miscIndex;
+	LOBBYSTATE		m_state;
+	bool			isSoundBar;
+	bool			isPress;
+	Button			m_Btn;
+	BKObject		m_bkmisc[3];
+	RECT			m_miscrt[12];
+	FloatPoint		m_miscpos[11];
 };
-
-class SceneGame : public Scene
-{public:
-	std::vector<NPCObj>		m_npcList;
-	Hero					m_Hero;
-public:
-	bool					Init() override;
-	bool					Frame() override;
-	bool					Render() override;
-	bool					Release() override;
-	virtual bool			Reset() override;
-//	virtual bool			SetNpcCount(int iNpc);
-public:
-	SceneGame();
-	virtual ~SceneGame() {}
-};
-

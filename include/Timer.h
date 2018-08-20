@@ -1,20 +1,20 @@
 #pragma once
 #include "Std.h"
-
-class KTimer
+class Timer
 {
 public:
-	KTimer();
+	Timer();
 public:
-	bool				Init();
-	bool				Frame();
-	bool				Render();
-	bool				Release();
+	bool					Init();
+	bool					Frame();
+	bool					Render();
+	bool					Release();
 private:
-	TCHAR				m_csBuffer[256];
-	DWORD				m_dwFrame;
-	DWORD				m_dwBeforeTick;
-	float				m_fTimer;
-	float				m_fSecPerFrame;
-	float				m_fGameTime;
+	TCHAR					m_csBuffer[256];
+	float					m_fSecPerFrame;
+	float					m_fTimer;
+	float					m_fGameTime;
+	DWORD					m_dwBeforeTick;
+	DWORD					m_dwFrameCount;
+	DWORD					m_dwInterval;
 };

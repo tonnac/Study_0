@@ -1,34 +1,32 @@
 #pragma once
 #include "Bitmap.h"
-//string a; multi-byte
-//wstring a; unicode-byte
 
-struct KCacheData
+struct CacheData_
 {
-	int m_iKey;
-	T_STR m_strName;
-	Bitmap * m_pBitmap;
+	T_STR	m_tName;
+	Bitmap* m_bBitmap;
 };
+
 
 class BitmapMgr : public Singleton<BitmapMgr>
 {
 	friend class Singleton<BitmapMgr>;
-private:
-	void								AddCache(int ikey, T_STR szName, Bitmap * pData);
-	Bitmap *							getCache(int iKey);
-	int									getCache(T_STR szName);
 public:
-	bool								Release();
-public:
-	int									Load(T_STR szLoadFile);
-	Bitmap *							getPtr(int iKey);
-public:
-	virtual ~BitmapMgr();
-private:
-	int									m_iIndex;
-	std::map<int, Bitmap*>				m_map;
-	std::list<KCacheData>				m_mapKCacheList;
 	BitmapMgr();
+	~BitmapMgr();
+public:
+	bool						Init();
+	bool						Frame();
+	bool						Render();
+	bool						Release();
+public:
+	T_STR						LoadFile(T_STR, T_STR);
+	Bitmap*						getBitmapPtr(T_STR);
+private:
+	void						AddCache(T_STR, Bitmap*);
+private:
+	std::map<T_STR, Bitmap*>	m_BitmapList;
+	std::list<CacheData_>		m_CacheList;
 };
 
-#define I_BitmapMgr BitmapMgr::getInstance()
+#define S_BitmapMgr	BitmapMgr::getInstance()
