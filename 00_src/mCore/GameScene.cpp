@@ -92,6 +92,7 @@ bool GameScene::inverseSet()
 
 	m_pPlayer.Set(800, 580, 10, 87, 25, 36);
 	m_pPlayer.setRendering(2.8f, INVERSE::LR_ROTATION);
+	m_pPlayer.setDir(-1);
 
 	return true;
 }
@@ -189,6 +190,7 @@ bool GameScene2::inverseSet()
 
 	m_pPlayer.Set(800, 580, 10, 87, 25, 36);
 	m_pPlayer.setRendering(2.8f, INVERSE::LR_ROTATION);
+	m_pPlayer.setDir(-1);
 
 	return true;
 }

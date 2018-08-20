@@ -68,6 +68,11 @@ bool PlayerIdle::Frame()
 			return true;
 		}
 	}
+	if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
+	{
+		m_pPlayer->setState(L"Crouch");
+		return true;
+	}
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
 		m_pPlayer->setState(L"Attack1");
@@ -414,6 +419,34 @@ bool PlayerRise::Frame()
 			m_pPlayer->setState(L"Run");
 			return true;
 		}
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+PlayerCrouch::PlayerCrouch(Player * pPlayer) : PlayerState(pPlayer)
+{
+	Player * m_pPlayer = dynamic_cast<Player*>(m_pObject);
+	m_pPlayer->addState(std::string("Crouch"), this);
+}
+bool PlayerCrouch::Init()
+{
+	setSprite(L"Kaho", L"Crouch");
+	m_pSprite->setDivideTime(0.8f);
+	return true;
+}
+bool PlayerCrouch::Frame()
+{
+	Player * m_pPlayer = dynamic_cast<Player*>(m_pObject);
+	m_CenterPos->y += g_fPerSecFrame * 60.0f;
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(1);
+		return true;
+	}
+	if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_UP)
+	{
+		m_pPlayer->setState(L"Rise");
 	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;

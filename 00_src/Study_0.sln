@@ -592,6 +592,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "051_Days", "051_Days", "{68
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Scene_01", "Scene_01\Scene_01.vcxproj", "{05755E14-6896-45BD-8862-41EE93E3C948}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{CD2324E3-5A6A-4262-BF2B-F64604D1EB5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2650,7 +2652,7 @@ Global
 		{05755E14-6896-45BD-8862-41EE93E3C948} = {6835F454-E734-455F-B91C-E831BCAB4389}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

@@ -120,9 +120,6 @@
     <ClInclude Include="TerrainObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="GroundObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -139,6 +136,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="DownableObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,9 +206,6 @@
     <ClCompile Include="TerrainObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="GroundObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -225,6 +222,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="DownableObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

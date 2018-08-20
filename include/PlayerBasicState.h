@@ -97,3 +97,12 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
+
+class PlayerCrouch : public PlayerState
+{
+public:
+	PlayerCrouch(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
