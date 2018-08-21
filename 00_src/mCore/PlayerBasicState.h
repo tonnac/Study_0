@@ -17,7 +17,6 @@ protected:
 	EffectObj *			m_pEffectObj;
 	FLOAT				m_fTimer;
 };
-
 class PlayerIdle : public PlayerState
 {
 public:
@@ -26,7 +25,6 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-
 class PlayerRun : public PlayerState
 {
 public:
@@ -35,7 +33,6 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-
 class PlayerBrake : public PlayerState
 {
 public:
@@ -44,7 +41,6 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-
 class PlayerTurn : public PlayerState
 {
 public:
@@ -53,7 +49,6 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-
 class PlayerJump : public PlayerState
 {
 public:
@@ -62,10 +57,9 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 private:
-	FLOAT		m_fJumpSpeed;
 	FLOAT		m_fAcceleration;
+	FLOAT&		m_fJumpSpeed;
 };
-
 class PlayerJump2 : public PlayerState
 {
 public:
@@ -74,10 +68,9 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 private:
-	FLOAT		m_fJumpSpeed;
 	FLOAT		m_fAcceleration;
+	FLOAT&		m_fJumpSpeed;
 };
-
 class PlayerFall : public PlayerState
 {
 public:
@@ -88,7 +81,6 @@ public:
 private:
 	FLOAT		m_fAcceleration;
 };
-
 class PlayerRise : public PlayerState
 {
 public:
@@ -97,11 +89,42 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-
 class PlayerCrouch : public PlayerState
 {
 public:
 	PlayerCrouch(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
+class PlayerLadderEnter : public PlayerState
+{
+public:
+	PlayerLadderEnter(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
+class PlayerLadderLeave : public PlayerState
+{
+public:
+	PlayerLadderLeave(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
+class PlayerLadderUp : public PlayerState
+{
+public:
+	PlayerLadderUp(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
+class PlayerLadderDown : public PlayerState
+{
+public:
+	PlayerLadderDown(Player*);
 public:
 	bool		Init() override;
 	bool		Frame() override;

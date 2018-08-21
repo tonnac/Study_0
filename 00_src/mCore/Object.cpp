@@ -160,7 +160,7 @@ void Object::setDraw_x(const FLOAT& xpos)
 void Object::setCenterPos_x(const FLOAT& ft)
 {
 	m_CenterPos.x = ft;
-	m_DrawPos.x = ft + m_rtDraw.right / 2;
+	m_DrawPos.x = ft - m_rtDraw.right / 2;
 
 	InversionRendering * ir = dynamic_cast<InversionRendering*>(m_pRendering);
 	if (ir)
@@ -177,7 +177,7 @@ void Object::setCenterPos_x(const FLOAT& ft)
 void Object::setCenterPos_y(const FLOAT& ft)
 {
 	m_CenterPos.y = ft;
-	m_DrawPos.y = ft + m_rtDraw.bottom / 2;
+	m_DrawPos.y = ft - m_rtDraw.bottom / 2;
 
 	InversionRendering * ir = dynamic_cast<InversionRendering*>(m_pRendering);
 	if (ir)

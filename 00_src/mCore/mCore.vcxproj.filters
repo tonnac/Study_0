@@ -49,9 +49,28 @@
     <Filter Include="소스 파일\State\PlayerState">
       <UniqueIdentifier>{040669d6-02fc-4cd1-95a0-25717172d197}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{301a9b9e-e6a5-4e3d-bae9-47012b89beb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Scene">
+      <UniqueIdentifier>{97af6b90-9cd5-4d5a-8fa0-140f1789a151}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object\Character">
+      <UniqueIdentifier>{cb8a40de-d5cf-4197-bff7-286575572344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object\Terrain">
+      <UniqueIdentifier>{d9f13407-9815-4e18-8dde-dd0461914dc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Terrain">
+      <UniqueIdentifier>{f83ceaab-55f2-4e3c-b1ab-72b23a00c2e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Character">
+      <UniqueIdentifier>{11423bcb-7c71-4a4e-a869-051cf6044e94}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Kaho.txt" />
+    <Text Include="Monkey.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitmap.h">
@@ -68,9 +87,6 @@
     </ClInclude>
     <ClInclude Include="SpriteMgr.h">
       <Filter>헤더 파일\Sprite</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>헤더 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="BKObject.h">
       <Filter>헤더 파일\Object</Filter>
@@ -93,9 +109,6 @@
     <ClInclude Include="KahoAttack.h">
       <Filter>헤더 파일\Object\EffectObj</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Scroll.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -117,29 +130,38 @@
     <ClInclude Include="State.h">
       <Filter>헤더 파일\State</Filter>
     </ClInclude>
-    <ClInclude Include="TerrainObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Rendering.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FadeObject.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneMgr.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="LadderObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
     </ClInclude>
     <ClInclude Include="DownableObject.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeObject.h">
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="CharacterObject.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Object\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,9 +173,6 @@
     </ClCompile>
     <ClCompile Include="Collision.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>소스 파일\Object</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
@@ -182,9 +201,6 @@
     <ClCompile Include="KahoAttack.cpp">
       <Filter>소스 파일\Object\EffectObj</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Scroll.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -203,29 +219,38 @@
     <ClCompile Include="State.cpp">
       <Filter>소스 파일\State</Filter>
     </ClCompile>
-    <ClCompile Include="TerrainObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Rendering.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FadeObject.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
     <ClCompile Include="SceneMgr.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="LadderObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
     </ClCompile>
     <ClCompile Include="DownableObject.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeObject.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Object\Character</Filter>
     </ClCompile>
     <ClCompile Include="CharacterObject.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>소스 파일\Object\Character</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

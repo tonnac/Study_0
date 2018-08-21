@@ -30,10 +30,9 @@ bool DownableObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 {
 	LONG lWidth = CollisionArea.right - CollisionArea.left;
 	LONG lHeight = CollisionArea.bottom - CollisionArea.top;
-	RECT crt = *pObject->getCollisionRt();
 	FloatPoint pObjCenterPos = *(pObject->getCenterPos());
 
-	Player * pl = dynamic_cast<Player*>(pObject);
+	CharacterObject * pl = dynamic_cast<CharacterObject*>(pObject);
 
 	bool flag = pl->isFallState();
 	if (flag == true)
@@ -42,8 +41,11 @@ bool DownableObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 	}
 	else
 	{
+		if (pl->getCurrentState() == "LadderEnter" || pl->getCurrentState() == "LadderLeave" ||
+			pl->getCurrentState() == "LadderUp" || pl->getCurrentState() == "LadderDown")
+			return true;
 		pObject->setCenterPos_y(pObjCenterPos.y - lHeight);
 	}
-//	pObject->setLanding(true);
+	pl->setDownable(true);
 	return true;
 }

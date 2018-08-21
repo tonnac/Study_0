@@ -73,15 +73,15 @@ void BKObject::AddTerrain(TerrainObject * m_ptObject)
 }
 bool BKObject::Collision(Object* pObject)
 {
+	CharacterObject * pCharObj = dynamic_cast<CharacterObject*>(pObject);
 	bool isLanding = false;
 	for (auto it : m_pObjList)
 	{
 		if (it->Collision(pObject))
 		{
 			isLanding = true;
-		}		
-		Player * pl = dynamic_cast<Player*> (pObject);
-		bool flag = pl->isFallState();
+		}
+		bool flag = pCharObj->isFallState();
 		if (flag == false)
 		{
 			RECT ObjRT = *pObject->getCollisionRt();

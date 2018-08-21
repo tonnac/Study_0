@@ -1,5 +1,8 @@
 #include "FadeObject.h"
 
+FadeObject::FadeObject() : m_fDecrement(150.5f)
+{}
+
 FadeObject::~FadeObject()
 {
 	Release();
@@ -24,8 +27,8 @@ bool FadeObject::Init()
 }
 bool FadeObject::Frame()
 {
-	m_fAlpha -= g_fPerSecFrame * 150.5f;
-	if (m_fAlpha < 0)
+	m_fAlpha += g_fPerSecFrame * m_fDecrement;
+	if (m_fAlpha < 0.0f || m_fAlpha > 255.0f)
 	{
 		return false;
 	}
@@ -52,5 +55,15 @@ bool FadeObject::Release()
 	DeleteDC(m_hMemDC);
 	DeleteObject(m_bkBrush);
 	DeleteObject(m_hOffBitmap);
+	return true;
+}
+bool FadeObject::SetAlpha(const FLOAT& alpha)
+{
+	m_fAlpha = alpha;
+	return true;
+}
+bool FadeObject::Decrease(const FLOAT& decre)
+{
+	m_fDecrement = decre;
 	return true;
 }

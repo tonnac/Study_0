@@ -18,18 +18,12 @@ bool TerrainObject::Frame()
 }
 bool TerrainObject::Render()
 {
-	//int prevpen = SetROP2(g_hOffScreenDC, R2_NOTXORPEN);
+	int prevpen = SetROP2(g_hOffScreenDC, R2_MASKPEN);
 
-	//Rectangle(g_hOffScreenDC, m_rtCollision.left, m_rtCollision.top,
-	//	m_rtCollision.right, m_rtCollision.bottom);
+	Rectangle(g_hOffScreenDC, m_rtCollision.left, m_rtCollision.top,
+		m_rtCollision.right, m_rtCollision.bottom);
 
-	//SetROP2(g_hOffScreenDC, prevpen);
-
-	HBRUSH recbrush = CreateSolidBrush(RGB(0, 0, 255));
-
-	RECT rt = { m_rtCollision.left,m_rtCollision.top,m_rtCollision.right,m_rtCollision.bottom };
-	FillRect(g_hOffScreenDC, &rt, recbrush);
-
+	SetROP2(g_hOffScreenDC, prevpen);
 	return true;
 }
 bool TerrainObject::Release()
@@ -67,9 +61,9 @@ bool TerrainObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 	FloatPoint pObjCenterPos = *(pObject->getCenterPos());
 	if (lWidth > lHeight)
 	{
+		CharacterObject * pl = dynamic_cast<CharacterObject*>(pObject);
 		if (CollisionArea.top == m_rtCollision.top)					//	위에서 충돌
 		{
-			Player * pl = dynamic_cast<Player*>(pObject);
 			bool flag = pl->isFallState();
 			if (flag == true)
 			{
@@ -84,6 +78,9 @@ bool TerrainObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 		else if (CollisionArea.bottom == m_rtCollision.bottom)		// 아래에서 충돌
 		{
 			pObject->setCenterPos_y(pObjCenterPos.y + lHeight);
+			pl->setState(L"Fall");
+			pObject->setLanding(false);
+			return false;
 		}
 	}
 	else

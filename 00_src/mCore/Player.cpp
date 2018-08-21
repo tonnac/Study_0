@@ -4,7 +4,7 @@
 
 float g_fSpeed = 0.0f;
 
-Player::Player() : m_iJumpNumber(0)
+Player::Player()
 { 
 	State * state = New PlayerIdle(this);
 	state = New PlayerRun(this);
@@ -19,25 +19,13 @@ Player::Player() : m_iJumpNumber(0)
 	state = New AirAttack(this);
 	state = New PlayerRise(this);
 	state = New PlayerCrouch(this);
+
+	state = New PlayerLadderEnter(this);
+	state = New PlayerLadderLeave(this);
+	state = New PlayerLadderUp(this);
+	state = New PlayerLadderDown(this);
 	g_fSpeed = m_fSpeed;
 }
-INT Player::getJumpNum()
-{
-	return m_iJumpNumber;
-}
-void Player::setJumpNum(const INT& Num)
-{
-	m_iJumpNumber = Num;
-}
-void Player::setDownable(const bool& bdown)
-{
-	m_bDownable = bdown;
-}
-bool Player::getDownable()
-{
-	return m_bDownable;
-}
-
 //bool Player::Init()
 //{
 //	for (auto it : m_pStateList)

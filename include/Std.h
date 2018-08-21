@@ -14,7 +14,7 @@
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"msimg32.lib")
-#pragma comment(lib,"MomodoraCore.lib")
+#pragma comment(lib,"11_mCore.lib")
 
 #define New new(__FILE__,__LINE__)
 #define PI 3.141592

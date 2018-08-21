@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-Scene::Scene() : m_bNextSceneStart(false)
+Scene::Scene() : m_bNextSceneStart(false), m_pFadeObject(nullptr)
 {}
 bool Scene::inverseSet()
 {
@@ -37,6 +37,10 @@ LobbyScene::LobbyScene() : isPress(false), m_nEffectVolume(10), m_nBGMVolume(10)
 bool LobbyScene::Init()
 {
 	PosSet();
+	m_pFadeObject = New FadeObject;
+	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
+	m_pFadeObject->Init();
+	m_pFadeObject->Decrease(-30.0f);
 	for (int i = 0; i < 3; ++i)
 	{
 		m_bkmisc[i].LoadFile(L"TitleAnyKey", L"../../data/bmp/Misc.bmp");
@@ -45,7 +49,7 @@ bool LobbyScene::Init()
 	m_BKObject.LoadFile(L"MainMenu", L"../../data/bmp/Title_0.bmp");
 	m_BKObject.Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_BKObject.Init();
-	m_BKObject.setFadeRender(0.0f,30.0f);
+	m_BKObject.setFadeRender(0.0f, 30.0f);
 	m_state = LOBBYSTATE::DEFAULT;
 
 	return true;
@@ -53,22 +57,39 @@ bool LobbyScene::Init()
 bool LobbyScene::Frame()
 {
 	BKState();
-	if (m_BKObject.Frame() == false)
+	if (m_pFadeObject)
 	{
-		if (m_state == LOBBYSTATE::SELECT)
+		if (m_pFadeObject->Frame() == false)
 		{
-			m_bNextSceneStart = true;
-			return false;
+			if (m_state == LOBBYSTATE::SELECT)
+			{
+				m_bNextSceneStart = true;
+				return false;
+			}
+			m_state = LOBBYSTATE::START;
+			delete m_pFadeObject;
+			m_pFadeObject = nullptr;
+			m_miscIndex = 0;
 		}
-		m_state = LOBBYSTATE::START;
-		m_BKObject.setRendering();
-		m_miscIndex = 0;
 	}
+	m_BKObject.Frame();
 	for (int i = 0; i < 3; ++i)
 	{
 		m_bkmisc[i].Frame();
 	}
-	
+	if (m_pFadeObject)
+	{
+		if (!m_pFadeObject->Frame())
+		{
+			if (m_state == LOBBYSTATE::SELECT)
+			{
+				m_bNextSceneStart = true;
+				delete m_pFadeObject;
+				m_pFadeObject = nullptr;
+				return false;
+			}
+		}
+	}
 	return true;
 }
 bool LobbyScene::Render()
@@ -77,6 +98,10 @@ bool LobbyScene::Render()
 	for (int i = 0; i < 3; ++i)
 	{
 		m_bkmisc[i].Render();
+	}
+	if (m_pFadeObject)
+	{
+		m_pFadeObject->Render();
 	}
 	return true;
 }
@@ -220,9 +245,11 @@ bool LobbyScene::BKState()
 	case LOBBYSTATE::SELECT:
 		if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
 		{
-			m_BKObject.setFadeRender(255.0f,-200.0f);
-			m_bkmisc[0].setFadeRender(255.0f, -200.0f);
-			m_bkmisc[1].Set(0, 0, 0, 0, 0, 0);
+			m_pFadeObject = New FadeObject;
+			m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
+			m_pFadeObject->Init();
+			m_pFadeObject->SetAlpha(0.0f);
+			m_pFadeObject->Decrease(130.0f);
 		}
 		if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 		{

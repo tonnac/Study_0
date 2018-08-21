@@ -4,8 +4,10 @@
 #include "SpriteMgr.h"
 #include "Player.h"
 #include "Scroll.h"
+#include "Enemy.h"
 #include "TerrainObject.h"
 #include "Button.h"
+#include "FadeObject.h"
 
 class Scene
 {
@@ -23,6 +25,7 @@ public:
 	void operator delete(void * p);
 protected:
 	BKObject		m_BKObject;
+	FadeObject*		m_pFadeObject;
 	bool			m_bNextSceneStart;
 };
 
