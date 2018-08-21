@@ -13,6 +13,8 @@ public:
 	virtual bool		Frame() =0;
 	virtual	bool		Render();
 	virtual	bool		Release();
+protected:
+	Player *			m_pCharObj;
 };
 class PlayerIdle : public PlayerState
 {

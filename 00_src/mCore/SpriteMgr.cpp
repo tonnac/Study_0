@@ -35,8 +35,8 @@ bool SpriteMgr::SpriteSet(T_STR szSpriteList)
 	std::ifstream fp(szSpriteList.c_str());
 	
 	std::string filestring(szSpriteList.begin(), szSpriteList.end());
-	std::string pe = filestring.substr(filestring.find_last_of('/')+1, filestring.length() - (filestring.find_last_not_of(".txt")+1));
-
+	std::string pe = filestring.substr(filestring.find_last_of('/')+1, filestring.length());
+	pe = pe.substr(0, pe.find('.'));
 	SPMAP addmap;
 
 	if (!fp.is_open())

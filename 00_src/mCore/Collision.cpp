@@ -30,6 +30,24 @@ bool CollisionClass::RectInRect(RECT A_rt, RECT B_rt)
 
 	return false;
 }
+bool CollisionClass::RectInRect(RECT A_rt, FloatRect B_rt)
+{
+	POINT A_Center, B_Center;
+	A_Center.x = (A_rt.right + A_rt.left) / 2;
+	A_Center.y = (A_rt.bottom + A_rt.top) / 2;
+
+	B_Center.x = (B_rt.right + B_rt.left) / 2;
+	B_Center.y = (B_rt.bottom + B_rt.top) / 2;
+
+	LONG xDiff = abs(A_Center.x - B_Center.x);
+	LONG yDiff = abs(A_Center.y - B_Center.y);
+
+	if (xDiff <= (A_rt.right - A_Center.x) + (B_rt.right - B_Center.x) &&
+		yDiff <= (A_rt.bottom - A_Center.y) + (B_rt.bottom - B_Center.y))
+		return true;
+
+	return false;
+}
 bool CollisionClass::SphereInPt(RECT rt, POINT pt)
 {
 	Sphere rtSphere;

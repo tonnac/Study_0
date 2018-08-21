@@ -14,8 +14,7 @@ public:
 	virtual	bool		Render();
 	virtual	bool		Release();
 protected:
-	EffectObj *			m_pEffectObj;
-	FLOAT				m_fTimer;
+	Player *			m_pCharObj;
 };
 class PlayerIdle : public PlayerState
 {

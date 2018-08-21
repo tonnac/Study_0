@@ -3,8 +3,7 @@
 #include "Rendering.h"
 
 Object::Object() : m_ColorBitmap(nullptr), m_MaskBitmap(nullptr), isDebugMode(false),
-					isDead(false), m_fSpeed(0.0f), m_pRendering(nullptr), m_fScroll(0.0f),
-					isLanding(false)
+					m_fSpeed(0.0f), m_pRendering(nullptr), m_fScroll(0.0f), isLanding(false)
 {
 	ZeroMemory(&m_CenterPos,sizeof(FloatPoint));
 	ZeroMemory(&m_DrawPos, sizeof(FloatPoint));

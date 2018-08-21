@@ -4,7 +4,7 @@
 #include "LadderObject.h"
 #include "Enemy.h"
 
-GameScene::GameScene() : m_pScroll(&m_pPlayer, &m_BKObject)
+GameScene::GameScene() : m_pScroll(&m_pPlayer, &m_BKObject, &m_NPCList)
 {}
 
 GameScene1::GameScene1()
@@ -375,6 +375,7 @@ bool GameScene4::Init()
 	m_pFadeObject->Init();
 
 	S_SpriteMgr.SpriteSet(L"../../data/txt/Kaho.txt");
+	S_SpriteMgr.SpriteSet(L"../../data/txt/Monkey.txt");
 	m_pPlayer.LoadFile(L"PLAYER", L"../../data/bmp/KahoColor.bmp", L"../../data/bmp/KahoMask.bmp");
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 5310, 0, 2198, 722);
@@ -400,6 +401,15 @@ bool GameScene4::Init()
 	t1->Set(1173, 570, 1173, 570, 105, 20);
 	m_BKObject.AddTerrain(t1);
 
+	Enemy * pl = New Enemy;
+	pl->LoadFile(L"ENEMY", L"../../data/bmp/MonkeyColor.bmp", L"../../data/bmp/MonkeyMask.bmp");
+	pl->Set(680, 550, 14, 66, 28, 23);
+	pl->Init();
+	pl->setRendering(2.8f, INVERSE::DEFAULT);
+	FloatRect rt = { 554,100,1173,573 };
+	pl->setArea(rt);
+	m_NPCList.push_back(pl);
+	
 
 	m_pPlayer.Set(130, 580, 10, 87, 25, 36);
 	m_pPlayer.Init();
@@ -422,9 +432,16 @@ bool GameScene4::Frame()
 		m_bNextSceneStart = true;
 		return false;
 	}
-	if (m_BKObject.Collision(&m_pPlayer) == false)
+	m_BKObject.Collision(&m_pPlayer);
+
+	for (NPCLIST it = m_NPCList.begin(); it != m_NPCList.end();)
 	{
-		m_BKObject.setRendering();
+		m_BKObject.Collision(*it);
+		(*it)->Process(&m_pPlayer);
+		//if ((*it)->isDead())
+		//{
+		//	it = m_NPCList.erase(it);
+		//}
 	}
 	m_pPlayer.Frame();
 	m_pScroll.Frame();
@@ -441,18 +458,27 @@ bool GameScene4::Frame()
 bool GameScene4::Render()
 {
 	m_BKObject.Render();
+	for (auto it : m_NPCList)
+	{
+		it->Render();
+	}
 	m_pPlayer.Render();
 	m_pScroll.Render();
 	if (m_pFadeObject)
 	{
 		m_pFadeObject->Render();
 	}
+
 	return true;
 }
 bool GameScene4::Release()
 {
 	m_pPlayer.Release();
 	m_BKObject.Release();
+	for (auto it : m_NPCList)
+	{
+		it->Release();
+	}
 	return true;
 }
 bool GameScene4::inverseSet()

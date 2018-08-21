@@ -25,6 +25,8 @@ Player::Player()
 	state = New PlayerLadderUp(this);
 	state = New PlayerLadderDown(this);
 	g_fSpeed = m_fSpeed;
+	m_HP = 100;
+	m_Damage = 24;
 }
 //bool Player::Init()
 //{

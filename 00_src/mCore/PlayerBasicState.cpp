@@ -3,8 +3,11 @@
 
 #include "TerrainObject.h"
 
-PlayerState::PlayerState(Player * pPlayer) : State(pPlayer)
-{}
+PlayerState::PlayerState(Player * pPlayer) : State(pPlayer), m_pCharObj(pPlayer)
+{
+	m_CenterPos = pPlayer->getCenterPos();
+	m_rtDraw = pPlayer->getrtDraw();
+}
 bool PlayerState::Render()
 {
 	return true;
@@ -18,8 +21,6 @@ bool PlayerState::Release()
 	}
 	return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 PlayerIdle::PlayerIdle(Player * pPlayer) : PlayerState(pPlayer)
 {
@@ -93,8 +94,6 @@ bool PlayerIdle::Frame()
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 PlayerRun::PlayerRun(Player * pPlayer) : PlayerState(pPlayer)
 {
 	m_pCharObj->addState(std::string("Run"), this);
@@ -150,8 +149,6 @@ bool PlayerRun::Frame()
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 PlayerBrake::PlayerBrake(Player * pPlayer) : PlayerState(pPlayer)
 {
 	m_pCharObj->addState(std::string("Brake"), this);
@@ -173,8 +170,6 @@ bool PlayerBrake::Frame()
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 PlayerTurn::PlayerTurn(Player * pPlayer) : PlayerState(pPlayer)
 {
@@ -207,8 +202,6 @@ bool PlayerTurn::Frame()
 	return true;
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 PlayerJump::PlayerJump(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed()), m_fAcceleration(-3.5f)
 {
 	m_pCharObj->addState(std::string("Jump"), this);
@@ -240,6 +233,7 @@ bool PlayerJump::Frame()
 	if (iJumpNumber == 0 && (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH))
 	{
 		m_pSprite->setIndex(0);
+		m_pCharObj->setJumpNum(1);
 		m_pCharObj->setState(L"Jump2");
 		return true;
 	}
@@ -259,8 +253,6 @@ bool PlayerJump::Frame()
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 PlayerJump2::PlayerJump2(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed(1)), m_fAcceleration(-3.5f)
 {
@@ -303,8 +295,6 @@ bool PlayerJump2::Frame()
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 PlayerFall::PlayerFall(Player * pPlayer) : PlayerState(pPlayer), m_fAcceleration(3.5f)
 {
@@ -362,8 +352,6 @@ bool PlayerFall::Frame()
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
-
-//////////////////////////////////////////////////////////////////////////
 
 PlayerRise::PlayerRise(Player * pPlayer) : PlayerState(pPlayer)
 {

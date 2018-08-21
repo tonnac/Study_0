@@ -64,7 +64,6 @@ protected:
 	Bitmap *			m_ColorBitmap;
 	Bitmap *			m_MaskBitmap;
 	bool				isDebugMode;
-	bool				isDead;
 	bool				isLanding;
 	Rendering*			m_pRendering;
 };

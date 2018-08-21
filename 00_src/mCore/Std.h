@@ -79,11 +79,14 @@ struct FloatPoint
 {
 	FLOAT x, y;
 };
-
 struct Sphere
 {
 	FLOAT fRadius;
 	POINT CenterPos;
+};
+struct FloatRect
+{
+	FLOAT left, top, right, bottom;
 };
 
 

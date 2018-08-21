@@ -1,16 +1,16 @@
 #include "Scroll.h"
 #include "Player.h"
 
-Scroll::Scroll(Object * pPlayer, Object * pBkObj) : m_pPlayer(pPlayer),
-		m_PlayerCollisionRt(pPlayer->getCollisionRt()), m_pBkObj(pBkObj),
+Scroll::Scroll(Object * pPlayer, Object * pBkObj, std::list<Enemy*>* npcVector) : m_pPlayer(pPlayer),
+		m_PlayerCollisionRt(pPlayer->getCollisionRt()), m_pBkObj(pBkObj), m_npclist(npcVector),
 		m_BkRtDraw(pBkObj->getrtDraw())
 {}
 
 bool Scroll::Init()
 {
-	m_rtCollision.left = g_rtClient.left + 200;
+	m_rtCollision.left = g_rtClient.left + 150;
 	m_rtCollision.top = g_rtClient.top;
-	m_rtCollision.right = (g_rtClient.left + 520 + g_rtClient.right) / 2;
+	m_rtCollision.right = (g_rtClient.left + 620 + g_rtClient.right) / 2;
 	m_rtCollision.bottom = g_rtClient.bottom;
 
 	m_CenterPos.x = static_cast<FLOAT>((m_rtCollision.left + m_rtCollision.right) / 2);
@@ -83,6 +83,12 @@ bool Scroll::MoveCamera(const LONG& size)
 {
 	FLOAT x = (*m_pPlayer->getCenterPos()).x;
 	m_pPlayer->setCenterPos_x(x - size);
+	for (auto it : *m_npclist)
+	{
+		FLOAT x1 = (*it->getCenterPos()).x;
+		it->MoveScrollObj(size);
+		it->setCenterPos_x(x1 - size);
+	}
 	m_pBkObj->MoveScrollBk(size);
 	return true;
 }

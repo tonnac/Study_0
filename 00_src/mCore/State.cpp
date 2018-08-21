@@ -1,10 +1,24 @@
 #include "State.h"
-State::State(CharacterObject* pObject) : m_pCharObj(pObject), m_CenterPos(pObject->getCenterPos()),
- m_rtDraw(pObject->getrtDraw()), m_pEffectObj(nullptr), m_fTimer(0.0f)
+#include "CharacterObject.h"
+#include "EffectObj.h"
+
+State::State(CharacterObject* pObject) : m_pEffectObj(nullptr), m_fTimer(0.0f)
 {}
 void State::setSprite(T_STR cName, T_STR szSprite)
 {
 	m_pSprite = S_SpriteMgr.LoadSprite(cName, szSprite);
+}
+RECT State::getEffectRT()
+{
+	if (m_pEffectObj)
+	{
+		return *m_pEffectObj->getCollisionRt();
+	}
+	return RECT();
+}
+bool State::Frame()
+{
+	return true;
 }
 bool State::Render()
 {
@@ -14,7 +28,10 @@ bool State::Release()
 {
 	return true;
 }
-
+bool State::Process(Player* pPlayer)
+{
+	return true;
+}
 void * State::operator new(size_t sz, const char* FileName, int iLine)
 {
 	std::string ad = FileName;

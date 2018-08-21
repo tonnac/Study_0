@@ -1,5 +1,5 @@
 #include "TerrainObject.h"
-
+#include "Enemy.h"
 
 bool TerrainObject::Init()
 {
@@ -78,7 +78,11 @@ bool TerrainObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 		else if (CollisionArea.bottom == m_rtCollision.bottom)		// 아래에서 충돌
 		{
 			pObject->setCenterPos_y(pObjCenterPos.y + lHeight);
-			pl->setState(L"Fall");
+			Enemy * ew = dynamic_cast<Enemy*>(pObject);
+			if (ew == nullptr)
+			{
+				pl->setState(L"Fall");
+			}
 			pObject->setLanding(false);
 			return false;
 		}

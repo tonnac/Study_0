@@ -17,16 +17,18 @@ protected:
 	std::list<Enemy*>	m_NPCList;
 };
 
+using NPCLIST = std::list<Enemy*>::iterator;
+
 class GameScene1 : public GameScene
 {
 public:
 	GameScene1();
 public:
-	bool		Init		() override;
-	bool		Frame		() override;
-	bool		Render		() override;
-	bool		Release		() override;
-	bool		inverseSet	() override;
+	bool				Init		() override;
+	bool				Frame		() override;
+	bool				Render		() override;
+	bool				Release		() override;
+	bool				inverseSet	() override;
 };
 
 class GameScene2 : public GameScene
@@ -34,11 +36,11 @@ class GameScene2 : public GameScene
 public:
 	GameScene2();
 public:
-	bool		Init		() override;
-	bool		Frame		() override;
-	bool		Render		() override;
-	bool		Release		() override;
-	bool		inverseSet	() override;
+	bool				Init		() override;
+	bool				Frame		() override;
+	bool				Render		() override;
+	bool				Release		() override;
+	bool				inverseSet	() override;
 };
 
 class GameScene3 : public GameScene
@@ -46,20 +48,20 @@ class GameScene3 : public GameScene
 public:
 	GameScene3();
 public:
-	bool		Init		() override;
-	bool		Frame		() override;
-	bool		Render		() override;
-	bool		Release		() override;
-	bool		inverseSet	() override;
+	bool				Init		() override;
+	bool				Frame		() override;
+	bool				Render		() override;
+	bool				Release		() override;
+	bool				inverseSet	() override;
 };
 class GameScene4 : public GameScene
 {
 public:
 	GameScene4();
 public:
-	bool		Init		() override;
-	bool		Frame		() override;
-	bool		Render		() override;
-	bool		Release		() override;
-	bool		inverseSet	() override;
+	bool				Init		() override;
+	bool				Frame		() override;
+	bool				Render		() override;
+	bool				Release		() override;
+	bool				inverseSet	() override;
 };

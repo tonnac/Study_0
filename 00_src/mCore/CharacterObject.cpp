@@ -3,7 +3,8 @@
 #include "PlayerBasicState.h"
 
 CharacterObject::CharacterObject() : m_pCurrentState(nullptr), m_iCurrentDir(1), m_bDownable(false),
-									m_iJumpNumber(0), m_fJumpSpeed(235.0f), m_fJumpSpeed2(185.0f), m_bLadder(false)
+									m_iJumpNumber(0), m_fJumpSpeed(235.0f), m_fJumpSpeed2(185.0f), m_bLadder(false),
+	m_bDead(false)
 {
 	m_fSpeed = 150.0f;
 }
@@ -65,6 +66,18 @@ void CharacterObject::setJumpNum(const INT& Num)
 {
 	m_iJumpNumber = Num;
 }
+bool CharacterObject::isDead()
+{
+	return m_bDead;
+}
+INT	 CharacterObject::getDamage()
+{
+	return m_Damage;
+}
+RECT CharacterObject::getEffectObj()
+{
+	return m_pCurrentState->getEffectRT();
+}
 std::string	CharacterObject::getCurrentState()
 {
 	for (auto it : m_pStateList)
@@ -79,6 +92,14 @@ std::string	CharacterObject::getCurrentState()
 void CharacterObject::setDownable(const bool& bdown)
 {
 	m_bDownable = bdown;
+}
+void CharacterObject::setHP(const INT& hp)
+{
+	m_HP -= hp;
+	if (m_HP <= 0)
+	{
+		m_bDead = true;
+	}
 }
 bool CharacterObject::getDownable()
 {
@@ -116,4 +137,10 @@ INT CharacterObject::getJumpNum()
 void CharacterObject::addState(std::string Name, State* state)
 {
 	m_pStateList.insert(std::make_pair(Name, state));
+}
+std::string	CharacterObject::setTransition(E_EVENT Event)
+{
+	m_sCurrestState = m_fms.StateTransition(m_sCurrestState, Event);
+	m_pCurrentState = m_pStateList[m_sCurrestState];
+	return m_sCurrestState;
 }
