@@ -102,6 +102,6 @@ void BKObject::ReverseSet()
 	{
 		it->ReverseSet(m_rtDraw.right - g_rtClient.right);
 	}
-	m_rtDraw.left = m_rtDraw.right - g_rtClient.right;
+	m_rtDraw.left += m_rtDraw.right - g_rtClient.right;
 	m_fScroll = m_rtDraw.left;
 }

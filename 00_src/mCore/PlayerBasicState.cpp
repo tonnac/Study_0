@@ -3,7 +3,7 @@
 
 #include "TerrainObject.h"
 
-PlayerState::PlayerState(Player * pPlayer) : State(pPlayer), m_pEffectObj(nullptr), m_fTimer(0.0f)
+PlayerState::PlayerState(Player * pPlayer) : State(pPlayer)
 {}
 bool PlayerState::Render()
 {

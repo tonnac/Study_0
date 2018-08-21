@@ -46,6 +46,17 @@ bool Collision::RectInPt(RECT rt, POINT pt)
 	}
 	return false;
 }
+bool Collision::RectInPt(RECT rt, KPoint pt)
+{
+	if (rt.left <= pt.x && rt.right >= pt.x)
+	{
+		if (rt.top <= pt.y && rt.bottom >= pt.y)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 bool Collision::SphereInSphere(RECT rtDesk, RECT rtSrc)
 {
 	Sphere sphereDesk, sphereSrc;

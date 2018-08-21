@@ -283,6 +283,7 @@ KObject::KObject() : m_ColorBitmap(nullptr),m_MaskBitmap(nullptr)
 	m_bDead = false;
 	m_fScrollSpeed = 100.0f;
 	m_fAlpha = 255.0f;
+	m_fAttackRadius = 200.0f;
 }
 KObject::~KObject()
 {

@@ -37,6 +37,7 @@ public:
 	float				m_fDir[2];
 	float				m_fSpeed;
 	bool				m_bDead;
+	float				m_fAttackRadius;
 public:
 	bool				m_bDebugRect;
 public:

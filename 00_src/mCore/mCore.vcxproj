@@ -164,7 +164,9 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClInclude Include="Core.h" />
     <ClInclude Include="DownableObject.h" />
     <ClInclude Include="EffectObj.h" />
+    <ClInclude Include="EnemyBasicState.h" />
     <ClInclude Include="FadeObject.h" />
+    <ClInclude Include="FinateStateMachine.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="KahoAttack.h" />
@@ -196,7 +198,9 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="DownableObject.cpp" />
     <ClCompile Include="EffectObj.cpp" />
+    <ClCompile Include="EnemyBasicState.cpp" />
     <ClCompile Include="FadeObject.cpp" />
+    <ClCompile Include="FinateStateMachine.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="KahoAttack.cpp" />

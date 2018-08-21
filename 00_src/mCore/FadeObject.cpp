@@ -27,7 +27,7 @@ bool FadeObject::Init()
 }
 bool FadeObject::Frame()
 {
-	m_fAlpha += g_fPerSecFrame * m_fDecrement;
+	m_fAlpha -= g_fPerSecFrame * m_fDecrement;
 	if (m_fAlpha < 0.0f || m_fAlpha > 255.0f)
 	{
 		return false;

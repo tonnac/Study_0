@@ -2,6 +2,7 @@
 #include "Rendering.h"
 #include "DownableObject.h"
 #include "LadderObject.h"
+#include "Enemy.h"
 
 GameScene::GameScene() : m_pScroll(&m_pPlayer, &m_BKObject)
 {}
@@ -185,23 +186,23 @@ bool GameScene2::Init()
 }
 bool GameScene2::Frame()
 {
-	static float ftimer = 0.0f;
+	//static float ftimer = 0.0f;
 
-	ftimer += g_fPerSecFrame;
+	//ftimer += g_fPerSecFrame;
 
-	if (ftimer <= 5.0f)
-	{
-		FloatPoint pe = *m_pPlayer.getCenterPos();
-		FloatPoint xy = *m_BKObject.getCenterPos();
-		int i = rand() % 2 == 0 ? 1 : -1;
-		float k = rand() % 5 * g_fPerSecFrame * 35.0f;
-		m_BKObject.setCenterPos_x(xy.x + i * k);
-		m_pPlayer.setCenterPos_x(pe.x + i * k);
-		int y = rand() % 2 == 0 ? 1 : -1;
-		float a = rand() % 5 * g_fPerSecFrame * 35.0f;
-		m_BKObject.setCenterPos_y(xy.y + y * a);
-		m_pPlayer.setCenterPos_y(pe.y + y * a);
-	}
+	//if (ftimer <= 5.0f)
+	//{
+	//	FloatPoint pe = *m_pPlayer.getCenterPos();
+	//	FloatPoint xy = *m_BKObject.getCenterPos();
+	//	int i = rand() % 2 == 0 ? 1 : -1;
+	//	float k = rand() % 5 * g_fPerSecFrame * 35.0f;
+	//	m_BKObject.setCenterPos_x(xy.x + i * k);
+	//	m_pPlayer.setCenterPos_x(pe.x + i * k);
+	//	int y = rand() % 2 == 0 ? 1 : -1;
+	//	float a = rand() % 5 * g_fPerSecFrame * 35.0f;
+	//	m_BKObject.setCenterPos_y(xy.y + y * a);
+	//	m_pPlayer.setCenterPos_y(pe.y + y * a);
+	//}
 
 	const FloatPoint px = *m_pPlayer.getDrawPos();
 	if (px.x <= 20)

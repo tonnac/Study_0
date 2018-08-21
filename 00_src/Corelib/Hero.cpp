@@ -110,7 +110,7 @@ bool Hero::AlphaBlendd(HDC dcDest, int x, int y, int cx, int cy,
 
 bool Hero::Render()
 {
-	m_fAlpha -= g_fSecPerFrame * 2000.0f;
+	m_fAlpha -= g_fSecPerFrame * 10.0f;
 	if (m_fAlpha < 0) m_fAlpha = 255.0f;
 
 	//static BLENDFUNCTION blend;

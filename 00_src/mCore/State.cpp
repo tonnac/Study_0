@@ -1,12 +1,11 @@
 #include "State.h"
 State::State(CharacterObject* pObject) : m_pCharObj(pObject), m_CenterPos(pObject->getCenterPos()),
- m_rtDraw(pObject->getrtDraw())
+ m_rtDraw(pObject->getrtDraw()), m_pEffectObj(nullptr), m_fTimer(0.0f)
 {}
 void State::setSprite(T_STR cName, T_STR szSprite)
 {
 	m_pSprite = S_SpriteMgr.LoadSprite(cName, szSprite);
 }
-
 bool State::Render()
 {
 	return true;

@@ -67,6 +67,12 @@
     <Filter Include="소스 파일\Object\Character">
       <UniqueIdentifier>{11423bcb-7c71-4a4e-a869-051cf6044e94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\State\EnemyState">
+      <UniqueIdentifier>{4c753077-97b4-4834-adbb-e9b09411bfa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\State\EnemyState">
+      <UniqueIdentifier>{3047ac2c-99a1-4402-8499-33c843f1b297}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Kaho.txt" />
@@ -163,6 +169,12 @@
     <ClInclude Include="Enemy.h">
       <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyBasicState.h">
+      <Filter>헤더 파일\State\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="FinateStateMachine.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp">
@@ -251,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
       <Filter>소스 파일\Object\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBasicState.cpp">
+      <Filter>소스 파일\State\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="FinateStateMachine.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 #include "PlayerBasicState.h"
 
 CharacterObject::CharacterObject() : m_pCurrentState(nullptr), m_iCurrentDir(1), m_bDownable(false),
-									m_iJumpNumber(0), m_fJumpSpeed(220.0f), m_fJumpSpeed2(170.0f), m_bLadder(false)
+									m_iJumpNumber(0), m_fJumpSpeed(235.0f), m_fJumpSpeed2(185.0f), m_bLadder(false)
 {
 	m_fSpeed = 150.0f;
 }

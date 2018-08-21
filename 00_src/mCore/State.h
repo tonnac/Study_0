@@ -2,6 +2,8 @@
 #include "SpriteMgr.h"
 #include "CharacterObject.h"
 
+class EffectObj;
+
 class State
 {
 public:
@@ -21,6 +23,8 @@ protected:
 	Sprite *			m_pSprite;
 	FloatPoint*			m_CenterPos;
 	RECT*				m_rtDraw;
+	EffectObj *			m_pEffectObj;
+	FLOAT				m_fTimer;
 };
 //	FloatPoint*			m_DrawPos;
 //	RECT*				m_rtCollision;
