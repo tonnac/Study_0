@@ -9,7 +9,7 @@ PlayerAttack::PlayerAttack(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerAttack::Init()
 {
 	setSprite(L"Kaho", L"Attack1");
-	m_pSprite->setDivideTime(0.9f);
+	m_pSprite->setDivideTime(0.7f);
 	m_pEffectObj->LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
 	m_pEffectObj->Init();
 	m_pEffectObj->setRendering(2.8f, INVERSE::DEFAULT);
@@ -34,7 +34,7 @@ bool PlayerAttack::Frame()
 		pt.x = m_CenterPos->x + 75.0f;
 		pt.y = m_CenterPos->y;
 	}
-	if (m_fTimer >= 0.5f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
+	if (m_fTimer >= 0.2f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
@@ -70,7 +70,7 @@ PlayerAttack2::PlayerAttack2(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerAttack2::Init()
 {
 	setSprite(L"Kaho", L"Attack2");
-	m_pSprite->setDivideTime(1.0f);
+	m_pSprite->setDivideTime(0.6f);
 	m_pEffectObj->LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
 	m_pEffectObj->Init();
 	m_pEffectObj->setRendering(2.8f, INVERSE::DEFAULT);
@@ -95,7 +95,7 @@ bool PlayerAttack2::Frame()
 		pt.x = m_CenterPos->x + 75.0f;
 		pt.y = m_CenterPos->y;
 	}
-	if (m_fTimer >= 0.5f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
+	if (m_fTimer >= 0.2f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
@@ -131,7 +131,7 @@ PlayerAttack3::PlayerAttack3(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerAttack3::Init()
 {
 	setSprite(L"Kaho", L"Attack3");
-	m_pSprite->setDivideTime(1.2f);
+	m_pSprite->setDivideTime(0.7f);
 	m_pEffectObj->LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
 	m_pEffectObj->Init();
 	m_pEffectObj->setRendering(2.8f, INVERSE::DEFAULT);
@@ -184,7 +184,7 @@ AirAttack::AirAttack(Player * pPlayer) : PlayerState(pPlayer), m_fAcceleration(0
 bool AirAttack::Init()
 {
 	setSprite(L"Kaho", L"AirAttack");
-	m_pSprite->setDivideTime(0.8f);
+	m_pSprite->setDivideTime(0.5f);
 	m_pEffectObj->LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
 	m_pEffectObj->Init();
 	m_pEffectObj->setRendering(2.8f, INVERSE::DEFAULT);

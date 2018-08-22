@@ -101,7 +101,7 @@ PlayerRun::PlayerRun(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerRun::Init()
 {
 	setSprite(L"Kaho", L"Run");
-	m_pSprite->setDivideTime(1.8f);
+	m_pSprite->setDivideTime(1.0f);
 	return true;
 }
 bool PlayerRun::Frame()
@@ -156,7 +156,7 @@ PlayerBrake::PlayerBrake(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerBrake::Init()
 {
 	setSprite(L"Kaho", L"Brake");
-	m_pSprite->setDivideTime(0.7f);
+	m_pSprite->setDivideTime(0.35f);
 	return true;
 }
 bool PlayerBrake::Frame()
@@ -178,7 +178,7 @@ PlayerTurn::PlayerTurn(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerTurn::Init()
 {
 	setSprite(L"Kaho", L"Turn");
-	m_pSprite->setDivideTime(0.3f);
+	m_pSprite->setDivideTime(0.15f);
 	return true;
 }
 bool PlayerTurn::Frame()
@@ -202,36 +202,41 @@ bool PlayerTurn::Frame()
 	return true;
 }
 
-PlayerJump::PlayerJump(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed()), m_fAcceleration(-3.5f)
+PlayerJump::PlayerJump(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed()), m_fAcceleration(-120.0f)
 {
 	m_pCharObj->addState(std::string("Jump"), this);
 }
 bool PlayerJump::Init()
 {
 	setSprite(L"Kaho", L"Jump");
-	m_pSprite->setDivideTime(1.0f);
+	m_pSprite->setDivideTime(0.5f);
 	return true;
 }
 bool PlayerJump::Frame()
 {
 	m_pCharObj->setLanding(false);
 	m_fTimer += g_fPerSecFrame;
-	m_fJumpSpeed += m_fAcceleration;
-
+	m_fJumpSpeed += g_fPerSecFrame * 9.8 * m_fAcceleration / 2;
 	INT iJumpNumber = m_pCharObj->getJumpNum();
 	m_CenterPos->y -= g_fPerSecFrame * m_fJumpSpeed;
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		m_fTimer = 0.0f;
+		m_fAcceleration = -120.0f;
 		m_pCharObj->setState(L"AirAttack");
 		return true;
 	}
 	if (m_fJumpSpeed < 0.0f)
 	{
+		m_fTimer = 0.0f;
+		m_fAcceleration = -120.0f;
 		m_pCharObj->setState(L"Fall");
 		return true;
 	}
 	if (iJumpNumber == 0 && (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH))
 	{
+		m_fTimer = 0.0f;
+		m_fAcceleration = -120.0f;
 		m_pSprite->setIndex(0);
 		m_pCharObj->setJumpNum(1);
 		m_pCharObj->setState(L"Jump2");
@@ -240,11 +245,23 @@ bool PlayerJump::Frame()
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	if (S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x += g_fPerSecFrame * fSpeed;
+		if (m_pCharObj->getDir() == -1)
+		{
+			m_pCharObj->setRendering(2.8f, INVERSE::DEFAULT);
+			m_pCharObj->setDir(-1);
+		}
+		else
+			m_CenterPos->x += g_fPerSecFrame * fSpeed;
 	}
 	if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x -= g_fPerSecFrame * fSpeed;
+		if (m_pCharObj->getDir() == 1)
+		{
+			m_pCharObj->setRendering(2.8f, INVERSE::LR_ROTATION);
+			m_pCharObj->setDir(-1);
+		}
+		else
+			m_CenterPos->x -= g_fPerSecFrame * fSpeed;
 	}
 	if (!m_pSprite->Frame())
 	{
@@ -254,7 +271,7 @@ bool PlayerJump::Frame()
 	return true;
 }
 
-PlayerJump2::PlayerJump2(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed(1)), m_fAcceleration(-3.5f)
+PlayerJump2::PlayerJump2(Player * pPlayer) : PlayerState(pPlayer), m_fJumpSpeed(m_pCharObj->getJumpSpeed(1)), m_fAcceleration(-120.0f)
 {
 	m_pCharObj->addState(std::string("Jump2"), this);
 }
@@ -267,16 +284,24 @@ bool PlayerJump2::Init()
 bool PlayerJump2::Frame()
 {
 	FLOAT fSpeed = m_pCharObj->getSpeed();
+	m_fTimer += g_fPerSecFrame;
+	m_fJumpSpeed += g_fPerSecFrame * 9.8 * m_fAcceleration / 2;
+	INT iJumpNumber = m_pCharObj->getJumpNum();
 	m_CenterPos->y -= g_fPerSecFrame * m_fJumpSpeed;
-	m_fJumpSpeed += m_fAcceleration;
 
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		m_fTimer = 0.0f;
+		m_fAcceleration = -120.0f;
+		m_pSprite->setIndex(0);
 		m_pCharObj->setState(L"AirAttack");
 		return true;
 	}
 	if (m_fJumpSpeed < 0.0f)
 	{
+		m_fTimer = 0.0f;
+		m_fAcceleration = -120.0f;
+		m_pSprite->setIndex(0);
 		m_pCharObj->setState(L"Fall");
 		return true;
 	}
@@ -296,7 +321,7 @@ bool PlayerJump2::Frame()
 	return true;
 }
 
-PlayerFall::PlayerFall(Player * pPlayer) : PlayerState(pPlayer), m_fAcceleration(3.5f)
+PlayerFall::PlayerFall(Player * pPlayer) : PlayerState(pPlayer), m_fAcceleration(1.0f)
 {
 	m_pCharObj->addState(std::string("Fall"), this);
 }
@@ -309,6 +334,7 @@ bool PlayerFall::Init()
 bool PlayerFall::Frame()
 {
 	m_fTimer += g_fPerSecFrame;
+	m_fAcceleration -= 1.8f;
 	INT iJumpNum = m_pCharObj->getJumpNum();
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
@@ -325,7 +351,7 @@ bool PlayerFall::Frame()
 		m_CenterPos->x -= g_fPerSecFrame * fSpeed;
 	}
 
-	m_CenterPos->y += g_fPerSecFrame + m_fAcceleration;
+	m_CenterPos->y += g_fPerSecFrame * 400.0f;
 
 	if (!m_pSprite->Frame())
 	{
@@ -345,7 +371,7 @@ bool PlayerFall::Frame()
 		m_pCharObj->setJumpNum(0);
 		m_pSprite->setIndex(0);
 		m_fTimer = 0.0f;
-		m_pCharObj->setJumpSpeed(220.0f, 170.0f);
+		m_pCharObj->setJumpSpeed(400.0f, 300.0f);
 		m_pCharObj->setState(L"Rise");
 		return true;
 	}

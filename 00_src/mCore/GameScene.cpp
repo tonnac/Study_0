@@ -410,8 +410,16 @@ bool GameScene4::Init()
 	pl->setArea(rt);
 	m_NPCList.push_back(pl);
 	
+	pl = New Enemy;
+	pl->LoadFile(L"ENEMY", L"../../data/bmp/MonkeyColor.bmp", L"../../data/bmp/MonkeyMask.bmp");
+	pl->Set(1869, 600, 14, 66, 28, 23);
+	pl->Init();
+	pl->setRendering(2.8f, INVERSE::DEFAULT);
+	rt = { 1670,219,2165,616 };
+	pl->setArea(rt);
+	m_NPCList.push_back(pl);
 
-	m_pPlayer.Set(130, 580, 10, 87, 25, 36);
+	m_pPlayer.Set(130, 500, 10, 87, 25, 36);
 	m_pPlayer.Init();
 	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
 
@@ -438,10 +446,14 @@ bool GameScene4::Frame()
 	{
 		m_BKObject.Collision(*it);
 		(*it)->Process(&m_pPlayer);
-		//if ((*it)->isDead())
-		//{
-		//	it = m_NPCList.erase(it);
-		//}
+		if ((*it)->isDead())
+		{
+			it = m_NPCList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
 	}
 	m_pPlayer.Frame();
 	m_pScroll.Frame();

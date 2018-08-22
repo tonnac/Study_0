@@ -28,14 +28,17 @@ bool Enemy::Frame()
 }
 bool Enemy::Render()
 {
+	if (isDebugMode)
+	{
+		int prev = SetROP2(g_hOffScreenDC, R2_MASKPEN);
+
+		Rectangle(g_hOffScreenDC, m_rtArea.left, m_rtArea.top, m_rtArea.right, m_rtArea.bottom);
+		Rectangle(g_hOffScreenDC, m_rtSight.left, m_rtSight.top, m_rtSight.right, m_rtSight.bottom);
+		Rectangle(g_hOffScreenDC, m_rtAttackRange.left, m_rtAttackRange.top, m_rtAttackRange.right, m_rtAttackRange.bottom);
+
+		SetROP2(g_hOffScreenDC, prev);
+	}
 	Object::Render();
-	int prev = SetROP2(g_hOffScreenDC, R2_MASKPEN);
-
-	Rectangle(g_hOffScreenDC, m_rtArea.left, m_rtArea.top, m_rtArea.right, m_rtArea.bottom);
-	Rectangle(g_hOffScreenDC, m_rtSight.left, m_rtSight.top, m_rtSight.right, m_rtSight.bottom);
-	Rectangle(g_hOffScreenDC, m_rtAttackRange.left, m_rtAttackRange.top, m_rtAttackRange.right, m_rtAttackRange.bottom);
-
-	SetROP2(g_hOffScreenDC, prev);
 	return true;
 }
 FloatRect* Enemy::getArea()

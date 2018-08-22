@@ -62,7 +62,7 @@ bool Scroll::Collision(const RECT& rt)
 		return MoveCamera(x1);
 	}
 
-	if (rt.left <= m_rtCollision.left)
+	if (rt.left < m_rtCollision.left)
 	{
 		x1 = rt.left - m_rtCollision.left;
 		if (m_BkRtDraw->left - m_nInitValue[0] <= g_rtClient.left)  // 화면 끝 도달

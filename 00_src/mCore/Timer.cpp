@@ -13,13 +13,14 @@ bool Timer::Frame()
 {
 	DWORD dwCurrentTick = timeGetTime();
 	DWORD ElapsedTick = dwCurrentTick - m_dwBeforeTick;
-	int dwDelay = m_dwInterval - ElapsedTick;
-	if (dwDelay > 0)
-	{
-		Sleep(dwDelay);
-	}
+	//int dwDelay = m_dwInterval - ElapsedTick;
+	//if (dwDelay > 0)
+	//{
+	//	Sleep(dwDelay);
+	//}
 	m_dwBeforeTick = dwCurrentTick;
-	m_fSecPerFrame = g_fPerSecFrame = m_dwInterval / 1000.0f;
+//	m_fSecPerFrame = g_fPerSecFrame = m_dwInterval / 1000.0f;
+	m_fSecPerFrame = g_fPerSecFrame = ElapsedTick / 1000.0f;
 	m_fGameTime += m_fSecPerFrame;
 	m_fTimer += m_fSecPerFrame;
 	if (m_fTimer >= 1.0f)

@@ -38,7 +38,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 	FLOAT fSpeed = m_pEnemy->getSpeed();
 	INT iDir = m_pEnemy->getDir();
 	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fPerSecFrame * 10.0f;
 
 	if (iDir == -1)
 	{
@@ -54,9 +54,9 @@ bool EnemyMoveState::Process(Player * pPlayer)
 	}
 	else
 	{
-		m_rtSight->left = collisionRT.right + 100.0f;
+		m_rtSight->left = m_CenterPos->x;
 		m_rtSight->top = collisionRT.top - 150.0f;
-		m_rtSight->right = m_CenterPos->x;
+		m_rtSight->right = collisionRT.right + 100.0f;
 		m_rtSight->bottom = collisionRT.bottom;
 
 		m_rtAttackRange->left = collisionRT.right + 10.0f;
@@ -123,7 +123,7 @@ bool EnemyChaseState::Process(Player * pPlayer)
 	FLOAT fSpeed = m_pEnemy->getSpeed();
 	INT iDir = m_pEnemy->getDir();
 	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fPerSecFrame * 10.0f;
 
 	if (iDir == -1)
 	{
@@ -211,7 +211,7 @@ bool EnemyAttackState::Process(Player * pPlayer)
 {
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
 	RECT playerEffectRT = pPlayer->getEffectObj();
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fPerSecFrame * 10.0f;
 	if (CollisionClass::RectInRect(playerEffectRT, collisionRT))
 	{
 		m_pSprite->setIndex(0);
@@ -244,19 +244,17 @@ EnemyHitState::EnemyHitState(Enemy* pEnemy) : EnemyBasicState(pEnemy)
 bool EnemyHitState::Init()
 {
 	setSprite(L"Monkey", L"Hit");
-	m_pSprite->setDivideTime(1.0f);
+	m_pSprite->setDivideTime(0.5f);
 	return true;
 }
 bool EnemyHitState::Process(Player * pPlayer)
 {
-	m_fTimer += g_fPerSecFrame;
 	if (!m_pSprite->Frame())
 	{
 		m_pSprite->setIndex(0);
 		m_pEnemy->setTransition(E_EVENT::NOHIT);
 		return true;
 	}
-
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
