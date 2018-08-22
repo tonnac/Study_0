@@ -39,6 +39,11 @@ bool SpriteMgr::SpriteSet(T_STR szSpriteList)
 	pe = pe.substr(0, pe.find('.'));
 	SPMAP addmap;
 
+	if (!m_SpriteMap[pe].empty())
+	{
+		return true;
+	}
+
 	if (!fp.is_open())
 	{
 		MessageBox(nullptr, L"FILE OPEN", L"FILE OPEN ERROR", MB_OK);

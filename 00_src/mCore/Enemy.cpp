@@ -9,6 +9,7 @@ Enemy::Enemy()
 	state = New EnemyChaseState(this);
 	m_HP = 50;
 	m_Damage = 8;
+	m_fZoom = 2.8f;
 }
 
 bool Enemy::Init()

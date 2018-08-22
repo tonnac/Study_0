@@ -2,7 +2,7 @@
 
 Rendering::Rendering(Object* ob) : m_DrawPos(ob->getDrawPos()), m_rtDraw(ob->getrtDraw()),
 									m_hColorDC(ob->getColorDC()), m_hMaskDC(ob->getMaskDC()),
-						m_CenterPos(ob->getCenterPos()), m_rtCollision(ob->getCollisionRt())
+								m_CenterPos(ob->getCenterPos()), m_rtCollision(ob->getCollisionRt())
 {}
 bool Rendering::Init()
 {
@@ -64,6 +64,10 @@ void Rendering::setInverse(const INVERSE& type)
 	return;
 }
 void Rendering::setFade(const FLOAT& alpha, const FLOAT& speed)
+{
+	return;
+}
+void Rendering::setFix(const FLOAT& alpha, const FLOAT& speed)
 {
 	return;
 }
@@ -402,7 +406,7 @@ void RotateRendering::getRotateBitmap(HBITMAP hbit, HDC MemDC)
 	SetGraphicsMode(m_hRotationDC, prevGraphic);
 }
 
-AlphaRendering::AlphaRendering(Object*ob) : Rendering(ob), m_fFadeSpeed(0.0f)
+AlphaRendering::AlphaRendering(Object* ob, const INVERSE& type, const FLOAT& fZoom) : Rendering(ob), m_fFadeSpeed(0.0f), m_fZoom(fZoom), m_sInverse(type)
 {}
 bool AlphaRendering::Init()
 {
@@ -415,15 +419,31 @@ bool AlphaRendering::Init()
 bool AlphaRendering::Frame()
 {
 	m_fAlpha += g_fPerSecFrame * m_fFadeSpeed;
-	if (m_fAlpha > 255)
+	if (m_fZoom > 1.0f)
 	{
-		m_fAlpha = 255;
-		return false;
+		if (m_fAlpha > 255)
+		{
+			m_fAlpha = 0;
+			return false;
+		}
+		else if (m_fAlpha < 128)
+		{
+			m_fAlpha = 255;
+			return false;
+		}
 	}
-	else if (m_fAlpha < 0)
+	else
 	{
-		m_fAlpha = 0;
-		return false;
+		if (m_fAlpha > 255)
+		{
+			m_fAlpha = 0;
+			return false;
+		}
+		else if (m_fAlpha < 0)
+		{
+			m_fAlpha = 255;
+			return false;
+		}
 	}
 	m_bBlend.SourceConstantAlpha = m_fAlpha;
 	return true;
@@ -446,18 +466,35 @@ bool AlphaRendering::Render()
 	}
 	else
 	{
-		AlphaBlend(g_hOffScreenDC,
-			m_DrawPos->x,
-			m_DrawPos->y, 
-			m_rtCollision->right,
-			m_rtCollision->bottom, 
-			m_hColorDC, 
-			m_hMaskDC,
-			m_rtDraw->left, 
-			m_rtDraw->top, 
-			m_rtDraw->right, 
-			m_rtDraw->bottom, 
-			255.0f);
+		switch (m_sInverse)
+		{
+		case INVERSE::LR_ROTATION:
+			AlphaBlend(g_hOffScreenDC,
+				static_cast<int>(m_DrawPos->x + m_rtDraw->right * m_fZoom),
+				static_cast<int>(m_DrawPos->y),
+				static_cast<int>(-m_rtDraw->right * m_fZoom),
+				static_cast<int>(m_rtDraw->bottom * m_fZoom),
+				m_hColorDC,
+				m_hMaskDC,
+				m_rtDraw->left,
+				m_rtDraw->top,
+				m_rtDraw->right,
+				m_rtDraw->bottom,
+				m_fAlpha);
+		default:
+			AlphaBlend(g_hOffScreenDC,
+				static_cast<int>(m_DrawPos->x),
+				static_cast<int>(m_DrawPos->y),
+				static_cast<int>(m_rtDraw->right * m_fZoom),
+				static_cast<int>(m_rtDraw->bottom * m_fZoom),
+				m_hColorDC,
+				m_hMaskDC,
+				m_rtDraw->left,
+				m_rtDraw->top,
+				m_rtDraw->right,
+				m_rtDraw->bottom,
+				m_fAlpha);
+		}
 	}
 	return true;
 }

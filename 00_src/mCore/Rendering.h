@@ -13,7 +13,8 @@ public:
 	virtual bool		Render		();
 	virtual bool		Release		();
 	virtual	void		setInverse	(const INVERSE&);
-	virtual	void		setFade	(const FLOAT&, const FLOAT&);
+	virtual	void		setFade		(const FLOAT&, const FLOAT&);
+	virtual void		setFix		(const FLOAT&, const FLOAT&);
 public:
 	void * operator new(size_t sz, const char* FileName, int iLine);
 	void operator delete(void * p);
@@ -30,12 +31,12 @@ class InversionRendering : public Rendering
 public:
 	InversionRendering(Object*, const FLOAT&, const INVERSE&);
 public:
-	bool		Frame() override;
-	bool		Render() override;
-	void		setInverse(const INVERSE&) override;
+	bool				Frame() override;
+	bool				Render() override;
+	void				setInverse(const INVERSE&) override;
 private:
-	INVERSE		m_sInverse;
-	FLOAT		m_fZoom;
+	INVERSE				m_sInverse;
+	FLOAT				m_fZoom;
 };
 class RotateRendering : public Rendering
 {
@@ -61,7 +62,7 @@ private:
 class AlphaRendering : public Rendering
 {
 public:
-	AlphaRendering(Object*);
+	AlphaRendering(Object*, const INVERSE& = INVERSE::DEFAULT, const FLOAT& = 1.0f);
 public:
 	bool				Init		() override;
 	bool				Frame		() override;
@@ -73,7 +74,9 @@ public:
 		HDC dcMaskSrc, int sx, int sy, int scx, int scy, int alpha, 
 		DWORD opMode = SRCCOPY, COLORREF rgbMask = RGB(0, 0, 0));
 private:
+	INVERSE				m_sInverse;
 	BLENDFUNCTION		m_bBlend;
+	FLOAT				m_fZoom;
 	FLOAT				m_fAlpha;
 	FLOAT				m_fFadeSpeed;
 };

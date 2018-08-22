@@ -34,7 +34,7 @@ bool PlayerAttack::Frame()
 		pt.x = m_CenterPos->x + 75.0f;
 		pt.y = m_CenterPos->y;
 	}
-	if (m_fTimer >= 0.2f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
+	if (m_fTimer >= 0.4f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
@@ -70,7 +70,7 @@ PlayerAttack2::PlayerAttack2(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerAttack2::Init()
 {
 	setSprite(L"Kaho", L"Attack2");
-	m_pSprite->setDivideTime(0.6f);
+	m_pSprite->setDivideTime(0.7f);
 	m_pEffectObj->LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
 	m_pEffectObj->Init();
 	m_pEffectObj->setRendering(2.8f, INVERSE::DEFAULT);
@@ -95,7 +95,7 @@ bool PlayerAttack2::Frame()
 		pt.x = m_CenterPos->x + 75.0f;
 		pt.y = m_CenterPos->y;
 	}
-	if (m_fTimer >= 0.2f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
+	if (m_fTimer >= 0.4f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
@@ -253,5 +253,49 @@ bool BowAttack::Frame()
 
 ////////////////////////////////////////////////////////////////////////////////////
 
+AirBowAttack::AirBowAttack(Player * pPlayer) : PlayerState(pPlayer), m_fAcceleration(0.25f)
+{
+	m_pCharObj->addState(std::string("AirBow"), this);
+}
+bool AirBowAttack::Init()
+{
+	setSprite(L"Kaho", L"AirBow");
+	m_pSprite->setDivideTime(0.5f);
+	return true;
+}
+bool AirBowAttack::Frame()
+{
+	m_CenterPos->y += g_fPerSecFrame + m_fAcceleration;
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+		m_pCharObj->setState(L"Fall");
+		return true;
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
+
+CrouchBowAttack::CrouchBowAttack(Player * pPlayer) : PlayerState(pPlayer)
+{
+	m_pCharObj->addState(std::string("CrouchBow"), this);
+}
+bool CrouchBowAttack::Init()
+{
+	setSprite(L"Kaho", L"CrouchBow");
+	m_pSprite->setDivideTime(0.5f);
+	return true;
+}
+bool CrouchBowAttack::Frame()
+{
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+		m_pCharObj->setState(L"Crouch");
+		return true;
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}

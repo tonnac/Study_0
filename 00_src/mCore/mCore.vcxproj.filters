@@ -175,6 +175,18 @@
     <ClInclude Include="FinateStateMachine.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TrapObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="OrbObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatObject.h">
+      <Filter>헤더 파일\Object\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp">
@@ -270,8 +282,17 @@
     <ClCompile Include="FinateStateMachine.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="TrapObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="OrbObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatObject.cpp">
+      <Filter>소스 파일\Object\Terrain</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

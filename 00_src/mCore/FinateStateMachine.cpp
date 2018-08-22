@@ -38,14 +38,15 @@ void FinateState::operator delete(void * p)
 FinateStateMachine::FinateStateMachine()
 {
 	m_mapState.clear();
-	AddStateTransition(std::string("Move"), E_EVENT::FINDTARGET, std::string("Chase"));
-	AddStateTransition(std::string("Chase"), E_EVENT::INATTACKRANGE, std::string("Attack"));
-	AddStateTransition(std::string("Chase"), E_EVENT::BEATTACKED, std::string("Hit"));
-	AddStateTransition(std::string("Chase"), E_EVENT::LOSTTARGET, std::string("Move"));
-	AddStateTransition(std::string("Attack"), E_EVENT::OUTATTACKRANGE, std::string("Chase"));
-	AddStateTransition(std::string("Attack"), E_EVENT::BEATTACKED, std::string("Hit"));
-	AddStateTransition(std::string("Move"), E_EVENT::BEATTACKED, std::string("Hit"));
-	AddStateTransition(std::string("Hit"), E_EVENT::NOHIT, std::string("Chase"));
+	AddStateTransition(std::string("Move"),		E_EVENT::FINDTARGET,		std::string("Chase"));
+	AddStateTransition(std::string("Chase"),	E_EVENT::INATTACKRANGE,		std::string("Attack"));
+	AddStateTransition(std::string("Chase"),	E_EVENT::BEATTACKED,		std::string("Hit"));
+	AddStateTransition(std::string("Chase"),	E_EVENT::LOSTTARGET,		std::string("Move"));
+	AddStateTransition(std::string("Attack"),	E_EVENT::OUTATTACKRANGE,	std::string("Chase"));
+	AddStateTransition(std::string("Attack"),	E_EVENT::BEATTACKED,		std::string("Hit"));
+	AddStateTransition(std::string("Move"),		E_EVENT::BEATTACKED,		std::string("Hit"));
+	AddStateTransition(std::string("Hit"),		E_EVENT::NOHIT,				std::string("Chase"));
+	AddStateTransition(std::string("Hit"),		E_EVENT::LOSTTARGET,		std::string("Move"));
 }
 FinateStateMachine::~FinateStateMachine()
 {

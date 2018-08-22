@@ -9,7 +9,7 @@ Leaf2 7
 Leaf3 9
 AirLeaf 6
 Bow 6
-Airbow 6
+AirBow 6
 CrouchBow 6
 Run 10
 Brake 7

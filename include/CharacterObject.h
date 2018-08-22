@@ -25,7 +25,9 @@ public:
 	void				setJumpNum		(const INT&);
 	void				setDownable		(const bool&);
 	void				setHP			(const INT&);
+	void				setInvincible	(const bool&);
 public:
+	bool				isInvincible	();
 	bool				isDead			();
 	INT					getDamage		();
 	RECT				getEffectObj	();
@@ -35,19 +37,28 @@ public:
 	FLOAT&				getJumpSpeed	(const INT& = 0);
 	bool				getLadder		();
 	INT					getJumpNum		();
+	FLOAT				getZoom			();
 	virtual bool		isFallState		();
 public:
 	void				addState		(std::string, State*);
 	void				addEffect		(EffectObj *);
 public:
+	bool				hasNext();
+	void				deleteEffect(EffectIter&);
+	EffectIter			getEffectIter();
+public:
 	std::string			setTransition	(E_EVENT Event);
 protected:
+	FLOAT				m_fZoom;
 	bool				m_bDead;
 	INT					m_HP;
 	INT					m_Damage;
 	INT					m_iJumpNumber;
+	bool				m_bInvincible;
 	bool				m_bLadder;
 	bool				m_bDownable;
+	FLOAT				m_fInvincibleTime;
+	const FLOAT			m_finvencible;
 	FLOAT				m_fJumpSpeed;
 	FLOAT				m_fJumpSpeed2;
 	INT					m_iCurrentDir;
@@ -55,5 +66,6 @@ protected:
 	State *				m_pCurrentState;
 	StateMap			m_pStateList;
 	EffectVector		m_pEffectVector;
+	EffectIter			m_EffectIter;
 	FinateStateMachine	m_fms;
 };

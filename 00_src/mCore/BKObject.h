@@ -2,6 +2,7 @@
 #include "CharacterObject.h"
 
 class TerrainObject;
+class PlatObject;
 
 class BKObject : public Object
 {
@@ -14,8 +15,10 @@ public:
 	bool		Release			() override;
 	bool		MoveScrollBk	(const LONG&) override;
 	void		AddTerrain		(TerrainObject *);
+	void		AddPlat			(PlatObject *);
 	bool		Collision		(Object* ) override;
 	void		ReverseSet		();
 private:
 	std::vector<TerrainObject*> m_pObjList;
+	std::vector<PlatObject*>	m_pPlatList;
 };

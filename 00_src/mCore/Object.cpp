@@ -144,6 +144,17 @@ void Object::setFadeRender(const FLOAT& alpha, const FLOAT& speed)
 	m_pRendering->setFade(alpha, speed);
 	m_pRendering->Init();
 }
+void Object::setFadeRender(const FLOAT& zoom, const INVERSE& type)
+{
+	if (m_pRendering)
+	{
+		m_pRendering->Release();
+		delete m_pRendering;
+	}
+	m_pRendering = New AlphaRendering(this, type, zoom);
+	m_pRendering->setFade(zoom, 0.0f);
+	m_pRendering->Init();
+}
 void Object::setDebugmode(const bool& bflag)
 {
 	isDebugMode = bflag;

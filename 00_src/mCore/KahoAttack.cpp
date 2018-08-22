@@ -25,7 +25,7 @@ bool KahoAttack2::Init()
 {
 	m_pEffectSprite = S_SpriteMgr.LoadSprite(L"Kaho", L"Leaf2");
 	m_pEffectSprite->setIndex(0);
-	m_pEffectSprite->setDivideTime(0.6f);
+	m_pEffectSprite->setDivideTime(0.7f);
 	Object::Init();
 	return true;
 }
@@ -95,7 +95,7 @@ bool KahoBowAttack::Init()
 }
 bool KahoBowAttack::Frame()
 {
-	m_CenterPos.x += g_fPerSecFrame * g_fSpeed * 2.0f;
+	m_CenterPos.x += g_fPerSecFrame * m_fSpeed * 7.0f;
 	EffectObj::Frame();
 	return true;
 }

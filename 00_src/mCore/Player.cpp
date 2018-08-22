@@ -21,8 +21,10 @@ Player::Player()
 	state = New PlayerCrouch(this);
 	state = New PlayerRoll(this);
 	state = New BowAttack(this);
-
-
+	state = New AirBowAttack(this);
+	state = New CrouchBowAttack(this);
+	state = New PlayerHurt(this);
+	
 	state = New PlayerLadderEnter(this);
 	state = New PlayerLadderLeave(this);
 	state = New PlayerLadderUp(this);
@@ -30,6 +32,7 @@ Player::Player()
 	g_fSpeed = m_fSpeed;
 	m_HP = 100;
 	m_Damage = 24;
+	m_fZoom = 2.8f;
 }
 //bool Player::Init()
 //{

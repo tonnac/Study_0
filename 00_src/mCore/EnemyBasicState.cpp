@@ -9,7 +9,7 @@ EnemyBasicState::EnemyBasicState(Enemy* pEnemy) : State(pEnemy), m_pEnemy(pEnemy
 	m_rtArea = m_pEnemy->getArea();
 	m_rtSight = m_pEnemy->getSight();
 	m_rtAttackRange = m_pEnemy->getAttackRange();
-	pEnemy->setSpeed(120.0f);
+	pEnemy->setSpeed(80.0f);
 }
 bool EnemyBasicState::Render()
 {
@@ -32,7 +32,7 @@ bool EnemyMoveState::Init()
 }
 bool EnemyMoveState::Process(Player * pPlayer)
 {
-	RECT playerEffectRT = pPlayer->getEffectObj();
+	const RECT playerEffectRT = pPlayer->getEffectObj();
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
 	const RECT playerRT = *pPlayer->getCollisionRt();
 	FLOAT fSpeed = m_pEnemy->getSpeed();
@@ -76,6 +76,36 @@ bool EnemyMoveState::Process(Player * pPlayer)
 		m_pEnemy->setTransition(E_EVENT::BEATTACKED);
 		return true;
 	}
+	if (CollisionClass::RectInRect(playerRT, collisionRT) && pPlayer->getCurrentState() != "Roll" &&
+		!pPlayer->isInvincible())
+	{
+		RECT CollisionArea;
+		CollisionArea.left = (playerRT.left < collisionRT.left) ? collisionRT.left : playerRT.left;
+		CollisionArea.right = (playerRT.right > collisionRT.right) ? collisionRT.right : playerRT.right;
+		CollisionArea.top = (playerRT.top < collisionRT.top) ? collisionRT.top : playerRT.top;
+		CollisionArea.bottom = (playerRT.bottom > collisionRT.bottom) ? collisionRT.bottom : playerRT.bottom;
+
+		FloatPoint vDir;
+		vDir.x = CollisionArea.right - CollisionArea.left;
+		vDir.y = CollisionArea.bottom - CollisionArea.top;
+
+		FLOAT fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		vDir.x /= fLength;
+		vDir.y /= fLength;
+
+		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		FloatPoint vPos = *pPlayer->getCenterPos();
+		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+
+		pPlayer->setCenterPos_x(vPos.x);
+		pPlayer->setCenterPos_y(vPos.y);
+		pPlayer->setHP(8);
+		pPlayer->setState(L"Hurt");
+		return true;
+	}
 	if (!m_pSprite->Frame())
 	{
 		m_pSprite->setIndex(0);
@@ -83,7 +113,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 	if (CollisionClass::RectInRect(playerRT, *m_rtSight))
 	{
 		m_pSprite->setIndex(0);
-		m_pEnemy->setSpeed(110.0f);
+		m_pEnemy->setSpeed(140.0f);
 		m_pEnemy->setTransition(E_EVENT::FINDTARGET);
 		return true;
 	}
@@ -101,6 +131,24 @@ bool EnemyMoveState::Process(Player * pPlayer)
 		}
 		m_pEnemy->setDir(-1);
 	}
+	while (pPlayer->hasNext())
+	{
+		EffectIter it = pPlayer->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (CollisionClass::RectInRect(itrt,collisionRT))
+		{
+			pPlayer->deleteEffect(it);
+			m_pEnemy->setHP(1);
+			if (m_pEnemy->isDead())
+			{
+				m_pEnemy->Release();
+				return true;
+			}
+			m_pSprite->setIndex(0);
+			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+			return true;
+		}
+	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
@@ -117,7 +165,7 @@ bool EnemyChaseState::Init()
 }
 bool EnemyChaseState::Process(Player * pPlayer)
 {
-	RECT playerEffectRT = pPlayer->getEffectObj();
+	const RECT playerEffectRT = pPlayer->getEffectObj();
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
 	const RECT playerRT = *pPlayer->getCollisionRt();
 	FLOAT fSpeed = m_pEnemy->getSpeed();
@@ -154,6 +202,36 @@ bool EnemyChaseState::Process(Player * pPlayer)
 	{
 		m_pSprite->setIndex(0);
 	}
+	if (CollisionClass::RectInRect(playerRT, collisionRT) && pPlayer->getCurrentState() != "Roll" &&
+		!pPlayer->isInvincible())
+	{
+		RECT CollisionArea;
+		CollisionArea.left = (playerRT.left < collisionRT.left) ? collisionRT.left : playerRT.left;
+		CollisionArea.right = (playerRT.right > collisionRT.right) ? collisionRT.right : playerRT.right;
+		CollisionArea.top = (playerRT.top < collisionRT.top) ? collisionRT.top : playerRT.top;
+		CollisionArea.bottom = (playerRT.bottom > collisionRT.bottom) ? collisionRT.bottom : playerRT.bottom;
+
+		FloatPoint vDir;
+		vDir.x = CollisionArea.right - CollisionArea.left;
+		vDir.y = CollisionArea.bottom - CollisionArea.top;
+
+		FLOAT fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		vDir.x /= fLength;
+		vDir.y /= fLength;
+
+		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		FloatPoint vPos = *pPlayer->getCenterPos();
+		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+
+		pPlayer->setCenterPos_x(vPos.x);
+		pPlayer->setCenterPos_y(vPos.y);
+		pPlayer->setHP(8);
+		pPlayer->setState(L"Hurt");
+		return true;
+	}
 	if (CollisionClass::RectInRect(playerRT, *m_rtAttackRange))
 	{
 		m_pSprite->setIndex(0);
@@ -187,9 +265,28 @@ bool EnemyChaseState::Process(Player * pPlayer)
 			return true;
 		}
 	}
+	while (pPlayer->hasNext())
+	{
+		EffectIter it = pPlayer->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (CollisionClass::RectInRect(itrt, collisionRT))
+		{
+			pPlayer->deleteEffect(it);
+			m_pEnemy->setHP(1);
+			if (m_pEnemy->isDead())
+			{
+				m_pEnemy->Release();
+				return true;
+			}
+			m_pSprite->setIndex(0);
+			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+			return true;
+		}
+	}
 	if (!CollisionClass::RectInRect(playerRT, *m_rtArea))
 	{
 		m_pSprite->setIndex(0);
+		m_pEnemy->setSpeed(80.0f);
 		m_pEnemy->setTransition(E_EVENT::LOSTTARGET);
 		return true;
 	}
@@ -204,13 +301,14 @@ EnemyAttackState::EnemyAttackState(Enemy* pEnemy) : EnemyBasicState(pEnemy)
 bool EnemyAttackState::Init()
 {
 	setSprite(L"Monkey", L"Attack");
-	m_pSprite->setDivideTime(1.7f);
+	m_pSprite->setDivideTime(0.8f);
 	return true;
 }
 bool EnemyAttackState::Process(Player * pPlayer)
 {
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
-	RECT playerEffectRT = pPlayer->getEffectObj();
+	const RECT playerEffectRT = pPlayer->getEffectObj();
+	const RECT playerRT = *pPlayer->getCollisionRt();
 	m_CenterPos->y += g_fPerSecFrame * 10.0f;
 	if (CollisionClass::RectInRect(playerEffectRT, collisionRT))
 	{
@@ -224,12 +322,55 @@ bool EnemyAttackState::Process(Player * pPlayer)
 		m_pEnemy->setTransition(E_EVENT::BEATTACKED);
 		return true;
 	}
+	if (CollisionClass::RectInRect(playerRT, collisionRT) && pPlayer->getCurrentState() != "Roll" &&
+		!pPlayer->isInvincible())
+	{
+		FloatPoint pPos = *pPlayer->getCenterPos();
+		FloatPoint vDir;
+		vDir.x = pPos.x - m_CenterPos->x;
+		vDir.y = pPos.y - m_CenterPos->y;
+
+		FLOAT fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		vDir.x /= fLength;
+		vDir.y /= fLength;
+
+		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		FloatPoint vPos = *pPlayer->getCenterPos();
+		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+
+		pPlayer->setCenterPos_x(vPos.x);
+		pPlayer->setCenterPos_y(vPos.y);
+		pPlayer->setHP(8);
+		pPlayer->setState(L"Hurt");
+		return true;
+	}
 	if (!m_pSprite->Frame())
 	{
 		m_pSprite->setIndex(0);
 		if (!CollisionClass::RectInRect(*pPlayer->getCollisionRt(), *m_rtAttackRange))
 		{
 			m_pEnemy->setTransition(E_EVENT::OUTATTACKRANGE);
+			return true;
+		}
+	}
+	while (pPlayer->hasNext())
+	{
+		EffectIter it = pPlayer->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (CollisionClass::RectInRect(itrt, collisionRT))
+		{
+			pPlayer->deleteEffect(it);
+			m_pEnemy->setHP(1);
+			if (m_pEnemy->isDead())
+			{
+				m_pEnemy->Release();
+				return true;
+			}
+			m_pSprite->setIndex(0);
+			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
 			return true;
 		}
 	}
@@ -244,13 +385,20 @@ EnemyHitState::EnemyHitState(Enemy* pEnemy) : EnemyBasicState(pEnemy)
 bool EnemyHitState::Init()
 {
 	setSprite(L"Monkey", L"Hit");
-	m_pSprite->setDivideTime(0.5f);
+	m_pSprite->setDivideTime(0.3f);
 	return true;
 }
 bool EnemyHitState::Process(Player * pPlayer)
 {
+	const RECT playerRT = *pPlayer->getCollisionRt();
 	if (!m_pSprite->Frame())
 	{
+		if (!CollisionClass::RectInRect(playerRT, *m_rtArea))
+		{
+			m_pSprite->setIndex(0);
+			m_pEnemy->setTransition(E_EVENT::LOSTTARGET);
+			return true;
+		}
 		m_pSprite->setIndex(0);
 		m_pEnemy->setTransition(E_EVENT::NOHIT);
 		return true;

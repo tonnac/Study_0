@@ -4,9 +4,6 @@
 
 class Rendering;
 
-
-// 소멸자 Delete 확인
-
 class Object
 {
 public:
@@ -33,6 +30,7 @@ public:
 	void				setRendering	(const FLOAT&);
 	void				setRendering	(const INVERSE&);
 	void				setFadeRender	(const FLOAT&, const FLOAT&);
+	void				setFadeRender	(const FLOAT&, const INVERSE&);
 	void				setDebugmode	(const bool&);
 	void				setSpeed		(const FLOAT&);
 	void				setDraw_x		(const FLOAT&);

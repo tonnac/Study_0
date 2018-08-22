@@ -1,13 +1,12 @@
 #include "SceneMgr.h"
 
-SceneMgr::SceneMgr() : m_nIndex(4)
+SceneMgr::SceneMgr() : m_nIndex(5)
 {
 }
 
 bool SceneMgr::Init()
 {
-	m_pCurrentScene = CreateScene(4, true);
-	m_pCurrentScene->Init();
+	m_pCurrentScene = CreateScene(5, true);
 	return true;
 }
 bool SceneMgr::Frame()
@@ -57,6 +56,9 @@ Scene* SceneMgr::CreateScene(const INT& index, const bool& bNextScene)
 		break;
 	case 4:
 		pScene = New GameScene4;
+		break;
+	case 5:
+		pScene = New GameScene5;
 		break;
 	}
 	pScene->Init();

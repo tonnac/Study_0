@@ -3,10 +3,13 @@
 #include "TerrainObject.h"
 #include "Collision.h"
 #include "Player.h"
+#include "ScrollObject.h"
+#include "PlatObject.h"
 
 BKObject::BKObject()
 {
 	m_pObjList.clear();
+	m_pPlatList.clear();
 }
 
 //bool BKObject::Init()
@@ -20,6 +23,13 @@ bool BKObject::Frame()
 	{
 		it->Frame();
 	}
+	if (!m_pPlatList.empty())
+	{
+		for (auto iter : m_pPlatList)
+		{
+			iter->Frame();
+		}
+	}
 	return Object::Frame();
 
 }
@@ -28,6 +38,7 @@ bool BKObject::Render()
 {
 	Object::Render();
 
+
 	if (isDebugMode)
 	{
 		for (auto it : m_pObjList)
@@ -35,10 +46,25 @@ bool BKObject::Render()
 			it->Render();
 		}
 	}
+	if (!m_pPlatList.empty())
+	{
+		for (auto iter : m_pPlatList)
+		{
+			iter->Render();
+		}
+	}
 	return true;
 }
 bool BKObject::Release()
 {
+	if (!m_pPlatList.empty())
+	{
+		for (auto iter : m_pPlatList)
+		{
+			iter->Release();
+			delete iter;
+		}
+	}
 	for (auto it : m_pObjList)
 	{
 		it->Release();
@@ -55,6 +81,13 @@ bool BKObject::MoveScrollBk(const LONG& fsize)
 	{
 		it->MoveScrollObj(fsize);
 	}
+	if (!m_pPlatList.empty())
+	{
+		for (auto iter : m_pPlatList)
+		{
+			iter->MoveScrollObj(fsize);
+		}
+	}
 	if (fsize < 0)
 	{
 		m_fScroll += -(g_fPerSecFrame * g_fSpeed);
@@ -65,11 +98,16 @@ bool BKObject::MoveScrollBk(const LONG& fsize)
 		m_fScroll += (g_fPerSecFrame * g_fSpeed);
 		m_rtDraw.left = static_cast<LONG>(m_fScroll);
 	}
+
 	return true;
 }
 void BKObject::AddTerrain(TerrainObject * m_ptObject)
 {
 	m_pObjList.push_back(m_ptObject);
+}
+void BKObject::AddPlat(PlatObject * m_pObject)
+{
+	m_pPlatList.push_back(m_pObject);
 }
 bool BKObject::Collision(Object* pObject)
 {
@@ -86,6 +124,24 @@ bool BKObject::Collision(Object* pObject)
 		{
 			RECT ObjRT = *pObject->getCollisionRt();
 			RECT rtrt = *it->getCollisionRt();
+			RECT faRT = { ObjRT.left + 27, ObjRT.bottom, ObjRT.right - 27, ObjRT.bottom + 10 };
+			if (CollisionClass::RectInRect(faRT, rtrt))
+			{
+				isLanding = true;
+			}
+		}
+	}
+	for (auto iter : m_pPlatList)
+	{
+		if (iter->Collision(pObject))
+		{
+			isLanding = true;
+		}
+		bool flag = pCharObj->isFallState();
+		if (flag == false)
+		{
+			RECT ObjRT = *pObject->getCollisionRt();
+			RECT rtrt = *iter->getCollisionRt();
 			RECT faRT = { ObjRT.left + 27, ObjRT.bottom, ObjRT.right - 27, ObjRT.bottom + 10 };
 			if (CollisionClass::RectInRect(faRT, rtrt))
 			{

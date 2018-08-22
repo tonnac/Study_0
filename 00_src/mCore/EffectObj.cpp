@@ -15,6 +15,10 @@ bool EffectObj::Frame()
 	Object::Frame();
 	return true;
 }
+void EffectObj::setSpeed(const FLOAT& pt)
+{
+	m_fSpeed = pt;
+}
 void EffectObj::setDrawPos(const FloatPoint& pt)
 {
 	m_CenterPos.x = pt.x;

@@ -3,6 +3,10 @@
 #include "DownableObject.h"
 #include "LadderObject.h"
 #include "Enemy.h"
+#include "TrapObject.h"
+#include "OrbObject.h"
+#include "ScrollObject.h"
+#include "PlatObject.h"
 
 GameScene::GameScene() : m_pScroll(&m_pPlayer, &m_BKObject, &m_NPCList)
 {}
@@ -419,10 +423,9 @@ bool GameScene4::Init()
 	pl->setArea(rt);
 	m_NPCList.push_back(pl);
 
-	m_pPlayer.Set(130, 300, 10, 87, 25, 36);
+	m_pPlayer.Set(130, 400, 10, 87, 25, 36);
 	m_pPlayer.Init();
 	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
-
 	m_pScroll.Init();
 
 	return true;
@@ -494,6 +497,156 @@ bool GameScene4::Release()
 	return true;
 }
 bool GameScene4::inverseSet()
+{
+	m_pFadeObject = New FadeObject;
+	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
+	m_pFadeObject->Init();
+
+	m_BKObject.ReverseSet();
+
+	m_pPlayer.Set(800, 580, 10, 87, 25, 36);
+	m_pPlayer.setRendering(2.8f, INVERSE::LR_ROTATION);
+	m_pPlayer.setDir(-1);
+
+	return true;
+}
+
+GameScene5::GameScene5()
+{}
+bool GameScene5::Init()
+{
+	m_pFadeObject = New FadeObject;
+	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
+	m_pFadeObject->Init();
+
+	S_SpriteMgr.SpriteSet(L"../../data/txt/Kaho.txt");
+	m_pPlayer.LoadFile(L"PLAYER", L"../../data/bmp/KahoColor.bmp", L"../../data/bmp/KahoMask.bmp");
+	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
+	m_BKObject.Set(0, 0, 9073, 0, 2140, 720);
+	m_BKObject.Init();
+
+	TerrainObject * t1 = New TerrainObject;
+	t1->Set(0, 622, 0, 622, 884, 98);
+	m_BKObject.AddTerrain(t1);
+
+	t1 = New DownableObject;
+	t1->Set(884, 622, 884, 622, 105, 21);
+	m_BKObject.AddTerrain(t1);
+
+	t1 = New TrapObject;
+	t1->Set(902, 688, 902, 688, 706, 32);
+	m_BKObject.AddTerrain(t1);
+
+	t1 = New TerrainObject;
+	t1->Set(1607, 623, 1607, 623, 533, 97);
+	m_BKObject.AddTerrain(t1);
+
+	t1 = New TerrainObject;
+	t1->Set(1607, 570, 1607, 570, 111, 52);
+	m_BKObject.AddTerrain(t1);
+
+	t1 = New OrbObject;
+	t1->Set(1609, 517, 1609, 517, 52, 53);
+	m_BKObject.AddTerrain(t1);
+
+	ScrollObject * t2 = New ScrollObject;
+	t2->Set(908, 547, 908, 547, 78, 73);
+	m_BKObject.AddTerrain(t2);
+	m_pScroll.AddScrollObject(t2);
+
+	PlatObject * t3 = New PlatObject;
+	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
+	t3->Set(1174, 720, 2, 96, 144, 144);
+	t3->Init();
+	m_BKObject.AddPlat(t3);
+
+	t3 = New PlatObject;
+	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
+	t3->Set(1318, 719, 146, 48, 144, 192);
+	t3->Init();
+	m_BKObject.AddPlat(t3);
+
+	t3 = New PlatObject;
+	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
+	t3->Set(1462, 719, 290, 0, 145, 240);
+	t3->Init();
+	m_BKObject.AddPlat(t3);
+
+	m_pPlayer.Set(130, 350, 10, 87, 25, 36);
+	m_pPlayer.Init();
+	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
+	m_pScroll.Init();
+	m_pScroll.setScene5(true);
+
+	return true;
+}
+bool GameScene5::Frame()
+{
+	const FloatPoint px = *m_pPlayer.getDrawPos();
+	if (px.x <= 20)
+	{
+		m_bNextSceneStart = false;
+		return false;
+	}
+	if (px.x >= 900)
+	{
+		m_bNextSceneStart = true;
+		return false;
+	}
+	m_BKObject.Collision(&m_pPlayer);
+
+	for (NPCLIST it = m_NPCList.begin(); it != m_NPCList.end();)
+	{
+		m_BKObject.Collision(*it);
+		(*it)->Process(&m_pPlayer);
+		if ((*it)->isDead())
+		{
+			it = m_NPCList.erase(it);
+		}
+		else
+		{
+			it++;
+		}
+	}
+	m_pPlayer.Frame();
+	m_pScroll.Frame();
+	if (m_pFadeObject)
+	{
+		if (!m_pFadeObject->Frame())
+		{
+			delete m_pFadeObject;
+			m_pFadeObject = nullptr;
+		}
+	}
+	return true;
+}
+bool GameScene5::Render()
+{
+	m_BKObject.Render();
+	for (auto it : m_NPCList)
+	{
+		it->Render();
+	}
+	m_pPlayer.Render();
+	m_pScroll.Render();
+	if (m_pFadeObject)
+	{
+		m_pFadeObject->Render();
+	}
+
+	return true;
+}
+bool GameScene5::Release()
+{
+	m_pPlayer.Release();
+	m_BKObject.Release();
+	for (auto it : m_NPCList)
+	{
+		it->Release();
+	}
+	return true;
+}
+bool GameScene5::inverseSet()
 {
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);

@@ -7,6 +7,7 @@ class EffectObj : public Object
 public:
 	virtual bool		Init		();
 	virtual bool		Frame		();
+	void				setSpeed	(const FLOAT&);
 	void				setDrawPos	(const FloatPoint&);
 	void				setIndex	(const int&);
 public:

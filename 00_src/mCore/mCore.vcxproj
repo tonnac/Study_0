@@ -173,6 +173,8 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClInclude Include="LadderObject.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="OrbObject.h" />
+    <ClInclude Include="PlatObject.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerAttack.h" />
     <ClInclude Include="PlayerBasicState.h" />
@@ -180,12 +182,14 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="Scroll.h" />
+    <ClInclude Include="ScrollObject.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteMgr.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Std.h" />
     <ClInclude Include="TerrainObject.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TrapObject.h" />
     <ClInclude Include="wClass.h" />
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +211,8 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClCompile Include="LadderObject.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="OrbObject.cpp" />
+    <ClCompile Include="PlatObject.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerAttack.cpp" />
     <ClCompile Include="PlayerBasicState.cpp" />
@@ -214,15 +220,14 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="Scroll.cpp" />
+    <ClCompile Include="ScrollObject.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteMgr.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="TerrainObject.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TrapObject.cpp" />
     <ClCompile Include="wClass.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

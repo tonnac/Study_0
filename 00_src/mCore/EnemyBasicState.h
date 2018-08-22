@@ -55,12 +55,3 @@ public:
 	bool				Init() override;
 	bool				Process(Player *) override;
 };
-
-class EnemyStiffenState : public EnemyBasicState
-{
-public:
-	EnemyStiffenState(Enemy*);
-public:
-	bool				Init() override;
-	bool				Process(Player *) override;
-};

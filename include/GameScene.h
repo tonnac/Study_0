@@ -65,3 +65,15 @@ public:
 	bool				Release		() override;
 	bool				inverseSet	() override;
 };
+
+class GameScene5 : public GameScene
+{
+public:
+	GameScene5();
+public:
+	bool				Init() override;
+	bool				Frame() override;
+	bool				Render() override;
+	bool				Release() override;
+	bool				inverseSet() override;
+};

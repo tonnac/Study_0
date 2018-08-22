@@ -1,9 +1,10 @@
 #include "Scroll.h"
 #include "Player.h"
+#include "ScrollObject.h"
 
 Scroll::Scroll(Object * pPlayer, Object * pBkObj, std::list<Enemy*>* npcVector) : m_pPlayer(pPlayer),
 		m_PlayerCollisionRt(pPlayer->getCollisionRt()), m_pBkObj(pBkObj), m_npclist(npcVector),
-		m_BkRtDraw(pBkObj->getrtDraw())
+		m_BkRtDraw(pBkObj->getrtDraw()), m_bScene5(false), m_pScrollObject(nullptr)
 {}
 
 bool Scroll::Init()
@@ -40,6 +41,12 @@ bool Scroll::Release()
 }
 bool Scroll::Collision(const RECT& rt)
 {
+	Player * pl = dynamic_cast<Player*>(m_pPlayer);
+	if (pl->getCurrentState() == "Attack1" || pl->getCurrentState() == "Attack2" || pl->getCurrentState() == "Attack3"
+		|| pl->getCurrentState() == "AirAttack")
+	{
+		return true;
+	}
 	LONG x1;			//충돌영역 계산
 	
 	POINT A_Center;
@@ -51,6 +58,15 @@ bool Scroll::Collision(const RECT& rt)
 	LONG xDiff = static_cast<LONG>(abs(A_Center.x - m_CenterPos.x));
 	LONG yDiff = static_cast<LONG>(abs(A_Center.y - m_CenterPos.y));
 
+	if (m_bScene5 && CollisionClass::RectInRect(rt, *m_pScrollObject->getCollisionRt()))
+	{
+		LONG x1Diff = m_pPlayer->getCenterPos()->x - 200;
+		if (x1Diff != 0)
+		{
+			x1Diff /= abs(x1Diff);
+			return MoveCenter(x1Diff);
+		}
+	}
 	if (rt.right >= m_rtCollision.right)
 	{
 		x1 = rt.right - m_rtCollision.right;
@@ -61,18 +77,34 @@ bool Scroll::Collision(const RECT& rt)
 		}
 		return MoveCamera(x1);
 	}
-
-	if (rt.left < m_rtCollision.left)
+	else if (rt.left < m_rtCollision.left)
 	{
 		x1 = rt.left - m_rtCollision.left;
 		if (m_BkRtDraw->left - m_nInitValue[0] <= g_rtClient.left)  // 화면 끝 도달
 		{
 			return true;
 		}
-		Player * pl = dynamic_cast<Player*>(m_pPlayer);
 		if (pl->getDir() == -1)
 		{
 			return MoveCamera(x1);
+		}
+	}
+	else
+	{
+		if (m_BkRtDraw->left - m_nInitValue[0] <= g_rtClient.left)  // 화면 끝 도달
+		{
+			return true;
+		}
+		else if ((m_nInitValue[1] - m_BkRtDraw->left)
+			<= g_rtClient.right)  // 화면 끝 도달
+		{
+			return true;
+		}
+		LONG x1Diff = m_pPlayer->getCenterPos()->x - g_rtClient.right / 2;
+		if (x1Diff != 0 && pl->getCurrentState() == "Idle")
+		{
+			x1Diff /= abs(x1Diff);
+			return MoveCenter(x1Diff);
 		}
 	}
 	return true;
@@ -91,4 +123,25 @@ bool Scroll::MoveCamera(const LONG& size)
 	}
 	m_pBkObj->MoveScrollBk(size);
 	return true;
+}
+bool Scroll::MoveCenter(const LONG& size)
+{
+	FLOAT x = (*m_pPlayer->getCenterPos()).x;
+	m_pPlayer->setCenterPos_x(x - size * g_fPerSecFrame * g_fSpeed);
+	for (auto it : *m_npclist)
+	{
+		FLOAT x1 = (*it->getCenterPos()).x;
+		it->MoveScrollObj(size);
+		it->setCenterPos_x(x1 - size);
+	}
+	m_pBkObj->MoveScrollBk(size);
+	return true;
+}
+void Scroll::setScene5(const bool& bflag)
+{
+	m_bScene5 = true;
+}
+void Scroll::AddScrollObject(ScrollObject* sobject)
+{
+	m_pScrollObject = sobject;
 }

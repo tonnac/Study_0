@@ -47,21 +47,21 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
-//class AirBowAttack : public PlayerState
-//{
-//public:
-//	AirBowAttack(Player*);
-//public:
-//	bool		Init() override;
-//	bool		Frame() override;
-//	bool		Render() override;
-//};
-//class CrouchBowAttack : public PlayerState
-//{
-//public:
-//	CrouchBowAttack(Player*);
-//public:
-//	bool		Init() override;
-//	bool		Frame() override;
-//	bool		Render() override;
-//};
+class AirBowAttack : public PlayerState
+{
+public:
+	AirBowAttack(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+private:
+	FLOAT		m_fAcceleration;
+};
+class CrouchBowAttack : public PlayerState
+{
+public:
+	CrouchBowAttack(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
