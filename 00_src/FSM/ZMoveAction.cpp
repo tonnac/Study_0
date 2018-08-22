@@ -1,6 +1,6 @@
 #include "ZMoveAction.h"
 
-bool ZMoveAction::Process(KObject * pTarget)
+bool ZMoveAction::Process(Object * pTarget)
 {
 	return true;
 }

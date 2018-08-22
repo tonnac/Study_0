@@ -56,9 +56,14 @@ int main()
 //	cout << *(iter + 3) << " " << ptr << endl;
 //	p.erase(iter+3);
 
-	string qwe = "aerbhjwerbhj";
-	ReplaceAll(qwe, "bhj", "zzz");
-	cout << qwe << endl;
+	std::vector<int> pl;
+	std::vector<int>::iterator iter;
+	pl.clear();
+	pl.empty();
+	pl.push_back(1);
+	iter = pl.begin();
+	pl.erase(iter);
+	pl.empty();
 
 	return 0;
 }

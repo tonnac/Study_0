@@ -9,7 +9,7 @@ EnemyBasicState::EnemyBasicState(Enemy* pEnemy) : State(pEnemy), m_pEnemy(pEnemy
 	m_rtArea = m_pEnemy->getArea();
 	m_rtSight = m_pEnemy->getSight();
 	m_rtAttackRange = m_pEnemy->getAttackRange();
-	pEnemy->setSpeed(80.0f);
+	pEnemy->setSpeed(120.0f);
 }
 bool EnemyBasicState::Render()
 {
@@ -48,7 +48,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 		m_rtSight->bottom = collisionRT.bottom;
 
 		m_rtAttackRange->left = collisionRT.left - 10.0f;
-		m_rtAttackRange->top = collisionRT.top - 40.0f;
+		m_rtAttackRange->top = collisionRT.top;
 		m_rtAttackRange->right = collisionRT.left;
 		m_rtAttackRange->bottom = collisionRT.bottom;
 	}
@@ -60,7 +60,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 		m_rtSight->bottom = collisionRT.bottom;
 
 		m_rtAttackRange->left = collisionRT.right + 10.0f;
-		m_rtAttackRange->top = collisionRT.top - 40.0f;
+		m_rtAttackRange->top = collisionRT.top;
 		m_rtAttackRange->right = collisionRT.right;
 		m_rtAttackRange->bottom = collisionRT.bottom;
 	}
@@ -133,7 +133,7 @@ bool EnemyChaseState::Process(Player * pPlayer)
 		m_rtSight->bottom = collisionRT.bottom;
 
 		m_rtAttackRange->left = collisionRT.left - 5.0f;
-		m_rtAttackRange->top = collisionRT.top - 40.0f;
+		m_rtAttackRange->top = collisionRT.top;
 		m_rtAttackRange->right = collisionRT.left;
 		m_rtAttackRange->bottom = collisionRT.bottom;
 	}
@@ -145,7 +145,7 @@ bool EnemyChaseState::Process(Player * pPlayer)
 		m_rtSight->bottom = collisionRT.bottom;
 
 		m_rtAttackRange->left = collisionRT.right + 5.0f;
-		m_rtAttackRange->top = collisionRT.top - 40.0f;
+		m_rtAttackRange->top = collisionRT.top;
 		m_rtAttackRange->right = collisionRT.right;
 		m_rtAttackRange->bottom = collisionRT.bottom;
 	}

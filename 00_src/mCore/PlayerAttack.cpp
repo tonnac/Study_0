@@ -226,3 +226,32 @@ bool AirAttack::Render()
 	m_pEffectObj->Render();
 	return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+
+BowAttack::BowAttack(Player * pPlayer) : PlayerState(pPlayer)
+{
+	m_pCharObj->addState(std::string("Bow"), this);
+}
+bool BowAttack::Init()
+{
+	setSprite(L"Kaho", L"Bow");
+	m_pSprite->setDivideTime(0.5f);
+	return true;
+}
+bool BowAttack::Frame()
+{
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+		m_pCharObj->setState(L"Idle");
+		return true;
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////

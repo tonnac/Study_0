@@ -419,7 +419,7 @@ bool GameScene4::Init()
 	pl->setArea(rt);
 	m_NPCList.push_back(pl);
 
-	m_pPlayer.Set(130, 500, 10, 87, 25, 36);
+	m_pPlayer.Set(130, 300, 10, 87, 25, 36);
 	m_pPlayer.Init();
 	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
 

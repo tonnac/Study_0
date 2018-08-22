@@ -7,14 +7,14 @@ bool ZEnemy::Frame()
 {
 	return true;
 }
-bool ZEnemy::Process(KObject * pTarget)
+bool ZEnemy::Process(Object * pTarget)
 {
 	m_pAction->Process(pTarget);
 	return true;
 }
 DWORD ZEnemy::SetTransition(DWORD dwEvent)
 {
-	m_dwCurrentState = m_fsm.StateTransition(m_dwCurrentState, dwEvent);
+	m_dwCurrentState = m_pFsm->StateTransition(m_dwCurrentState, dwEvent);
 	m_pAction = m_pActionList[m_dwCurrentState];
 	return m_dwCurrentState;
 }

@@ -10,7 +10,6 @@ public:
 	bool		Frame() override;
 	bool		Render() override;
 };
-
 class PlayerAttack2 : public PlayerState
 {
 public:
@@ -20,7 +19,6 @@ public:
 	bool		Frame() override;
 	bool		Render() override;
 };
-
 class PlayerAttack3 : public PlayerState
 {
 public:
@@ -30,7 +28,6 @@ public:
 	bool		Frame() override;
 	bool		Render() override;
 };
-
 class AirAttack : public PlayerState
 {
 public:
@@ -42,3 +39,29 @@ public:
 private:
 	FLOAT		m_fAcceleration;
 };
+class BowAttack : public PlayerState
+{
+public:
+	BowAttack(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};
+//class AirBowAttack : public PlayerState
+//{
+//public:
+//	AirBowAttack(Player*);
+//public:
+//	bool		Init() override;
+//	bool		Frame() override;
+//	bool		Render() override;
+//};
+//class CrouchBowAttack : public PlayerState
+//{
+//public:
+//	CrouchBowAttack(Player*);
+//public:
+//	bool		Init() override;
+//	bool		Frame() override;
+//	bool		Render() override;
+//};

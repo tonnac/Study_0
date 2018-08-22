@@ -4,9 +4,10 @@
 
 CharacterObject::CharacterObject() : m_pCurrentState(nullptr), m_iCurrentDir(1), m_bDownable(false),
 									m_iJumpNumber(0), m_fJumpSpeed(200.0f), m_fJumpSpeed2(250.0f), m_bLadder(false),
-	m_bDead(false)
+									m_bDead(false)
 {
 	m_fSpeed = 250.0f;
+	m_pEffectVector.clear();
 }
 
 bool CharacterObject::Init()
@@ -22,13 +23,26 @@ bool CharacterObject::Init()
 bool CharacterObject::Frame()
 {
 	m_pCurrentState->Frame();
-
+	if (!m_pEffectVector.empty())
+	{
+		for (auto it : m_pEffectVector)
+		{
+			it->Frame();
+		}
+	}
 	Object::Frame();
 	return true;
 }
 bool CharacterObject::Render()
 {
 	Object::Render();
+	if (!m_pEffectVector.empty())
+	{
+		for (auto it : m_pEffectVector)
+		{
+			it->Render();
+		}
+	}
 	m_pCurrentState->Render();
 	return true;
 }
@@ -137,6 +151,10 @@ INT CharacterObject::getJumpNum()
 void CharacterObject::addState(std::string Name, State* state)
 {
 	m_pStateList.insert(std::make_pair(Name, state));
+}
+void CharacterObject::addEffect(EffectObj * eobj)
+{
+	m_pEffectVector.push_back(eobj);
 }
 std::string	CharacterObject::setTransition(E_EVENT Event)
 {

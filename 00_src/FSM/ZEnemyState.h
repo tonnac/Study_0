@@ -1,5 +1,5 @@
 #pragma once
-#include "KObject.h"
+#include "Object.h"
 
 class ZEnemy;
 
@@ -8,7 +8,7 @@ class ZEnemyState
 protected:
 	ZEnemy * m_pOwner;
 public:
-	virtual bool Process(KObject * pTarget) = 0;
+	virtual bool Process(Object * pTarget) = 0;
 public:
 	ZEnemyState(ZEnemy * pParent);
 	virtual ~ZEnemyState();

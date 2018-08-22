@@ -128,3 +128,11 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
+class PlayerRoll : public PlayerState
+{
+public:
+	PlayerRoll(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};

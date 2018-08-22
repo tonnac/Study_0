@@ -42,6 +42,9 @@
     <ClCompile Include="ZFiniteStateMachine.cpp">
       <Filter>FSM</Filter>
     </ClCompile>
+    <ClCompile Include="ZFsmMgr.cpp">
+      <Filter>FSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ZEnemy.h">
@@ -62,5 +65,16 @@
     <ClInclude Include="ZFiniteStateMachine.h">
       <Filter>FSM</Filter>
     </ClInclude>
+    <ClInclude Include="ZFsmMgr.h">
+      <Filter>FSM</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fsmLevel1.txt">
+      <Filter>State</Filter>
+    </Text>
+    <Text Include="fsmDefault.txt">
+      <Filter>State</Filter>
+    </Text>
   </ItemGroup>
 </Project>

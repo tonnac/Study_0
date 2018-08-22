@@ -19,6 +19,9 @@ Player::Player()
 	state = New AirAttack(this);
 	state = New PlayerRise(this);
 	state = New PlayerCrouch(this);
+	state = New PlayerRoll(this);
+	state = New BowAttack(this);
+
 
 	state = New PlayerLadderEnter(this);
 	state = New PlayerLadderLeave(this);

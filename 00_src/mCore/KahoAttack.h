@@ -29,3 +29,10 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
+
+class KahoBowAttack : public EffectObj
+{
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};

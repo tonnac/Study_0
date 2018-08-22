@@ -152,6 +152,7 @@
     <ClCompile Include="ZEnemy.cpp" />
     <ClCompile Include="ZEnemyState.cpp" />
     <ClCompile Include="ZFiniteStateMachine.cpp" />
+    <ClCompile Include="ZFsmMgr.cpp" />
     <ClCompile Include="ZMoveAction.cpp" />
     <ClCompile Include="ZStandAction.cpp" />
   </ItemGroup>
@@ -160,8 +161,13 @@
     <ClInclude Include="ZEnemy.h" />
     <ClInclude Include="ZEnemyState.h" />
     <ClInclude Include="ZFiniteStateMachine.h" />
+    <ClInclude Include="ZFsmMgr.h" />
     <ClInclude Include="ZMoveAction.h" />
     <ClInclude Include="ZStandAction.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="fsmDefault.txt" />
+    <Text Include="fsmLevel1.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

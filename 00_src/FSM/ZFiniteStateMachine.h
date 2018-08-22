@@ -22,13 +22,21 @@ private:
 	// event -> output
 	std::map<DWORD, DWORD> m_mapOutState;
 public:
+	DWORD	m_dwState;
+public:
 	void AddTransition(DWORD dwEvent, DWORD dwOutput)
 	{
 		m_mapOutState[dwEvent] = dwOutput;
 	}
 	DWORD GetState(DWORD dwEvent)
 	{
-		return m_mapOutState[dwEvent];
+		std::map<DWORD, DWORD>::iterator iter;
+		iter = m_mapOutState.find(dwEvent);
+		if (iter != m_mapOutState.end())
+		{
+			return m_mapOutState[dwEvent];
+		}
+		return m_dwState;
 	}
 public:
 	ZFiniteState() 
@@ -42,6 +50,11 @@ class ZFiniteStateMachine
 {
 	std::map<DWORD, ZFiniteState*> m_mapState;
 	using ITER = std::map<DWORD, ZFiniteState*>::iterator;
+public:
+	T_STR	m_szName;
+public:
+	bool	LoadFile(T_STR);
+	int		GetIndex(T_STR szState);
 public:
 	DWORD StateTransition(DWORD dwCurrentState, DWORD dwEvent);
 	void AddStateTransition(

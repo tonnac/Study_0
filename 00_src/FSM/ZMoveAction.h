@@ -1,10 +1,10 @@
 #pragma once
-#include "ZEnemy.h"
+#include "Enemy.h"
 
 class ZMoveAction : public ZEnemyState
 {
 public:
-	bool Process(KObject * pTarget) override;
+	bool Process(Object * pTarget) override;
 public:
 	ZMoveAction(ZEnemy * pOwner);
 	virtual ~ZMoveAction();

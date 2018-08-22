@@ -1,9 +1,10 @@
 #include "Core.h"
-#include "KbkObject.h"
+#include "BkObject.h"
 #include "ZEnemy.h"
 #include "Scene.h"
+#include "ZFsmMgr.h"
 
-class KSample : public KCore
+class KSample : public Core
 {
 	ZEnemy								m_tmpObj;
 	Hero								m_effect;
@@ -11,6 +12,8 @@ class KSample : public KCore
 public:
 	bool Init()
 	{
+		I_ZFsmMgr.Load(L"fsmDefault.txt");
+		I_ZFsmMgr.Load(L"fsmLevel1.txt");
 		m_fAngle = 30.0f;
 		m_effect.Init();
 		m_tmpObj.Init();
@@ -19,7 +22,7 @@ public:
 		m_tmpObj.Set(500, 500, 133, 1, 42, 59);
 		m_effect.Set(300, 300, 133, 1, 42, 59);
 
-
+		m_tmpObj.SetFsm(rand() % I_ZFsmMgr.getSize() + 1);
 		return true;
 	}
 	bool Frame()

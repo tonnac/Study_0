@@ -1,6 +1,5 @@
 #include "PlayerBasicState.h"
-#include "EffectObj.h"
-
+#include "KahoAttack.h"
 #include "TerrainObject.h"
 
 PlayerState::PlayerState(Player * pPlayer) : State(pPlayer), m_pCharObj(pPlayer)
@@ -86,6 +85,20 @@ bool PlayerIdle::Frame()
 		m_pCharObj->setState(L"Attack1");
 		return true;
 	}
+	if (S_Input.GetKey('Q') == KEYSTATE::KEY_PUSH)
+	{
+		m_pCharObj->setState(L"Roll");
+		return true;
+	}
+	if (S_Input.GetKey('D') == KEYSTATE::KEY_PUSH)
+	{
+		EffectObj * Arrow = New KahoBowAttack;
+		Arrow->Set(m_pCharObj->getCenterPos()->x + 20, m_pCharObj->getCenterPos()->y - 20);
+		Arrow->Init();
+		m_pCharObj->addEffect(Arrow);
+		m_pCharObj->setState(L"Bow");
+		return true;
+	}
 	if (!m_pSprite->Frame())				// 한바퀴 다돌면
 	{
 		m_pSprite->setIndex(0);
@@ -139,6 +152,12 @@ bool PlayerRun::Frame()
 	{
 		m_pSprite->setIndex(0);
 		m_pCharObj->setState(L"Brake");
+		return true;
+	}
+	if (S_Input.GetKey('Q') == KEYSTATE::KEY_PUSH)
+	{
+		m_pSprite->setIndex(0);
+		m_pCharObj->setState(L"Roll");
 		return true;
 	}
 	if (!m_pSprite->Frame())
@@ -561,6 +580,30 @@ bool PlayerLadderDown::Frame()
 	//	m_pCharObj->setState(L"LadderLeave");
 	//	return true;
 	//}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+PlayerRoll::PlayerRoll(Player * pPlayer) : PlayerState(pPlayer)
+{
+	m_pCharObj->addState(std::string("Roll"), this);
+}
+bool PlayerRoll::Init()
+{
+	setSprite(L"Kaho", L"Roll");
+	m_pSprite->setDivideTime(0.6f);
+	return true;
+}
+bool PlayerRoll::Frame()
+{
+	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+		m_pCharObj->setState(L"Idle");
+	}
+	FLOAT fSpeed = m_pCharObj->getSpeed();
+	m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * fSpeed * 1.5f;
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }

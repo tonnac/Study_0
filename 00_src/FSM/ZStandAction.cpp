@@ -1,6 +1,6 @@
 #include "ZStandAction.h"
 
-bool ZStandAction::Process(KObject * pTarget)
+bool ZStandAction::Process(Object * pTarget)
 {
 	RECT rt;
 	rt.left = m_pOwner->m_CenterPos.x - m_pOwner->m_fAttackRadius;

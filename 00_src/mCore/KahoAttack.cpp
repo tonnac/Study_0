@@ -63,7 +63,6 @@ bool KahoAttack3::Frame()
 	return true;
 }
 
-
 bool KahoAirAttack::Init()
 {
 	m_pEffectSprite = S_SpriteMgr.LoadSprite(L"Kaho", L"AirLeaf");
@@ -82,5 +81,21 @@ bool KahoAirAttack::Frame()
 		m_rtCollision.bottom = 0;
 		m_rtCollision.top = 0;
 	}
+	return true;
+}
+
+bool KahoBowAttack::Init()
+{
+	LoadFile(L"PLAYER", L"../../../../data/bmp/KahoColor.bmp", L"../../../../data/bmp/KahoMask.bmp");
+	m_pEffectSprite = S_SpriteMgr.LoadSprite(L"Kaho", L"ArrowS");
+	m_pEffectSprite->setIndex(0);
+	m_pEffectSprite->setDivideTime(0.5f);
+	setRendering(2.8f, INVERSE::DEFAULT);
+	return true;
+}
+bool KahoBowAttack::Frame()
+{
+	m_CenterPos.x += g_fPerSecFrame * g_fSpeed * 2.0f;
+	EffectObj::Frame();
 	return true;
 }

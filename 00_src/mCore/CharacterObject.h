@@ -1,9 +1,12 @@
 #pragma once
-#include "Object.h"
 #include "FinateStateMachine.h"
+#include "EffectObj.h"
+
 
 class State;
 using StateMap = std::map<std::string, State*>;
+using EffectVector = std::vector<EffectObj*>;
+using EffectIter = EffectVector::iterator;
 
 class CharacterObject : public Object
 {
@@ -35,6 +38,7 @@ public:
 	virtual bool		isFallState		();
 public:
 	void				addState		(std::string, State*);
+	void				addEffect		(EffectObj *);
 public:
 	std::string			setTransition	(E_EVENT Event);
 protected:
@@ -50,5 +54,6 @@ protected:
 	std::string			m_sCurrestState;
 	State *				m_pCurrentState;
 	StateMap			m_pStateList;
+	EffectVector		m_pEffectVector;
 	FinateStateMachine	m_fms;
 };
