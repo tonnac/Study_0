@@ -99,11 +99,14 @@ extern float				g_fSpeed;
 extern float				g_fPerSecFrame;
 extern bool					g_bActiveApp;
 
-
+extern INT					g_HP;
 extern INT					g_iNewCount;
 extern MEM_MAP				MemoryMap;
 
+class UI;
 
+extern UI * g_UI;
+extern UI * g_HPBar;
 
 //	KahoAttack1 7
 //	KahoAttack2 7

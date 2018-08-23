@@ -26,6 +26,9 @@ bool GameScene1::Init()
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 0, 0, 2072, 772);
 	m_BKObject.Init();
+	
+	m_BKObject.AddUI(g_UI);
+	m_BKObject.AddUI(g_HPBar);
 
 	TerrainObject * t1 = New TerrainObject;
 	t1->Set(0, 622, 0, 622, 1560, 150);
@@ -43,7 +46,7 @@ bool GameScene1::Init()
 	t1->Set(1818, 623, 1818, 623, 335, 151);
 	m_BKObject.AddTerrain(t1);
 
-	m_pPlayer.Set(150, 580, 10, 87, 25, 36);
+	m_pPlayer.Set(150, 300, 10, 87, 25, 36);
 	m_pPlayer.Init();
 	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
 
@@ -121,6 +124,9 @@ bool GameScene2::Init()
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 2072, 0, 2206, 769);
 	m_BKObject.Init();
+
+	m_BKObject.AddUI(g_UI);
+	m_BKObject.AddUI(g_HPBar);
 
 	TerrainObject * t1 = New TerrainObject;
 	t1->Set(0, 620, 0, 620, 740, 148);
@@ -283,6 +289,9 @@ bool GameScene3::Init()
 	m_BKObject.Set(0, 0, 4292, 0, 960, 720);
 	m_BKObject.Init();
 
+	m_BKObject.AddUI(g_UI);
+	m_BKObject.AddUI(g_HPBar);
+
 	TerrainObject * t1 = New TerrainObject;
 	t1->Set(0, 673, 0, 673, 1010, 47);
 	m_BKObject.AddTerrain(t1);
@@ -376,6 +385,7 @@ GameScene4::GameScene4()
 {}
 bool GameScene4::Init()
 {
+
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_pFadeObject->Init();
@@ -386,6 +396,9 @@ bool GameScene4::Init()
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 5310, 0, 2198, 722);
 	m_BKObject.Init();
+
+	m_BKObject.AddUI(g_UI);
+	m_BKObject.AddUI(g_HPBar);
 
 	TerrainObject * t1 = New TerrainObject;
 	t1->Set(0, 673, 0, 673, 2198, 48);
@@ -517,6 +530,15 @@ GameScene5::GameScene5()
 {}
 bool GameScene5::Init()
 {
+	g_UI = New UI;
+	g_UI->LoadFile(L"UI", L"../../data/bmp/UIColor.bmp", L"../../data/bmp/UIMask.bmp");
+	g_HPBar = New UI;
+	g_HPBar->LoadFile(L"HPBAR", L"../../data/bmp/HPBar.bmp");
+	g_UI->Set(30, 48, 0, 0, 276, 72);
+	g_HPBar->Set(108, 51, 0, 0, 186, 21);
+	g_UI->Init();
+	g_HPBar->Init();
+
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_pFadeObject->Init();
@@ -527,12 +549,15 @@ bool GameScene5::Init()
 	m_BKObject.Set(0, 0, 9073, 0, 2140, 720);
 	m_BKObject.Init();
 
+	m_BKObject.AddUI(g_UI);
+	m_BKObject.AddUI(g_HPBar);
+
 	TerrainObject * t1 = New TerrainObject;
 	t1->Set(0, 622, 0, 622, 884, 98);
 	m_BKObject.AddTerrain(t1);
 
 	t1 = New DownableObject;
-	t1->Set(884, 622, 884, 622, 105, 21);
+	t1->Set(884, 621, 884, 622, 105, 21);
 	m_BKObject.AddTerrain(t1);
 
 	t1 = New TrapObject;

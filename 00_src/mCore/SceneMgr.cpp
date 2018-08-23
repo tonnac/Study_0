@@ -36,6 +36,8 @@ bool SceneMgr::Release()
 {
 	m_pCurrentScene->Release();
 	delete m_pCurrentScene;
+	delete g_UI;
+	delete g_HPBar;
 	return true;
 }
 Scene* SceneMgr::CreateScene(const INT& index, const bool& bNextScene)

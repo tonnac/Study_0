@@ -61,6 +61,10 @@ bool Scroll::Collision(const RECT& rt)
 	if (m_bScene5 && CollisionClass::RectInRect(rt, *m_pScrollObject->getCollisionRt()))
 	{
 		LONG x1Diff = m_pPlayer->getCenterPos()->x - 200;
+		if (x1Diff == 0)
+		{
+			return true;
+		}
 		if (x1Diff != 0)
 		{
 			x1Diff /= abs(x1Diff);

@@ -1,5 +1,6 @@
 #pragma once
 #include "CharacterObject.h"
+#include "UI.h"
 
 class TerrainObject;
 class PlatObject;
@@ -16,6 +17,7 @@ public:
 	bool		MoveScrollBk	(const LONG&) override;
 	void		AddTerrain		(TerrainObject *);
 	void		AddPlat			(PlatObject *);
+	void		AddUI			(UI* ui);
 	bool		Collision		(Object* ) override;
 	void		ReverseSet		();
 	void		PlatUp			();
@@ -23,4 +25,5 @@ public:
 private:
 	std::vector<TerrainObject*> m_pObjList;
 	std::vector<PlatObject*>	m_pPlatList;
+	std::vector<UI*>			m_pUIList;
 };

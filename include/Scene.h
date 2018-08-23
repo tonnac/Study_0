@@ -6,8 +6,8 @@
 #include "Scroll.h"
 #include "Enemy.h"
 #include "TerrainObject.h"
-#include "Button.h"
 #include "FadeObject.h"
+#include "UI.h"
 
 class Scene
 {
@@ -48,7 +48,6 @@ protected:
 	LOBBYSTATE		m_state;
 	bool			isSoundBar;
 	bool			isPress;
-	Button			m_Btn;
 	BKObject		m_bkmisc[3];
 	RECT			m_miscrt[12];
 	FloatPoint		m_miscpos[11];
@@ -62,3 +61,4 @@ public:
 	bool			Render		() override;
 	bool			Release		() override;
 };
+

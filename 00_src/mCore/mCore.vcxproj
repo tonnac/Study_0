@@ -158,7 +158,6 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="BitmapMgr.h" />
     <ClInclude Include="BKObject.h" />
-    <ClInclude Include="Button.h" />
     <ClInclude Include="CharacterObject.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Core.h" />
@@ -190,13 +189,13 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClInclude Include="TerrainObject.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TrapObject.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="wClass.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp" />
     <ClCompile Include="BitmapMgr.cpp" />
     <ClCompile Include="BKObject.cpp" />
-    <ClCompile Include="Button.cpp" />
     <ClCompile Include="CharacterObject.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Core.cpp" />
@@ -227,6 +226,7 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <ClCompile Include="TerrainObject.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TrapObject.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="wClass.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

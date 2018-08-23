@@ -1,5 +1,8 @@
 #include "Scene.h"
 
+UI * g_UI = nullptr;
+UI * g_HPBar = nullptr;
+
 Scene::Scene() : m_bNextSceneStart(false), m_pFadeObject(nullptr)
 {}
 bool Scene::inverseSet()
@@ -51,6 +54,14 @@ bool LobbyScene::Init()
 	m_BKObject.Init();
 	m_BKObject.setFadeRender(0.0f, 30.0f);
 	m_state = LOBBYSTATE::DEFAULT;
+	g_UI = New UI;
+	g_UI->LoadFile(L"UI", L"../../data/bmp/UIColor.bmp", L"../../data/bmp/UIMask.bmp");
+	g_HPBar = New UI;
+	g_HPBar->LoadFile(L"HPBAR", L"../../data/bmp/HPBar.bmp");
+	g_UI->Set(30, 48, 0, 0, 276, 72);
+	g_HPBar->Set(108, 51, 0, 0, 186, 21);
+	g_UI->Init();
+	g_HPBar->Init();
 
 	return true;
 }

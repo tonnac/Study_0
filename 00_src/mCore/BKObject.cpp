@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "ScrollObject.h"
 #include "PlatObject.h"
+#include "UI.h"
 
 BKObject::BKObject()
 {
@@ -19,6 +20,11 @@ BKObject::BKObject()
 //}
 bool BKObject::Frame()
 {
+	for (auto iter : m_pUIList)
+	{
+		iter->Frame();
+		m_pUIList[1]->Set(108, 51, 0, 0, (FLOAT)(186 * g_HP * 0.01), 21);
+	}
 	for (auto it : m_pObjList)
 	{
 		it->Frame();
@@ -53,6 +59,10 @@ bool BKObject::Render()
 			iter->Render();
 		}
 	}
+	for (auto iter : m_pUIList)
+	{
+		iter->Render();
+	}
 	return true;
 }
 bool BKObject::Release()
@@ -65,6 +75,7 @@ bool BKObject::Release()
 			delete iter;
 		}
 	}
+	m_pPlatList.clear();
 	for (auto it : m_pObjList)
 	{
 		it->Release();
@@ -88,6 +99,10 @@ bool BKObject::MoveScrollBk(const LONG& fsize)
 			iter->MoveScrollObj(fsize);
 		}
 	}
+	for (auto iter : m_pUIList)
+	{
+		iter->MoveScrollObj(fsize);
+	}
 	if (fsize < 0)
 	{
 		m_fScroll += -(g_fPerSecFrame * g_fSpeed);
@@ -108,6 +123,10 @@ void BKObject::AddTerrain(TerrainObject * m_ptObject)
 void BKObject::AddPlat(PlatObject * m_pObject)
 {
 	m_pPlatList.push_back(m_pObject);
+}
+void BKObject::AddUI(UI* ui)
+{
+	m_pUIList.push_back(ui);
 }
 bool BKObject::Collision(Object* pObject)
 {

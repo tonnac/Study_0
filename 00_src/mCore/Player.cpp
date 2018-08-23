@@ -2,7 +2,8 @@
 #include "PlayerAttack.h"
 #include "PlayerBasicState.h"
 
-float g_fSpeed = 0.0f;
+float	g_fSpeed = 0.0f;
+INT		g_HP = 0;
 
 Player::Player()
 { 
@@ -31,13 +32,14 @@ Player::Player()
 	state = New PlayerLadderUp(this);
 	state = New PlayerLadderDown(this);
 	g_fSpeed = m_fSpeed;
-	m_HP = 100;
+	m_HP = g_HP = 100;
 	m_Damage = 24;
 	m_fZoom = 2.8f;
 }
 void Player::setHP(const INT& hp)
 {
 	m_HP -= hp;
+	g_HP = m_HP;
 }
 //bool Player::Init()
 //{
