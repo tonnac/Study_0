@@ -55,3 +55,12 @@ public:
 	bool				Init() override;
 	bool				Process(Player *) override;
 };
+
+class EnemyAngryState : public EnemyBasicState
+{
+public:
+	EnemyAngryState(Enemy*);
+public:
+	bool				Init() override;
+	bool				Process(Player *) override;
+};

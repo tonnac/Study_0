@@ -15,6 +15,7 @@
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"msimg32.lib")
 #pragma comment(lib,"11_mCore.lib")
+#pragma comment(lib, "fmod64_vc.lib")
 
 #define New new(__FILE__,__LINE__)
 #define PI 3.141592
@@ -105,8 +106,12 @@ extern MEM_MAP				MemoryMap;
 
 class UI;
 
-extern UI * g_UI;
-extern UI * g_HPBar;
+extern UI *					g_UI;
+extern UI *					g_HPBar;
+
+class Player;
+
+extern Player*				g_pPlayer;
 
 //	KahoAttack1 7
 //	KahoAttack2 7

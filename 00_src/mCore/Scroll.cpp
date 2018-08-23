@@ -2,13 +2,14 @@
 #include "Player.h"
 #include "ScrollObject.h"
 
-Scroll::Scroll(Object * pPlayer, Object * pBkObj, std::list<Enemy*>* npcVector) : m_pPlayer(pPlayer),
-		m_PlayerCollisionRt(pPlayer->getCollisionRt()), m_pBkObj(pBkObj), m_npclist(npcVector),
+Scroll::Scroll(Object * pBkObj, std::list<Enemy*>* npcVector) : m_pBkObj(pBkObj), m_npclist(npcVector),
 		m_BkRtDraw(pBkObj->getrtDraw()), m_bScene5(false), m_pScrollObject(nullptr)
 {}
 
 bool Scroll::Init()
 {
+	m_pPlayer = g_pPlayer;
+	m_PlayerCollisionRt = g_pPlayer->getCollisionRt();
 	m_rtCollision.left = g_rtClient.left + 150;
 	m_rtCollision.top = g_rtClient.top;
 	m_rtCollision.right = (g_rtClient.left + 620 + g_rtClient.right) / 2;

@@ -77,6 +77,8 @@
   <ItemGroup>
     <Text Include="Kaho.txt" />
     <Text Include="Monkey.txt" />
+    <Text Include="FSM.txt" />
+    <Text Include="FSM1.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitmap.h">
@@ -187,6 +189,12 @@
     <ClInclude Include="UI.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
+    <ClInclude Include="mSound.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMMgr.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bitmap.cpp">
@@ -293,6 +301,12 @@
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="mSound.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMMgr.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

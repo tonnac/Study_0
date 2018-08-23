@@ -27,6 +27,8 @@ public:
 	virtual void		setHP			(const INT&);
 	void				setInvincible	(const bool&);
 	void				setDead			(const bool&);
+	void				setFSM			(FinateStateMachine* );
+	void				setDamage		(const INT&);
 public:
 	bool				isInvincible	();
 	bool				isDead			();
@@ -46,8 +48,8 @@ public:
 	void				addEffect		(EffectObj *);
 public:
 	bool				hasNext();
-	void				deleteEffect(EffectIter&);
-	EffectIter			getEffectIter();
+	void				deleteEffect	(EffectIter&);
+	EffectIter			getEffectIter	();
 public:
 	std::string			setTransition	(E_EVENT Event);
 protected:

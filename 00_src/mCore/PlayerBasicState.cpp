@@ -402,7 +402,6 @@ bool PlayerFall::Init()
 bool PlayerFall::Frame()
 {
 	m_fTimer += g_fPerSecFrame;
-	m_fAcceleration -= 1.8f;
 	INT iJumpNum = m_pCharObj->getJumpNum();
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)

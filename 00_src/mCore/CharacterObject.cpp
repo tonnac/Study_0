@@ -170,6 +170,14 @@ void CharacterObject::setDead(const bool& bflag)
 {
 	m_bDead = bflag;
 }
+void CharacterObject::setFSM(FinateStateMachine* fsm)
+{
+	m_fms = fsm;
+}
+void CharacterObject::setDamage(const INT& damage)
+{
+	m_Damage = damage;
+}
 bool CharacterObject::getDownable()
 {
 	return m_bDownable;

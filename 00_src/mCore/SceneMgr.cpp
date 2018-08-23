@@ -1,16 +1,21 @@
 #include "SceneMgr.h"
+#include "mSound.h"
 
-SceneMgr::SceneMgr() : m_nIndex(5)
+SceneMgr::SceneMgr() : m_nIndex(4)
 {
 }
 
 bool SceneMgr::Init()
 {
-	m_pCurrentScene = CreateScene(5, true);
+	m_pCurrentScene = CreateScene(4, true);
 	return true;
 }
 bool SceneMgr::Frame()
 {
+	if (S_Input.GetKey(VK_END) == KEYSTATE::KEY_PUSH)
+	{
+		g_pPlayer->setInvincible(!g_pPlayer->isInvincible());
+	}
 	if (!m_pCurrentScene->Frame())
 	{
 		bool bflag = m_pCurrentScene->getNextScene();
@@ -35,9 +40,11 @@ bool SceneMgr::Render()
 bool SceneMgr::Release()
 {
 	m_pCurrentScene->Release();
+	S_Sound.Release();
 	delete m_pCurrentScene;
 	delete g_UI;
 	delete g_HPBar;
+	delete g_pPlayer;
 	return true;
 }
 Scene* SceneMgr::CreateScene(const INT& index, const bool& bNextScene)

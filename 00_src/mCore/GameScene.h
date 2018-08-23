@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 
+
 class GameScene : public Scene
 {
 public:
@@ -12,7 +13,6 @@ public:
 	virtual bool		Release		() override = 0;
 	virtual bool		inverseSet	() override = 0;
 protected:
-	Player				m_pPlayer;
 	Scroll				m_pScroll;
 	std::list<Enemy*>	m_NPCList;
 };

@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "mSound.h"
 
 UI * g_UI = nullptr;
 UI * g_HPBar = nullptr;
@@ -39,6 +40,7 @@ LobbyScene::LobbyScene() : isPress(false), m_nEffectVolume(10), m_nBGMVolume(10)
 {}										 
 bool LobbyScene::Init()
 {
+
 	PosSet();
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);

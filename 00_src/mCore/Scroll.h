@@ -6,7 +6,7 @@ class ScrollObject;
 class Scroll
 {
 public:
-	Scroll(Object * object, Object * pBkObj, std::list<Enemy*>* npcVector = nullptr);
+	Scroll(Object * pBkObj, std::list<Enemy*>* npcVector = nullptr);
 public:
 	bool				Init			();
 	bool				Frame			();

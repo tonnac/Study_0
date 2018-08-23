@@ -102,7 +102,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
-		pPlayer->setHP(8);
+		pPlayer->setHP(m_pEnemy->getDamage());
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -228,7 +228,7 @@ bool EnemyChaseState::Process(Player * pPlayer)
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
-		pPlayer->setHP(8);
+		pPlayer->setHP(m_pEnemy->getDamage());
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -343,7 +343,7 @@ bool EnemyAttackState::Process(Player * pPlayer)
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
-		pPlayer->setHP(8);
+		pPlayer->setHP(m_pEnemy->getDamage());
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -402,6 +402,151 @@ bool EnemyHitState::Process(Player * pPlayer)
 		m_pSprite->setIndex(0);
 		m_pEnemy->setTransition(E_EVENT::NOHIT);
 		return true;
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+EnemyAngryState::EnemyAngryState(Enemy* pEnemy) : EnemyBasicState(pEnemy)
+{
+	pEnemy->addState(std::string("Angry"), this);
+}
+bool EnemyAngryState::Init()
+{
+	setSprite(L"Monkey", L"Labeled");
+	m_pSprite->setDivideTime(0.3f);
+	return true;
+}
+bool EnemyAngryState::Process(Player * pPlayer)
+{
+	m_fTimer += g_fPerSecFrame;
+	const RECT playerEffectRT = pPlayer->getEffectObj();
+	const RECT collisionRT = *m_pEnemy->getCollisionRt();
+	const RECT playerRT = *pPlayer->getCollisionRt();
+	FLOAT fSpeed = m_pEnemy->getSpeed();
+	INT iDir = m_pEnemy->getDir();
+	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
+	m_CenterPos->y += g_fPerSecFrame * 10.0f;
+
+	if (m_fTimer >= 5.0f)
+	{
+		INT eDamage = m_pEnemy->getDamage();
+		m_fTimer -= 5.0f;
+		m_pEnemy->setSpeed(fSpeed + 10.0f);
+		m_pEnemy->setDamage(eDamage + 5);
+		m_rtArea->left -= 15;
+//		m_rtArea->right += 15;
+	}
+
+	if (iDir == -1)
+	{
+		m_rtSight->left = collisionRT.left - 100.0f;
+		m_rtSight->top = collisionRT.top - 150.0f;
+		m_rtSight->right = m_CenterPos->x;
+		m_rtSight->bottom = collisionRT.bottom;
+
+		m_rtAttackRange->left = collisionRT.left - 5.0f;
+		m_rtAttackRange->top = collisionRT.top;
+		m_rtAttackRange->right = collisionRT.left;
+		m_rtAttackRange->bottom = collisionRT.bottom;
+	}
+	else
+	{
+		m_rtSight->left = collisionRT.right + 100.0f;
+		m_rtSight->top = collisionRT.top - 150.0f;
+		m_rtSight->right = m_CenterPos->x;
+		m_rtSight->bottom = collisionRT.bottom;
+
+		m_rtAttackRange->left = collisionRT.right + 5.0f;
+		m_rtAttackRange->top = collisionRT.top;
+		m_rtAttackRange->right = collisionRT.right;
+		m_rtAttackRange->bottom = collisionRT.bottom;
+	}
+
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+	}
+	if (CollisionClass::RectInRect(playerRT, collisionRT) && pPlayer->getCurrentState() != "Roll" &&
+		!pPlayer->isInvincible())
+	{
+		RECT CollisionArea;
+		CollisionArea.left = (playerRT.left < collisionRT.left) ? collisionRT.left : playerRT.left;
+		CollisionArea.right = (playerRT.right > collisionRT.right) ? collisionRT.right : playerRT.right;
+		CollisionArea.top = (playerRT.top < collisionRT.top) ? collisionRT.top : playerRT.top;
+		CollisionArea.bottom = (playerRT.bottom > collisionRT.bottom) ? collisionRT.bottom : playerRT.bottom;
+
+		FloatPoint vDir;
+		vDir.x = CollisionArea.right - CollisionArea.left;
+		vDir.y = CollisionArea.bottom - CollisionArea.top;
+
+		FLOAT fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		vDir.x /= fLength;
+		vDir.y /= fLength;
+
+		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
+
+		FloatPoint vPos = *pPlayer->getCenterPos();
+		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+
+		pPlayer->setCenterPos_x(vPos.x);
+		pPlayer->setCenterPos_y(vPos.y);
+		pPlayer->setHP(m_pEnemy->getDamage());
+		pPlayer->setState(L"Hurt");
+		return true;
+	}
+	if (CollisionClass::RectInRect(playerRT, *m_rtAttackRange))
+	{
+		m_pSprite->setIndex(0);
+		m_pEnemy->setTransition(E_EVENT::INATTACKRANGE);
+		return true;
+	}
+	if (CollisionClass::RectInRect(playerEffectRT, collisionRT))
+	{
+		m_pSprite->setIndex(0);
+		m_pEnemy->setHP(pPlayer->getDamage());
+		if (m_pEnemy->isDead())
+		{
+			m_pEnemy->Release();
+			return true;
+		}
+		m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+		return true;
+	}
+	if (CollisionClass::RectInRect(playerRT, *m_rtArea))
+	{
+		if (m_pEnemy->getDir() == 1 && collisionRT.left > playerRT.right)
+		{
+			m_pEnemy->setDir(-1);
+			m_pEnemy->setRendering(INVERSE::LR_ROTATION);
+			return true;
+		}
+		if (m_pEnemy->getDir() == -1 && collisionRT.right < playerRT.left)
+		{
+			m_pEnemy->setDir(-1);
+			m_pEnemy->setRendering(INVERSE::DEFAULT);
+			return true;
+		}
+	}
+	while (pPlayer->hasNext())
+	{
+		EffectIter it = pPlayer->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (CollisionClass::RectInRect(itrt, collisionRT))
+		{
+			pPlayer->deleteEffect(it);
+			m_pEnemy->setHP(1);
+			if (m_pEnemy->isDead())
+			{
+				m_pEnemy->Release();
+				return true;
+			}
+			m_pSprite->setIndex(0);
+			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+			return true;
+		}
 	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
