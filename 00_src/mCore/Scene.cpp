@@ -330,3 +330,31 @@ void LobbyScene::AKeyReact(const INT& index)
 		break;
 	}
 }
+
+
+bool EndScene::Init()
+{
+	m_BKObject.LoadFile(L"End", L"../../data/bmp/EndScene.bmp");
+	m_BKObject.Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
+	m_BKObject.Init();
+	return true;
+}
+bool EndScene::Frame()
+{
+	if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
+	{
+		DestroyWindow(g_hWnd);
+	}
+	m_BKObject.Frame();
+	return true;
+}
+bool EndScene::Render()
+{
+	m_BKObject.Render();
+	return true;
+}
+bool EndScene::Release()
+{
+	m_BKObject.Release();
+	return true;
+}

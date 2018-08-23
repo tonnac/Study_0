@@ -38,6 +38,8 @@ public:
 public:
 	void AddStateTransition		(const std::string&, const E_EVENT&, const std::string&);
 	std::string StateTransition	(const std::string&, const E_EVENT&);
+	void * operator new			(size_t sz, const char* FileName, int iLine);
+	void operator delete		(void * p);
 private:
 	EnemyMapState m_mapState;
 };

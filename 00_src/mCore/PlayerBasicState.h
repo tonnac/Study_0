@@ -144,3 +144,11 @@ public:
 	bool		Init() override;
 	bool		Frame() override;
 };
+class PlayerDeath : public PlayerState
+{
+public:
+	PlayerDeath(Player*);
+public:
+	bool		Init() override;
+	bool		Frame() override;
+};

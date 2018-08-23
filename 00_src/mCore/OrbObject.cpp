@@ -1,7 +1,50 @@
 #include "OrbObject.h"
+#include "Rendering.h"
+
+OrbObject::OrbObject() : m_bPlatUp(false)
+{}
+
+
+bool OrbObject::Init()
+{
+	Object::Init();
+	return true;
+}
+bool OrbObject::Frame()
+{
+	Object::Frame();
+	return true;
+}
+bool OrbObject::Render()
+{
+	Object::Render();
+	return true;
+}
+bool OrbObject::Release()
+{
+	if (m_pRendering)
+	{
+		m_pRendering->Release();
+		delete m_pRendering;
+	}
+	m_pRendering = nullptr;
+	return true;
+}
 
 bool OrbObject::Collision(Object* pObject)
 {
+	CharacterObject * pCharObj = dynamic_cast<CharacterObject*>(pObject);
+	while (pCharObj->hasNext())
+	{
+		EffectIter it = pCharObj->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (CollisionClass::RectInRect(itrt, m_rtCollision))
+		{
+			pCharObj->deleteEffect(it);
+			m_rtDraw = { 56,0,56,61 };
+			m_bPlatUp = true;
+		}
+	}
 	RECT CollisionArea;
 	RECT ObjRT = *(pObject->getCollisionRt());
 	POINT Center;
@@ -26,4 +69,8 @@ bool OrbObject::Collision(Object* pObject)
 		}
 	}
 	return false;
+}
+bool OrbObject::isPlatUP()
+{
+	return m_bPlatUp;
 }

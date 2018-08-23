@@ -723,11 +723,39 @@ bool PlayerHurt::Frame()
 	m_CenterPos->y += g_fPerSecFrame * 30.0f;
 	if (!m_pSprite->Frame())
 	{
+		if (m_pCharObj->getHP() <= 0)
+		{
+			m_pCharObj->setInvincible(false);
+			m_pCharObj->setState(L"Death");
+			return true;
+		}
 		m_pSprite->setIndex(0);
 		m_pCharObj->setState(L"Fall");
+		return true;
 	}
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	m_CenterPos->x += m_pCharObj->getDir() * -1 * g_fPerSecFrame * fSpeed * 0.25f;
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+PlayerDeath::PlayerDeath(Player * pPlayer) : PlayerState(pPlayer)
+{
+	m_pCharObj->addState(std::string("Death"), this);
+}
+bool PlayerDeath::Init()
+{
+	setSprite(L"Kaho", L"Death");
+	m_pSprite->setDivideTime(3.0f);
+	return true;
+}
+bool PlayerDeath::Frame()
+{
+	if (!m_pSprite->Frame())
+	{
+		m_pCharObj->setDead(true);
+		m_pSprite->setIndex(0);
+	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }

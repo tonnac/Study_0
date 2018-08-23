@@ -35,6 +35,7 @@ bool SceneMgr::Render()
 bool SceneMgr::Release()
 {
 	m_pCurrentScene->Release();
+	delete m_pCurrentScene;
 	return true;
 }
 Scene* SceneMgr::CreateScene(const INT& index, const bool& bNextScene)
@@ -59,6 +60,9 @@ Scene* SceneMgr::CreateScene(const INT& index, const bool& bNextScene)
 		break;
 	case 5:
 		pScene = New GameScene5;
+		break;
+	case 6:
+		pScene = New EndScene;
 		break;
 	}
 	pScene->Init();

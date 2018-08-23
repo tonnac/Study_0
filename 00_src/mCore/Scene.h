@@ -53,3 +53,12 @@ protected:
 	RECT			m_miscrt[12];
 	FloatPoint		m_miscpos[11];
 };
+
+class EndScene : public Scene
+{
+public:
+	bool			Init		() override;
+	bool			Frame		() override;
+	bool			Render		() override;
+	bool			Release		() override;
+};

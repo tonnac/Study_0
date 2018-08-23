@@ -76,3 +76,24 @@ std::string FinateStateMachine::StateTransition(const std::string& currentstate,
 {
 	return m_mapState[currentstate]->GetState(eventtype);
 }
+void * FinateStateMachine::operator new(size_t sz, const char* FileName, int iLine)
+{
+	std::string ad = FileName;
+	MEMINFO mem;
+	void* pfs = new char[sz];
+	mem.addr = pfs;
+	mem.filename = ad.substr(ad.find_last_of('\\') + 1, ad.length() - (ad.find_last_of(".cpp") + 4));
+	mem.line = iLine;
+	mem.dwAllocateTime = timeGetTime();
+	MemoryMap.insert(std::make_pair(pfs, mem));
+	++::g_iNewCount;
+	return pfs;
+}
+void FinateStateMachine::operator delete(void * p)
+{
+	std::map<void*, MEMINFO>::iterator it;
+	it = MemoryMap.find(p);
+	MemoryMap.erase(it);
+	--::g_iNewCount;
+	delete p;
+}

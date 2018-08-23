@@ -6,7 +6,7 @@
 CharacterObject::CharacterObject() : m_pCurrentState(nullptr), m_iCurrentDir(1), m_bDownable(false),
 									m_iJumpNumber(0), m_fJumpSpeed(200.0f), m_fJumpSpeed2(250.0f), m_bLadder(false),
 									m_bDead(false), m_bInvincible(false), m_fInvincibleTime(0.0f), m_fZoom(0.0f),
-									m_finvencible(5.0f)
+									m_finvencible(5.0f),m_fms(nullptr)
 {
 	m_fSpeed = 250.0f;
 	m_pEffectVector.clear();
@@ -57,8 +57,8 @@ bool CharacterObject::Frame()
 	}
 	else
 	{
-		m_CenterPos.x = m_DrawPos.x + (m_rtDraw.right / 2);
-		m_CenterPos.y = m_DrawPos.y + (m_rtDraw.bottom / 2);
+		m_DrawPos.x = m_CenterPos.x + (m_rtDraw.right / 2);
+		m_DrawPos.y = m_CenterPos.y + (m_rtDraw.bottom / 2);
 
 		m_rtCollision.left = static_cast<LONG>(m_DrawPos.x);
 		m_rtCollision.top = static_cast<LONG>(m_DrawPos.y);
@@ -88,7 +88,7 @@ bool CharacterObject::Render()
 	}
 	m_pCurrentState->Render();
 	return true;
-}
+};
 bool CharacterObject::Release()
 {
 	for (auto it : m_pStateList)
@@ -166,6 +166,10 @@ void CharacterObject::setInvincible(const bool& bflag)
 {
 	m_bInvincible = bflag;
 }
+void CharacterObject::setDead(const bool& bflag)
+{
+	m_bDead = bflag;
+}
 bool CharacterObject::getDownable()
 {
 	return m_bDownable;
@@ -203,6 +207,10 @@ FLOAT CharacterObject::getZoom()
 {
 	return m_fZoom;
 }
+INT	CharacterObject::getHP()
+{
+	return m_HP;
+}
 void CharacterObject::addState(std::string Name, State* state)
 {
 	m_pStateList.insert(std::make_pair(Name, state));
@@ -233,7 +241,7 @@ EffectIter CharacterObject::getEffectIter()
 }
 std::string	CharacterObject::setTransition(E_EVENT Event)
 {
-	m_sCurrestState = m_fms.StateTransition(m_sCurrestState, Event);
+	m_sCurrestState = m_fms->StateTransition(m_sCurrestState, Event);
 	m_pCurrentState = m_pStateList[m_sCurrestState];
 	return m_sCurrestState;
 }

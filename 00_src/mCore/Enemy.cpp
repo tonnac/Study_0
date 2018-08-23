@@ -10,6 +10,7 @@ Enemy::Enemy()
 	m_HP = 50;
 	m_Damage = 8;
 	m_fZoom = 2.8f;
+	m_fms = New FinateStateMachine;
 }
 
 bool Enemy::Init()

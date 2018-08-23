@@ -8,6 +8,8 @@
 #include "ScrollObject.h"
 #include "PlatObject.h"
 
+FadeObject* GameScene5::m_fDeadScene = nullptr;
+
 GameScene::GameScene() : m_pScroll(&m_pPlayer, &m_BKObject, &m_NPCList)
 {}
 
@@ -546,7 +548,9 @@ bool GameScene5::Init()
 	m_BKObject.AddTerrain(t1);
 
 	t1 = New OrbObject;
-	t1->Set(1609, 517, 1609, 517, 52, 53);
+	t1->LoadFile(L"ORB", L"../../data/bmp/Orb.bmp");
+	t1->Set(1609, 517, 0, 0, 56, 51);
+	t1->Init();
 	m_BKObject.AddTerrain(t1);
 
 	ScrollObject * t2 = New ScrollObject;
@@ -556,19 +560,19 @@ bool GameScene5::Init()
 
 	PlatObject * t3 = New PlatObject;
 	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
-	t3->Set(1174, 720, 2, 96, 144, 144);
+	t3->Set(1174, 818, 2, 96, 144, 144);
 	t3->Init();
 	m_BKObject.AddPlat(t3);
 
 	t3 = New PlatObject;
 	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
-	t3->Set(1318, 719, 146, 48, 144, 192);
+	t3->Set(1318, 769, 146, 48, 144, 192);
 	t3->Init();
 	m_BKObject.AddPlat(t3);
 
 	t3 = New PlatObject;
 	t3->LoadFile(L"PLAT", L"../../data/bmp/Plat.bmp");
-	t3->Set(1462, 719, 290, 0, 145, 240);
+	t3->Set(1462, 721, 290, 0, 145, 240);
 	t3->Init();
 	m_BKObject.AddPlat(t3);
 
@@ -577,6 +581,11 @@ bool GameScene5::Init()
 	m_pPlayer.setRendering(2.8f, INVERSE::DEFAULT);
 	m_pScroll.Init();
 	m_pScroll.setScene5(true);
+
+	m_fDeadScene = New FadeObject;
+	m_fDeadScene->Init();
+	m_fDeadScene->SetAlpha(0.0f);
+	m_fDeadScene->Decrease(0.0f);
 
 	return true;
 }
@@ -594,7 +603,10 @@ bool GameScene5::Frame()
 		return false;
 	}
 	m_BKObject.Collision(&m_pPlayer);
-
+	if (m_BKObject.isPlatUp())
+	{
+		m_BKObject.PlatUp();
+	}
 	for (NPCLIST it = m_NPCList.begin(); it != m_NPCList.end();)
 	{
 		m_BKObject.Collision(*it);
@@ -608,7 +620,20 @@ bool GameScene5::Frame()
 			it++;
 		}
 	}
+	if (m_fDeadScene)
+	{
+		m_fDeadScene->Frame();
+	}
 	m_pPlayer.Frame();
+	if (m_pPlayer.getCurrentState() == "Death")
+	{
+		m_fDeadScene->SetAlpha(255.0f);
+	}
+	if (m_pPlayer.isDead())
+	{
+		m_bNextSceneStart = true;
+		return false;
+	}
 	m_pScroll.Frame();
 	if (m_pFadeObject)
 	{
@@ -627,6 +652,10 @@ bool GameScene5::Render()
 	{
 		it->Render();
 	}
+	if (m_fDeadScene)
+	{
+		m_fDeadScene->Render();
+	}
 	m_pPlayer.Render();
 	m_pScroll.Render();
 	if (m_pFadeObject)
@@ -638,6 +667,7 @@ bool GameScene5::Render()
 }
 bool GameScene5::Release()
 {
+	delete m_fDeadScene;
 	m_pPlayer.Release();
 	m_BKObject.Release();
 	for (auto it : m_NPCList)

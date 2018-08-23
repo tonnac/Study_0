@@ -24,6 +24,7 @@ Player::Player()
 	state = New AirBowAttack(this);
 	state = New CrouchBowAttack(this);
 	state = New PlayerHurt(this);
+	state = New PlayerDeath(this);
 	
 	state = New PlayerLadderEnter(this);
 	state = New PlayerLadderLeave(this);
@@ -33,6 +34,10 @@ Player::Player()
 	m_HP = 100;
 	m_Damage = 24;
 	m_fZoom = 2.8f;
+}
+void Player::setHP(const INT& hp)
+{
+	m_HP -= hp;
 }
 //bool Player::Init()
 //{

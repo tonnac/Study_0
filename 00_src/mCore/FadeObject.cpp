@@ -60,6 +60,7 @@ bool FadeObject::Release()
 bool FadeObject::SetAlpha(const FLOAT& alpha)
 {
 	m_fAlpha = alpha;
+	m_bBlend.SourceConstantAlpha = m_fAlpha;
 	return true;
 }
 bool FadeObject::Decrease(const FLOAT& decre)

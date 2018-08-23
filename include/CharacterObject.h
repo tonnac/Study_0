@@ -24,8 +24,9 @@ public:
 	void				setJumpSpeed	(const FLOAT&, const FLOAT& = 0.0f);
 	void				setJumpNum		(const INT&);
 	void				setDownable		(const bool&);
-	void				setHP			(const INT&);
+	virtual void		setHP			(const INT&);
 	void				setInvincible	(const bool&);
+	void				setDead			(const bool&);
 public:
 	bool				isInvincible	();
 	bool				isDead			();
@@ -38,6 +39,7 @@ public:
 	bool				getLadder		();
 	INT					getJumpNum		();
 	FLOAT				getZoom			();
+	INT					getHP			();
 	virtual bool		isFallState		();
 public:
 	void				addState		(std::string, State*);
@@ -67,5 +69,5 @@ protected:
 	StateMap			m_pStateList;
 	EffectVector		m_pEffectVector;
 	EffectIter			m_EffectIter;
-	FinateStateMachine	m_fms;
+	FinateStateMachine*	m_fms;
 };

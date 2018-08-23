@@ -149,6 +149,15 @@ bool BKObject::Collision(Object* pObject)
 			}
 		}
 	}
+	while (pCharObj->hasNext())
+	{
+		EffectIter it = pCharObj->getEffectIter();
+		RECT itrt = *(*it)->getCollisionRt();
+		if (itrt.left < m_rtCollision.left || itrt.right > m_rtCollision.right)
+		{
+			pCharObj->deleteEffect(it);
+		}
+	}
 	pObject->setLanding(isLanding);
 	return Frame();
 }
@@ -160,4 +169,25 @@ void BKObject::ReverseSet()
 	}
 	m_rtDraw.left += m_rtDraw.right - g_rtClient.right;
 	m_fScroll = m_rtDraw.left;
+}
+bool BKObject::isPlatUp()
+{
+	for (auto it : m_pObjList)
+	{
+		if (it->isPlatUP())
+			return true;
+	}
+	return false;
+}
+void BKObject::PlatUp()
+{
+	static FLOAT f_Timer = 0.0f;
+	f_Timer += g_fPerSecFrame;
+	FloatPoint y1[3] = { *m_pPlatList[0]->getCenterPos() , *m_pPlatList[1]->getCenterPos(), *m_pPlatList[2]->getCenterPos() };
+	if (f_Timer <= 8.0f)
+	{
+		m_pPlatList[0]->setCenterPos_y(y1[0].y -= g_fPerSecFrame * 30.0f);
+		m_pPlatList[1]->setCenterPos_y(y1[1].y -= g_fPerSecFrame * 30.0f);
+		m_pPlatList[2]->setCenterPos_y(y1[2].y -= g_fPerSecFrame * 30.0f);
+	}
 }

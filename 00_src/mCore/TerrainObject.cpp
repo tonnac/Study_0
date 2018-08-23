@@ -107,3 +107,7 @@ void TerrainObject::ReverseSet(const LONG& drawright)
 {
 	m_DrawPos.x -= drawright;
 }
+bool TerrainObject::isPlatUP()
+{
+	return false;
+}

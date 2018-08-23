@@ -18,6 +18,8 @@ public:
 	void		AddPlat			(PlatObject *);
 	bool		Collision		(Object* ) override;
 	void		ReverseSet		();
+	void		PlatUp			();
+	bool		isPlatUp		();
 private:
 	std::vector<TerrainObject*> m_pObjList;
 	std::vector<PlatObject*>	m_pPlatList;

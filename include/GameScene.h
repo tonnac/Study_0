@@ -76,4 +76,6 @@ public:
 	bool				Render() override;
 	bool				Release() override;
 	bool				inverseSet() override;
+public:
+	static FadeObject *	m_fDeadScene;
 };

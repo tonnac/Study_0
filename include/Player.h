@@ -6,5 +6,6 @@ class Player : public CharacterObject
 {
 public:
 	Player();
+	void		setHP(const INT&) override;
 private:
 };
