@@ -29,11 +29,6 @@ bool Scroll::Frame()
 }
 bool Scroll::Render()
 {
-	int prevpen = SetROP2(g_hOffScreenDC, R2_NOTXORPEN);
-	Rectangle(g_hOffScreenDC, m_rtCollision.left, m_rtCollision.top,
-		m_rtCollision.right, m_rtCollision.bottom);
-
-	SetROP2(g_hOffScreenDC, prevpen);
 	return true;
 }
 bool Scroll::Release()
@@ -106,7 +101,7 @@ bool Scroll::Collision(const RECT& rt)
 			return true;
 		}
 		LONG x1Diff = m_pPlayer->getCenterPos()->x - g_rtClient.right / 2;
-		if (x1Diff != 0 && pl->getCurrentState() == "Idle")
+		if (x1Diff != 0 && pl->getCurrentState() != "Run")
 		{
 			x1Diff /= abs(x1Diff);
 			return MoveCenter(x1Diff);
@@ -132,12 +127,12 @@ bool Scroll::MoveCamera(const LONG& size)
 bool Scroll::MoveCenter(const LONG& size)
 {
 	FLOAT x = (*m_pPlayer->getCenterPos()).x;
-	m_pPlayer->setCenterPos_x(x - size * g_fPerSecFrame * g_fSpeed);
+	m_pPlayer->setCenterPos_x(x - size * g_fSecPerFrame * g_fSpeed);
 	for (auto it : *m_npclist)
 	{
 		FLOAT x1 = (*it->getCenterPos()).x;
 		it->MoveScrollObj(size);
-		it->setCenterPos_x(x1 - size);
+		it->setCenterPos_x(x1 - size * g_fSecPerFrame * g_fSpeed);
 	}
 	m_pBkObj->MoveScrollBk(size);
 	return true;

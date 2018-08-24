@@ -1,6 +1,7 @@
 #include "EnemyBasicState.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "mSound.h"
 
 EnemyBasicState::EnemyBasicState(Enemy* pEnemy) : State(pEnemy), m_pEnemy(pEnemy)
 {
@@ -9,7 +10,7 @@ EnemyBasicState::EnemyBasicState(Enemy* pEnemy) : State(pEnemy), m_pEnemy(pEnemy
 	m_rtArea = m_pEnemy->getArea();
 	m_rtSight = m_pEnemy->getSight();
 	m_rtAttackRange = m_pEnemy->getAttackRange();
-	pEnemy->setSpeed(80.0f);
+	pEnemy->setSpeed(55.0f);
 }
 bool EnemyBasicState::Render()
 {
@@ -37,8 +38,8 @@ bool EnemyMoveState::Process(Player * pPlayer)
 	const RECT playerRT = *pPlayer->getCollisionRt();
 	FLOAT fSpeed = m_pEnemy->getSpeed();
 	INT iDir = m_pEnemy->getDir();
-	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
-	m_CenterPos->y += g_fPerSecFrame * 10.0f;
+	m_CenterPos->x += iDir * g_fSecPerFrame * fSpeed;
+	m_CenterPos->y += g_fSecPerFrame * 5.0f;
 
 	if (iDir == -1)
 	{
@@ -97,12 +98,14 @@ bool EnemyMoveState::Process(Player * pPlayer)
 		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
 
 		FloatPoint vPos = *pPlayer->getCenterPos();
-		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
-		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+		vPos.x += vDir.x * g_fSecPerFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fSecPerFrame * g_fSpeed * 50.0f;
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
 		pPlayer->setHP(m_pEnemy->getDamage());
+		
+		S_Sound.Play(Effect::HURT);
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -145,7 +148,7 @@ bool EnemyMoveState::Process(Player * pPlayer)
 				return true;
 			}
 			m_pSprite->setIndex(0);
-			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+			m_pEnemy->setTransition(E_EVENT::BEARROWATTACKED);
 			return true;
 		}
 	}
@@ -170,8 +173,8 @@ bool EnemyChaseState::Process(Player * pPlayer)
 	const RECT playerRT = *pPlayer->getCollisionRt();
 	FLOAT fSpeed = m_pEnemy->getSpeed();
 	INT iDir = m_pEnemy->getDir();
-	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
-	m_CenterPos->y += g_fPerSecFrame * 10.0f;
+	m_CenterPos->x += iDir * g_fSecPerFrame * fSpeed;
+	m_CenterPos->y += g_fSecPerFrame * 10.0f;
 
 	if (iDir == -1)
 	{
@@ -223,12 +226,13 @@ bool EnemyChaseState::Process(Player * pPlayer)
 		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
 
 		FloatPoint vPos = *pPlayer->getCenterPos();
-		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
-		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+		vPos.x += vDir.x * g_fSecPerFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fSecPerFrame * g_fSpeed * 50.0f;
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
 		pPlayer->setHP(m_pEnemy->getDamage());
+		S_Sound.Play(Effect::HURT);
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -309,7 +313,7 @@ bool EnemyAttackState::Process(Player * pPlayer)
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
 	const RECT playerEffectRT = pPlayer->getEffectObj();
 	const RECT playerRT = *pPlayer->getCollisionRt();
-	m_CenterPos->y += g_fPerSecFrame * 10.0f;
+	m_CenterPos->y += g_fSecPerFrame * 10.0f;
 	if (CollisionClass::RectInRect(playerEffectRT, collisionRT))
 	{
 		m_pSprite->setIndex(0);
@@ -338,12 +342,13 @@ bool EnemyAttackState::Process(Player * pPlayer)
 		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
 
 		FloatPoint vPos = *pPlayer->getCenterPos();
-		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
-		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+		vPos.x += vDir.x * g_fSecPerFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fSecPerFrame * g_fSpeed * 50.0f;
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
 		pPlayer->setHP(m_pEnemy->getDamage());
+		S_Sound.Play(Effect::HURT);
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -419,25 +424,31 @@ bool EnemyAngryState::Init()
 }
 bool EnemyAngryState::Process(Player * pPlayer)
 {
-	m_fTimer += g_fPerSecFrame;
+	m_pEnemy->setSpeed(120.0f);
+	m_fTimer += g_fSecPerFrame;
 	const RECT playerEffectRT = pPlayer->getEffectObj();
 	const RECT collisionRT = *m_pEnemy->getCollisionRt();
 	const RECT playerRT = *pPlayer->getCollisionRt();
 	FLOAT fSpeed = m_pEnemy->getSpeed();
 	INT iDir = m_pEnemy->getDir();
-	m_CenterPos->x += iDir * g_fPerSecFrame * fSpeed;
-	m_CenterPos->y += g_fPerSecFrame * 10.0f;
+	m_CenterPos->x += iDir * g_fSecPerFrame * fSpeed;
 
-	if (m_fTimer >= 5.0f)
+	if (m_fTimer >= 7.0f)
 	{
-		INT eDamage = m_pEnemy->getDamage();
-		m_fTimer -= 5.0f;
-		m_pEnemy->setSpeed(fSpeed + 10.0f);
-		m_pEnemy->setDamage(eDamage + 5);
-		m_rtArea->left -= 15;
-//		m_rtArea->right += 15;
+		m_pSprite->setIndex(0);
+		m_fTimer = 0.0f;
+		m_pEnemy->setTransition(E_EVENT::LOSTTARGET);
 	}
 
+	if (m_pEnemy->getJumpSpeed() < 0.0f)
+	{
+		m_CenterPos->y += g_fSecPerFrame * 300.0f;
+	}
+	else
+	{
+		m_pEnemy->setJumpSpeed(m_pEnemy->getJumpSpeed() - 5);
+		m_CenterPos->y -= g_fSecPerFrame * m_pEnemy->getJumpSpeed();
+	}
 	if (iDir == -1)
 	{
 		m_rtSight->left = collisionRT.left - 100.0f;
@@ -488,12 +499,13 @@ bool EnemyAngryState::Process(Player * pPlayer)
 		fLength = sqrt(vDir.x * vDir.x + vDir.y * vDir.y);
 
 		FloatPoint vPos = *pPlayer->getCenterPos();
-		vPos.x += vDir.x * g_fPerSecFrame * g_fSpeed;
-		vPos.y -= vDir.y * g_fPerSecFrame * g_fSpeed * 50.0f;
+		vPos.x += vDir.x * g_fSecPerFrame * g_fSpeed;
+		vPos.y -= vDir.y * g_fSecPerFrame * g_fSpeed * 50.0f;
 
 		pPlayer->setCenterPos_x(vPos.x);
 		pPlayer->setCenterPos_y(vPos.y);
 		pPlayer->setHP(m_pEnemy->getDamage());
+		S_Sound.Play(Effect::HURT);
 		pPlayer->setState(L"Hurt");
 		return true;
 	}
@@ -515,21 +527,6 @@ bool EnemyAngryState::Process(Player * pPlayer)
 		m_pEnemy->setTransition(E_EVENT::BEATTACKED);
 		return true;
 	}
-	if (CollisionClass::RectInRect(playerRT, *m_rtArea))
-	{
-		if (m_pEnemy->getDir() == 1 && collisionRT.left > playerRT.right)
-		{
-			m_pEnemy->setDir(-1);
-			m_pEnemy->setRendering(INVERSE::LR_ROTATION);
-			return true;
-		}
-		if (m_pEnemy->getDir() == -1 && collisionRT.right < playerRT.left)
-		{
-			m_pEnemy->setDir(-1);
-			m_pEnemy->setRendering(INVERSE::DEFAULT);
-			return true;
-		}
-	}
 	while (pPlayer->hasNext())
 	{
 		EffectIter it = pPlayer->getEffectIter();
@@ -544,9 +541,74 @@ bool EnemyAngryState::Process(Player * pPlayer)
 				return true;
 			}
 			m_pSprite->setIndex(0);
-			m_pEnemy->setTransition(E_EVENT::BEATTACKED);
+			m_pEnemy->setTransition(E_EVENT::BEARROWATTACKED);
 			return true;
 		}
+	}
+	if (m_pEnemy->getDir() == 1 && collisionRT.left > playerRT.right)
+	{
+		m_pEnemy->setDir(-1);
+		m_pEnemy->setRendering(2.8f, INVERSE::LR_ROTATION);
+		return true;
+	}
+	if (m_pEnemy->getDir() == -1 && collisionRT.right < playerRT.left)
+	{
+		m_pEnemy->setDir(-1);
+		m_pEnemy->setRendering(2.8f, INVERSE::DEFAULT);
+		return true;
+	}
+	*m_rtDraw = m_pSprite->getSpriteRt();
+	return true;
+}
+
+EnemyMoveLocationState::EnemyMoveLocationState(Enemy* pEnemy) : EnemyBasicState(pEnemy)
+{
+	pEnemy->addState(std::string("MoveLocation"), this);
+}
+bool EnemyMoveLocationState::Init()
+{
+	setSprite(L"Monkey", L"Labeled");
+	m_pSprite->setDivideTime(0.3f);
+	return true;
+}
+bool EnemyMoveLocationState::Process(Player * pPlayer)
+{
+	m_pEnemy->setSpeed(120.0f);
+	const RECT collisionRT = *m_pEnemy->getCollisionRt();
+	FLOAT fSpeed = m_pEnemy->getSpeed();
+	INT iDir = m_pEnemy->getDir();
+	m_CenterPos->x += iDir * g_fSecPerFrame * fSpeed;
+
+	if (!m_pSprite->Frame())
+	{
+		m_pSprite->setIndex(0);
+	}
+	if (m_pEnemy->getJumpSpeed() < 0.0f)
+	{
+		m_CenterPos->y += g_fSecPerFrame * 300.0f;
+	}
+	else
+	{
+		m_pEnemy->setJumpSpeed(m_pEnemy->getJumpSpeed() - 5);
+		m_CenterPos->y -= g_fSecPerFrame * m_pEnemy->getJumpSpeed();
+	}
+	if (m_pEnemy->getDir() == 1 && collisionRT.left > m_rtArea->right)
+	{
+		m_pEnemy->setDir(-1);
+		m_pEnemy->setRendering(2.8f, INVERSE::LR_ROTATION);
+		return true;
+	}
+	if (m_pEnemy->getDir() == -1 && collisionRT.right < m_rtArea->left)
+	{
+		m_pEnemy->setDir(-1);
+		m_pEnemy->setRendering(2.8f, INVERSE::DEFAULT);
+		return true;
+	}
+	if (collisionRT.left > m_rtArea->left)
+	{
+		m_pSprite->setIndex(0);
+		m_pEnemy->setSpeed(50.0f);
+		m_pEnemy->setTransition(E_EVENT::ARRIVE);
 	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;

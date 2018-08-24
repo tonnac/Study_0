@@ -64,3 +64,12 @@ public:
 	bool				Init() override;
 	bool				Process(Player *) override;
 };
+
+class EnemyMoveLocationState : public EnemyBasicState
+{
+public:
+	EnemyMoveLocationState(Enemy*);
+public:
+	bool				Init() override;
+	bool				Process(Player *) override;
+};

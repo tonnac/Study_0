@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "SceneMgr.h"
+#include "mSound.h"
 
 class Sample : public Core
 {

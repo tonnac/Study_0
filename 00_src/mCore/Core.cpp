@@ -1,5 +1,5 @@
 #include "Core.h"
-
+#include "mSound.h"
 HDC			g_hOffScreenDC = nullptr;
 HDC			g_hScreenDC = nullptr;
 int			g_iNewCount = 0;
@@ -17,6 +17,8 @@ bool Core::GameInit()
 
 	m_Timer.Init();
 	S_Input.Init();
+	S_Sound.Init();
+	S_Sound.LoadFile("../../data/txt/Sound.txt");
 	Init();
 	return true;
 }
@@ -28,6 +30,8 @@ bool Core::GameFrame()
 	}
 	m_Timer.Frame();
 	S_Input.Frame();
+	S_Sound.Frame();
+
 	Frame();
 	return true;
 }
@@ -50,6 +54,7 @@ bool Core::GameRelease()
 	DeleteDC(m_hOffScreenDC);
 	ReleaseDC(g_hWnd, m_hScreenDC);
 
+	S_Sound.Release();
 	m_Timer.Release();
 	S_Input.Release();
 	Release();

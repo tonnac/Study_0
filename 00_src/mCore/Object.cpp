@@ -274,11 +274,11 @@ bool Object::MoveScrollObj(const LONG& fsize)
 	if (fsize < 0)
 	{
 		
-		m_DrawPos.x += (g_fPerSecFrame * g_fSpeed);
+		m_DrawPos.x += (g_fSecPerFrame * g_fSpeed);
 	}
 	else
 	{
-		m_DrawPos.x -= (g_fPerSecFrame * g_fSpeed);
+		m_DrawPos.x -= (g_fSecPerFrame * g_fSpeed);
 	}
 	return true;
 }

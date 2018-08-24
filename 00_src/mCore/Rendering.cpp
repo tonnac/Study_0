@@ -307,7 +307,7 @@ bool RotateRendering::Init()
 }
 bool RotateRendering::Frame()
 {
-	m_fAngle += g_fPerSecFrame * 30.0f;
+	m_fAngle += g_fSecPerFrame * 30.0f;
 	getRotateBitmap(m_hbMaskBitmap, m_hMaskDC);
 	getRotateBitmap(m_hbColorBitmap, m_hColorDC);
 	return true;
@@ -425,7 +425,7 @@ bool AlphaRendering::Init()
 }
 bool AlphaRendering::Frame()
 {
-	m_fAlpha += g_fPerSecFrame * m_fFadeSpeed;
+	m_fAlpha += g_fSecPerFrame * m_fFadeSpeed;
 	if (m_fZoom > 1.0f)
 	{
 		if (m_fAlpha > 255)

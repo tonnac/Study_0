@@ -159,6 +159,7 @@ copy "$(ProjectDir)*.txt" "$(SolutionDir)../data/txt"</Command>
     <Text Include="Kaho.txt" />
     <Text Include="Monkey.txt" />
     <Text Include="FSM.txt" />
+    <Text Include="Sound.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitmap.h" />

@@ -8,6 +8,7 @@ Enemy::Enemy()
 	state = New EnemyHitState(this);
 	state = New EnemyChaseState(this);
 	state = New EnemyAngryState(this);
+	state = New EnemyMoveLocationState(this);
 	m_HP = 50;
 	m_Damage = 8;
 	m_fZoom = 2.8f;
@@ -67,9 +68,13 @@ void Enemy::setAttackRange(const FloatRect& arange)
 {
 	m_rtAttackRange = arange;
 }
+void Enemy::setJumpSpeed(const FLOAT& jspeed)
+{
+	m_fJumpSpeed = jspeed;
+}
 bool Enemy::MoveScrollObj(const LONG& size)
 {
-	m_fScroll = (g_fPerSecFrame * g_fSpeed);
+	m_fScroll = (g_fSecPerFrame * g_fSpeed);
 	if (size < 0)
 	{
 		m_rtArea.left			+= m_fScroll;

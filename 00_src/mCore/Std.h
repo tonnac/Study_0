@@ -17,6 +17,7 @@
 #pragma comment(lib,"11_mCore.lib")
 #pragma comment(lib, "fmod64_vc.lib")
 
+
 #define New new(__FILE__,__LINE__)
 #define PI 3.141592
 #define DegreeToRadian(x) (x) * PI / 180.0f
@@ -97,12 +98,14 @@ extern HDC					g_hOffScreenDC;
 extern HDC					g_hScreenDC;
 extern RECT					g_rtClient;
 extern float				g_fSpeed;
-extern float				g_fPerSecFrame;
+extern float				g_fSecPerFrame;
 extern bool					g_bActiveApp;
 
 extern INT					g_HP;
 extern INT					g_iNewCount;
 extern MEM_MAP				MemoryMap;
+extern FLOAT				g_EffectVolume;
+extern FLOAT				g_BGMVolume;
 
 class UI;
 

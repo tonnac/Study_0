@@ -4,6 +4,9 @@
 UI * g_UI = nullptr;
 UI * g_HPBar = nullptr;
 
+FLOAT g_EffectVolume = 1.0f;
+FLOAT g_BGMVolume = 1.0f;
+
 Scene::Scene() : m_bNextSceneStart(false), m_pFadeObject(nullptr)
 {}
 bool Scene::inverseSet()
@@ -36,16 +39,15 @@ void Scene::operator delete(void * p)
 	delete p;
 }
 
-LobbyScene::LobbyScene() : isPress(false), m_nEffectVolume(10), m_nBGMVolume(10), isSoundBar(false)
+LobbyScene::LobbyScene() : isPress(false), isSoundBar(false)
 {}										 
 bool LobbyScene::Init()
 {
-
 	PosSet();
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_pFadeObject->Init();
-	m_pFadeObject->Decrease(-30.0f);
+	m_pFadeObject->Decrease(30.0f);
 	for (int i = 0; i < 3; ++i)
 	{
 		m_bkmisc[i].LoadFile(L"TitleAnyKey", L"../../data/bmp/Misc.bmp");
@@ -64,7 +66,6 @@ bool LobbyScene::Init()
 	g_HPBar->Set(108, 51, 0, 0, 186, 21);
 	g_UI->Init();
 	g_HPBar->Init();
-
 	return true;
 }
 bool LobbyScene::Frame()
@@ -76,6 +77,7 @@ bool LobbyScene::Frame()
 		{
 			if (m_state == LOBBYSTATE::SELECT)
 			{
+				S_Sound.StopSound(BGM::TITLE);
 				m_bNextSceneStart = true;
 				return false;
 			}
@@ -137,6 +139,8 @@ bool LobbyScene::BKState()
 		if (S_Input.isPressAnyKey())
 		{
 			m_state = LOBBYSTATE::MAINMENU;
+			S_Sound.Play(Effect::PRESSANYKEY);
+			S_Sound.Play(BGM::TITLE, true, true);
 			m_miscIndex = 1;
 		}
 		break;
@@ -145,10 +149,12 @@ bool LobbyScene::BKState()
 		{
 			if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::MENUMOVE);
 				m_miscIndex--;
 			}
 			if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::MENUMOVE);
 				m_miscIndex++;
 			}
 		}
@@ -156,6 +162,7 @@ bool LobbyScene::BKState()
 		{
 			if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::MENUMOVE);
 				m_miscIndex++;
 			}
 		}
@@ -163,11 +170,13 @@ bool LobbyScene::BKState()
 		{
 			if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::MENUMOVE);
 				m_miscIndex--;
 			}
 		}
 		if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
 		{
+			S_Sound.Play(Effect::MENUSELECT);
 			AKeyReact(m_miscIndex);
 		}
 		m_BKObject.Set(0, 0, 960, 0, 960, 720);
@@ -178,52 +187,70 @@ bool LobbyScene::BKState()
 		{
 			if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::SETTINGMOVE);
 				m_miscIndex--;
 			}
 			if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
 			{
 				m_state = LOBBYSTATE::KEYSETTING;
+				S_Sound.Play(Effect::SETTINGMOVE);
 				isSoundBar = false;
 				m_miscIndex = 11;
 			}
 			if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH)
 			{
-				if (m_nBGMVolume > 0)
-					m_nBGMVolume -= 1;
+				g_BGMVolume -= 0.1f;
+				if (g_BGMVolume <= 0.0f)
+				{
+					g_BGMVolume = 0.0f;
+				}
 			}
 			if (S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_PUSH)
 			{
-				if (m_nBGMVolume < 10)
-					m_nBGMVolume += 1;
+				g_BGMVolume += 0.1f;
+				if (g_BGMVolume >= 1.0f)
+				{
+					g_BGMVolume = 1.0f;
+				}
 			}
 		}
 		else if (m_miscIndex == 8)
 		{
 			if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::SETTINGMOVE);
 				m_miscIndex++;
 			}
 			if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH)
 			{
-				if(m_nEffectVolume > 0)
-					m_nEffectVolume -= 1;
+				g_EffectVolume -= 0.1f;
+				if (g_EffectVolume <= 0.0f)
+				{
+					g_EffectVolume = 0.0f;
+				}
 			}
 			if (S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_PUSH)
 			{
-				if(m_nEffectVolume < 10)
-					m_nEffectVolume += 1;
+				g_EffectVolume += 0.1f;
+				if (g_EffectVolume >= 1.0f)
+				{
+					g_EffectVolume = 1.0f;
+				}
+			
 			}
 		}
 		else
 		{
 			if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::SETTINGMOVE);
 				m_state = LOBBYSTATE::KEYSETTING;
 				isSoundBar = false;
 				m_miscIndex = 11;
 			}
 			if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
 			{
+				S_Sound.Play(Effect::MENUCANCLE);
 				AKeyReact(m_miscIndex);
 			}
 		}
@@ -236,20 +263,22 @@ bool LobbyScene::BKState()
 		}
 		else
 		{
-			m_bkmisc[1].Set(741, 102, 390, 119, 90 * m_nEffectVolume / 10.0f, 24);
-			m_bkmisc[2].Set(741, 150, 390, 119, 90 * m_nBGMVolume / 10.0f, 24);
+			m_bkmisc[1].Set(741, 102, 390, 119, 90 * g_EffectVolume, 24);
+			m_bkmisc[2].Set(741, 150, 390, 119, 90 * g_BGMVolume, 24);
 		}
 		break;
 	case LOBBYSTATE::KEYSETTING:
 		m_BKObject.Set(0, 0, 960, 720, 960, 720);
 		if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH)
 		{
+			S_Sound.Play(Effect::SETTINGMOVE);
 			m_state = LOBBYSTATE::SETTING;
 			isSoundBar = true;
 			m_miscIndex = 9;
 		}
 		if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH)
 		{
+			S_Sound.Play(Effect::SETTINGMOVE);
 			m_state = LOBBYSTATE::SETTING;
 			isSoundBar = true;
 			m_miscIndex = 10;
@@ -258,6 +287,7 @@ bool LobbyScene::BKState()
 	case LOBBYSTATE::SELECT:
 		if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
 		{
+			S_Sound.Play(Effect::MENUSELECT);
 			m_pFadeObject = New FadeObject;
 			m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 			m_pFadeObject->Init();
@@ -266,6 +296,7 @@ bool LobbyScene::BKState()
 		}
 		if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 		{
+			S_Sound.Play(Effect::MENUCANCLE);
 			m_state = LOBBYSTATE::MAINMENU;
 			m_bkmisc[1].Set(741, 102, 390, 119, 0, 0);
 		}

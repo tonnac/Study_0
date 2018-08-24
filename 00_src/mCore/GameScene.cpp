@@ -10,8 +10,8 @@
 #include "mSound.h"
 #include "FSMMgr.h"
 
-FadeObject* GameScene5::m_fDeadScene = nullptr;
 
+FadeObject* GameScene5::m_fDeadScene = nullptr;
 Player* g_pPlayer = nullptr;
 
 GameScene::GameScene() : m_pScroll(&m_BKObject, &m_NPCList)
@@ -21,31 +21,16 @@ GameScene1::GameScene1()
 {}
 bool GameScene1::Init()
 {
-	S_FSMMgr.LoadFile(L"FSM1", L"../../data/txt/FSM.txt");
-	S_Sound.Init();
-	S_Sound.LoadBGM("../../data/OnlyLove.mp3", true);
-
-	g_pPlayer = New Player;
-
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0,0,0,0,g_rtClient.right,g_rtClient.bottom);
 	m_pFadeObject->Init();
 
 	S_SpriteMgr.SpriteSet(L"../../data/txt/Kaho.txt");
+	g_pPlayer = New Player;
 	g_pPlayer->LoadFile(L"PLAYER", L"../../data/bmp/KahoColor.bmp", L"../../data/bmp/KahoMask.bmp");
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 0, 0, 2072, 772);
 	m_BKObject.Init();
-	
-	g_UI = New UI;
-	g_UI->LoadFile(L"UI", L"../../data/bmp/UIColor.bmp", L"../../data/bmp/UIMask.bmp");
-	g_HPBar = New UI;
-	g_HPBar->LoadFile(L"HPBAR", L"../../data/bmp/HPBar.bmp");
-	g_UI->Set(30, 48, 0, 0, 276, 72);
-	g_HPBar->Set(108, 51, 0, 0, 186, 21);
-	g_UI->Init();
-	g_HPBar->Init();
-
 
 	m_BKObject.AddUI(g_UI);
 	m_BKObject.AddUI(g_HPBar);
@@ -66,17 +51,16 @@ bool GameScene1::Init()
 	t1->Set(1818, 623, 1818, 623, 335, 151);
 	m_BKObject.AddTerrain(t1);
 
-	g_pPlayer->Set(150, 0, 10, 87, 25, 36);
+	g_pPlayer->Set(150, 200, 10, 87, 25, 36);
 	g_pPlayer->Init();
 	g_pPlayer->setRendering(2.8f, INVERSE::DEFAULT);
 
 	m_pScroll.Init();
-
+	S_Sound.Play(BGM::STAGE, true, true);
 	return true;
 }
 bool GameScene1::Frame()
 {
-	S_Sound.Frame();
 	const FloatPoint px = *g_pPlayer->getDrawPos();
 	if (px.x >= 900)
 	{
@@ -97,7 +81,6 @@ bool GameScene1::Frame()
 			m_pFadeObject = nullptr;
 		}
 	}
-
 	return true;
 }
 bool GameScene1::Render()
@@ -105,6 +88,7 @@ bool GameScene1::Render()
 	m_BKObject.Render();
 	m_pScroll.Render();
 	g_pPlayer->Render();
+
 	if (m_pFadeObject)
 	{
 		m_pFadeObject->Render();
@@ -218,24 +202,7 @@ bool GameScene2::Init()
 }
 bool GameScene2::Frame()
 {
-	S_Sound.Frame();
-	//static float ftimer = 0.0f;
 
-	//ftimer += g_fPerSecFrame;
-
-	//if (ftimer <= 5.0f)
-	//{
-	//	FloatPoint pe = *g_pPlayer->getCenterPos();
-	//	FloatPoint xy = *m_BKObject.getCenterPos();
-	//	int i = rand() % 2 == 0 ? 1 : -1;
-	//	float k = rand() % 5 * g_fPerSecFrame * 35.0f;
-	//	m_BKObject.setCenterPos_x(xy.x + i * k);
-	//	g_pPlayer->setCenterPos_x(pe.x + i * k);
-	//	int y = rand() % 2 == 0 ? 1 : -1;
-	//	float a = rand() % 5 * g_fPerSecFrame * 35.0f;
-	//	m_BKObject.setCenterPos_y(xy.y + y * a);
-	//	g_pPlayer->setCenterPos_y(pe.y + y * a);
-	//}
 
 	const FloatPoint px = *g_pPlayer->getDrawPos();
 	if (px.x <= 20)
@@ -299,15 +266,16 @@ GameScene3::GameScene3()
 {}
 bool GameScene3::Init()
 {
+
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_pFadeObject->Init();
 
 	S_SpriteMgr.SpriteSet(L"../../data/txt/Kaho.txt");
-	g_pPlayer->LoadFile(L"PLAYER", L"../../data/bmp/KahoColor.bmp", L"../../data/bmp/KahoMask.bmp");
 	m_BKObject.LoadFile(L"BACKGROUND", L"../../data/bmp/Map.bmp");
 	m_BKObject.Set(0, 0, 4292, 0, 960, 720);
 	m_BKObject.Init();
+
 
 	m_BKObject.AddUI(g_UI);
 	m_BKObject.AddUI(g_HPBar);
@@ -332,7 +300,7 @@ bool GameScene3::Init()
 	t1->Set(894, 307, 894, 307, 66, 210);
 	m_BKObject.AddTerrain(t1);
 
-	g_pPlayer->Set(130, 580, 10, 87, 25, 36);
+	g_pPlayer->Set(130, 300, 10, 87, 25, 36);
 	g_pPlayer->Init();
 	g_pPlayer->setRendering(2.8f, INVERSE::DEFAULT);
 
@@ -342,7 +310,6 @@ bool GameScene3::Init()
 }
 bool GameScene3::Frame()
 {
-	S_Sound.Frame();
 	const FloatPoint px = *g_pPlayer->getDrawPos();
 	if (px.x <= 20)
 	{
@@ -412,7 +379,7 @@ bool GameScene4::Init()
 	g_UI->Set(30, 48, 0, 0, 276, 72);
 	g_HPBar->Set(108, 51, 0, 0, 186, 21);
 	g_UI->Init();
-	g_HPBar->Init();			//Áö¿ö
+	g_HPBar->Init();
 
 	S_FSMMgr.LoadFile(L"FSM", L"../../data/txt/FSM.txt");
 	S_FSMMgr.LoadFile(L"FSM1", L"../../data/txt/FSM1.txt");
@@ -471,7 +438,7 @@ bool GameScene4::Init()
 	pl->setArea(rt);
 	m_NPCList.push_back(pl);
 
-	g_pPlayer->Set(130, 400, 10, 87, 25, 36);
+	g_pPlayer->Set(130, 200, 10, 87, 25, 36);
 	g_pPlayer->Init();
 	g_pPlayer->setRendering(2.8f, INVERSE::DEFAULT);
 	m_pScroll.Init();
@@ -480,7 +447,6 @@ bool GameScene4::Init()
 }
 bool GameScene4::Frame()
 {
-	S_Sound.Frame();
 	const FloatPoint px = *g_pPlayer->getDrawPos();
 	if (px.x <= 20)
 	{
@@ -563,6 +529,8 @@ GameScene5::GameScene5()
 {}
 bool GameScene5::Init()
 {
+
+
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0, 0, 0, 0, g_rtClient.right, g_rtClient.bottom);
 	m_pFadeObject->Init();

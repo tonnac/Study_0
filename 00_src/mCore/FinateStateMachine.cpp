@@ -41,11 +41,6 @@ FinateStateMachine::FinateStateMachine()
 }
 FinateStateMachine::~FinateStateMachine()
 {
-	for (auto it : m_mapState)
-	{
-		delete it.second;
-		m_mapState.erase(it.first);
-	}
 }
 void FinateStateMachine::AddStateTransition(const std::string& inputState,
 						const E_EVENT& eventtype, const std::string& outputState)

@@ -20,7 +20,7 @@ bool Sprite::Init()
 }
 bool Sprite::Frame()
 {
-	m_fSpriteTime += g_fPerSecFrame;
+	m_fSpriteTime += g_fSecPerFrame;
 	if (m_fSpriteTime >= m_fOffset)
 	{
 		m_fSpriteTime -= m_fOffset;

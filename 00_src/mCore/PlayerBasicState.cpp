@@ -1,6 +1,7 @@
 #include "PlayerBasicState.h"
 #include "KahoAttack.h"
 #include "TerrainObject.h"
+#include "mSound.h"
 
 PlayerState::PlayerState(Player * pPlayer) : State(pPlayer), m_pCharObj(pPlayer)
 {
@@ -33,19 +34,22 @@ bool PlayerIdle::Init()
 }
 bool PlayerIdle::Frame()
 {
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fSecPerFrame * 30.0f;
 	if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::JUMP);
 		m_pCharObj->setState(L"Jump");
 		return true;
 	}
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ATTACK1);
 		m_pCharObj->setState(L"Attack1");
 		return true;
 	}
 	if (S_Input.GetKey('Q') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ROLL);
 		m_pCharObj->setState(L"Roll");
 		return true;
 	}
@@ -65,6 +69,7 @@ bool PlayerIdle::Frame()
 			Arrow->setSpeed(200.0f);
 		}
 		m_pCharObj->addEffect(Arrow);
+		S_Sound.Play(Effect::ARROW);
 		m_pCharObj->setState(L"Bow");
 		return true;
 	}
@@ -131,7 +136,7 @@ bool PlayerRun::Init()
 bool PlayerRun::Frame()
 {
 	FLOAT fSpeed = m_pCharObj->getSpeed();
-	m_CenterPos->y += g_fPerSecFrame * 2.0f;
+	m_CenterPos->y += g_fSecPerFrame * 2.0f;
 	if (!m_pCharObj->getLanding())
 	{
 		m_pSprite->setIndex(0);
@@ -147,6 +152,7 @@ bool PlayerRun::Frame()
 	}
 	if (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH || S_Input.GetKey('A') == KEYSTATE::KEY_HOLD)
 	{
+		S_Sound.Play(Effect::JUMP);
 		m_pSprite->setIndex(0);
 		m_pCharObj->setState(L"Jump");
 		return true;
@@ -155,7 +161,7 @@ bool PlayerRun::Frame()
 		|| (m_pCharObj->getDir() == -1 && (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_HOLD)))
 	{
 		FLOAT fSpeed = m_pCharObj->getSpeed();
-		m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * fSpeed;
+		m_CenterPos->x += m_pCharObj->getDir() * g_fSecPerFrame * fSpeed;
 		*m_rtDraw = m_pSprite->getSpriteRt();
 	}
 	else if ((S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_UP || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_FREE) ||
@@ -197,6 +203,11 @@ bool PlayerBrake::Frame()
 		m_pCharObj->setState(L"Idle");
 		return true;
 	}
+	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
+	{
+		m_pCharObj->setState(L"Attack1");
+		return true;
+	}
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
@@ -208,7 +219,7 @@ PlayerTurn::PlayerTurn(Player * pPlayer) : PlayerState(pPlayer)
 bool PlayerTurn::Init()
 {
 	setSprite(L"Kaho", L"Turn");
-	m_pSprite->setDivideTime(0.15f);
+	m_pSprite->setDivideTime(0.1f);
 	return true;
 }
 bool PlayerTurn::Frame()
@@ -245,12 +256,13 @@ bool PlayerJump::Init()
 bool PlayerJump::Frame()
 {
 	m_pCharObj->setLanding(false);
-	m_fTimer += g_fPerSecFrame;
-	m_fJumpSpeed += g_fPerSecFrame * 9.8 * m_fAcceleration / 2;
+	m_fTimer += g_fSecPerFrame;
+	m_fJumpSpeed += g_fSecPerFrame * 9.8 * m_fAcceleration / 2;
 	INT iJumpNumber = m_pCharObj->getJumpNum();
-	m_CenterPos->y -= g_fPerSecFrame * m_fJumpSpeed;
+	m_CenterPos->y -= g_fSecPerFrame * m_fJumpSpeed;
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::AIRATTACK);
 		m_fTimer = 0.0f;
 		m_fAcceleration = -120.0f;
 		m_pCharObj->setState(L"AirAttack");
@@ -265,6 +277,7 @@ bool PlayerJump::Frame()
 	}
 	if (iJumpNumber == 0 && (S_Input.GetKey('A') == KEYSTATE::KEY_PUSH))
 	{
+		S_Sound.Play(Effect::JUMP);
 		m_fTimer = 0.0f;
 		m_fAcceleration = -120.0f;
 		m_pSprite->setIndex(0);
@@ -281,7 +294,7 @@ bool PlayerJump::Frame()
 			m_pCharObj->setDir(-1);
 		}
 		else
-			m_CenterPos->x += g_fPerSecFrame * fSpeed;
+			m_CenterPos->x += g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_HOLD)
 	{
@@ -291,10 +304,11 @@ bool PlayerJump::Frame()
 			m_pCharObj->setDir(-1);
 		}
 		else
-			m_CenterPos->x -= g_fPerSecFrame * fSpeed;
+			m_CenterPos->x -= g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey('D') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ARROW);
 		EffectObj * Arrow = New KahoBowAttack;
 		Arrow->Init();
 		if (m_pCharObj->getDir() == -1)
@@ -333,13 +347,14 @@ bool PlayerJump2::Init()
 bool PlayerJump2::Frame()
 {
 	FLOAT fSpeed = m_pCharObj->getSpeed();
-	m_fTimer += g_fPerSecFrame;
-	m_fJumpSpeed += g_fPerSecFrame * 9.8 * m_fAcceleration / 2;
+	m_fTimer += g_fSecPerFrame;
+	m_fJumpSpeed += g_fSecPerFrame * 9.8 * m_fAcceleration / 2;
 	INT iJumpNumber = m_pCharObj->getJumpNum();
-	m_CenterPos->y -= g_fPerSecFrame * m_fJumpSpeed;
+	m_CenterPos->y -= g_fSecPerFrame * m_fJumpSpeed;
 
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::AIRATTACK);
 		m_fTimer = 0.0f;
 		m_fAcceleration = -120.0f;
 		m_pSprite->setIndex(0);
@@ -356,11 +371,11 @@ bool PlayerJump2::Frame()
 	}
 	if (S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x += g_fPerSecFrame * fSpeed;
+		m_CenterPos->x += g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x -= g_fPerSecFrame * fSpeed;
+		m_CenterPos->x -= g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey('D') == KEYSTATE::KEY_PUSH)
 	{
@@ -378,6 +393,7 @@ bool PlayerJump2::Frame()
 			Arrow->setSpeed(200.0f);
 		}
 		m_pCharObj->addEffect(Arrow);
+		S_Sound.Play(Effect::ARROW);
 		m_pCharObj->setState(L"AirBow");
 		return true;
 	}
@@ -401,7 +417,7 @@ bool PlayerFall::Init()
 }
 bool PlayerFall::Frame()
 {
-	m_fTimer += g_fPerSecFrame;
+	m_fTimer += g_fSecPerFrame;
 	INT iJumpNum = m_pCharObj->getJumpNum();
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	if (S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
@@ -411,11 +427,11 @@ bool PlayerFall::Frame()
 	}
 	if (S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_RIGHT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x += g_fPerSecFrame * fSpeed;
+		m_CenterPos->x += g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_LEFT) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->x -= g_fPerSecFrame * fSpeed;
+		m_CenterPos->x -= g_fSecPerFrame * fSpeed;
 	}
 	if (S_Input.GetKey('D') == KEYSTATE::KEY_PUSH)
 	{
@@ -445,7 +461,7 @@ bool PlayerFall::Frame()
 		m_pCharObj->setState(L"Jump");
 		return true;
 	}
-	m_CenterPos->y += g_fPerSecFrame * 400.0f;
+	m_CenterPos->y += g_fSecPerFrame * 400.0f;
 
 	if (!m_pSprite->Frame())
 	{
@@ -515,7 +531,7 @@ bool PlayerCrouch::Init()
 }
 bool PlayerCrouch::Frame()
 {
-	m_CenterPos->y += g_fPerSecFrame * 200.0f;
+	m_CenterPos->y += g_fSecPerFrame * 200.0f;
 	if (!m_pSprite->Frame())
 	{
 		m_pSprite->setIndex(2);
@@ -535,6 +551,7 @@ bool PlayerCrouch::Frame()
 	}
 	if (S_Input.GetKey('D') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ARROW);
 		EffectObj * Arrow = New KahoBowAttack;
 		Arrow->Init();
 		if (m_pCharObj->getDir() == -1)
@@ -577,9 +594,9 @@ bool PlayerLadderEnter::Frame()
 	}
 	/*if (m_pSprite->getIndex() == 0)
 	{
-		m_CenterPos->y += 100.0f * g_fPerSecFrame;
+		m_CenterPos->y += 100.0f * g_fSecPerFrame;
 	}*/
-	m_CenterPos->y += g_fPerSecFrame * 80.0f;
+	m_CenterPos->y += g_fSecPerFrame * 80.0f;
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
@@ -602,7 +619,7 @@ bool PlayerLadderLeave::Frame()
 		m_pCharObj->setState(L"Rise");
 		return true;
 	}
-	m_CenterPos->y -= g_fPerSecFrame * 65.0f;
+	m_CenterPos->y -= g_fSecPerFrame * 65.0f;
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
@@ -627,7 +644,7 @@ bool PlayerLadderUp::Frame()
 	}
 	if (S_Input.GetKey(VK_UP) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_UP) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->y -= g_fPerSecFrame * fSpeed * 0.67;
+		m_CenterPos->y -= g_fSecPerFrame * fSpeed * 0.67;
 		if (!m_pSprite->Frame())
 		{
 			m_pSprite->setIndex(0);
@@ -652,7 +669,7 @@ bool PlayerLadderDown::Frame()
 	FLOAT fSpeed = m_pCharObj->getSpeed();
 	if (S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_PUSH || S_Input.GetKey(VK_DOWN) == KEYSTATE::KEY_HOLD)
 	{
-		m_CenterPos->y += g_fPerSecFrame * fSpeed * 0.9;
+		m_CenterPos->y += g_fSecPerFrame * fSpeed * 0.9;
 		if (!m_pSprite->Frame())
 		{
 			m_pSprite->setIndex(0);
@@ -685,7 +702,7 @@ bool PlayerRoll::Init()
 }
 bool PlayerRoll::Frame()
 {
-	m_fTimer += g_fPerSecFrame;
+	m_fTimer += g_fSecPerFrame;
 	if (!m_pCharObj->getLanding() && m_fTimer>= 0.5f)
 	{
 		m_fTimer = 0.0f;
@@ -693,7 +710,7 @@ bool PlayerRoll::Frame()
 		m_pCharObj->setState(L"Fall");
 		return true;
 	}
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fSecPerFrame * 30.0f;
 	if (!m_pSprite->Frame())
 	{
 		m_fTimer = 0.0f;
@@ -701,7 +718,7 @@ bool PlayerRoll::Frame()
 		m_pCharObj->setState(L"Idle");
 	}
 	FLOAT fSpeed = m_pCharObj->getSpeed();
-	m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * fSpeed * 1.5f;
+	m_CenterPos->x += m_pCharObj->getDir() * g_fSecPerFrame * fSpeed * 1.5f;
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }
@@ -719,7 +736,7 @@ bool PlayerHurt::Init()
 bool PlayerHurt::Frame()
 {
 	m_pCharObj->setInvincible(true);
-	m_CenterPos->y += g_fPerSecFrame * 30.0f;
+	m_CenterPos->y += g_fSecPerFrame * 30.0f;
 	if (!m_pSprite->Frame())
 	{
 		if (m_pCharObj->getHP() <= 0)
@@ -733,7 +750,7 @@ bool PlayerHurt::Frame()
 		return true;
 	}
 	FLOAT fSpeed = m_pCharObj->getSpeed();
-	m_CenterPos->x += m_pCharObj->getDir() * -1 * g_fPerSecFrame * fSpeed * 0.25f;
+	m_CenterPos->x += m_pCharObj->getDir() * -1 * g_fSecPerFrame * fSpeed * 0.25f;
 	*m_rtDraw = m_pSprite->getSpriteRt();
 	return true;
 }

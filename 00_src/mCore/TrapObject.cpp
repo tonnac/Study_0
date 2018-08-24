@@ -1,4 +1,5 @@
 #include "TrapObject.h"
+#include "mSound.h"
 
 bool TrapObject::Collision(Object* pObject)
 {
@@ -19,6 +20,7 @@ bool TrapObject::Collision(Object* pObject)
 			return true;
 		}
 		pl->setHP(100);
+		S_Sound.Play(Effect::HURT);
 		pl->setState(L"Hurt");
 	}
 	return false;

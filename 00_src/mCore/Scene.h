@@ -42,8 +42,6 @@ public:
 	void			PosSet		();
 	void			AKeyReact	(const INT&);
 protected:
-	INT				m_nEffectVolume;
-	INT				m_nBGMVolume;
 	INT				m_miscIndex;
 	LOBBYSTATE		m_state;
 	bool			isSoundBar;

@@ -41,6 +41,7 @@ void Player::setHP(const INT& hp)
 	m_HP -= hp;
 	g_HP = m_HP;
 }
+
 //bool Player::Init()
 //{
 //	for (auto it : m_pStateList)
@@ -52,30 +53,7 @@ void Player::setHP(const INT& hp)
 //	Object::Init();
 //	return true;
 //}
-//bool Player::Frame()
-//{
-//	m_pCurrentState->Frame();
-//
-//	Object::Frame();
-//	return true;
-//}
-//bool Player::Render()
-//{
-//	Object::Render();
-//	m_pCurrentState->Render();
-//	return true;
-//}
-//bool Player::Release()
-//{
-//	for (auto it : m_pStateList)
-//	{
-//		it.second->Release();
-//		delete it.second;
-//	}
-//	m_pStateList.clear();
-//	Object::Release();
-//	return true;
-//}
+
 //void Player::setState(T_STR szStateName)
 //{
 //	std::string cstate(szStateName.begin(), szStateName.end());

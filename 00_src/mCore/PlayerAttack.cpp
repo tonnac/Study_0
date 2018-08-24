@@ -1,5 +1,6 @@
 #include "PlayerAttack.h"
 #include "KahoAttack.h"
+#include "mSound.h"
 
 PlayerAttack::PlayerAttack(Player * pPlayer) : PlayerState(pPlayer)
 {
@@ -17,10 +18,10 @@ bool PlayerAttack::Init()
 }
 bool PlayerAttack::Frame()
 {
-	m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * 30.0f;
+	m_CenterPos->x += m_pCharObj->getDir() * g_fSecPerFrame * 30.0f;
 
 	m_pEffectObj->setDebugmode(m_pCharObj->getDebugmode());
-	m_fTimer += g_fPerSecFrame;
+	m_fTimer += g_fSecPerFrame;
 	FloatPoint pt;
 	if (m_pCharObj->getDir() == -1)
 	{
@@ -36,10 +37,12 @@ bool PlayerAttack::Frame()
 	}
 	if (m_fTimer >= 0.4f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ATTACK2);
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
 		m_fTimer = 0.0f;
 		m_pCharObj->setState(L"Attack2");
+		return true;
 	}
 	m_pEffectObj->Frame();
 	m_pEffectObj->setDrawPos(pt);
@@ -78,10 +81,10 @@ bool PlayerAttack2::Init()
 }
 bool PlayerAttack2::Frame()
 {
-	m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * 30.0f;
+	m_CenterPos->x += m_pCharObj->getDir() * g_fSecPerFrame * 30.0f;
 
 	m_pEffectObj->setDebugmode(m_pCharObj->getDebugmode());
-	m_fTimer += g_fPerSecFrame;
+	m_fTimer += g_fSecPerFrame;
 	FloatPoint pt;
 	if (m_pCharObj->getDir() == -1)
 	{
@@ -97,10 +100,12 @@ bool PlayerAttack2::Frame()
 	}
 	if (m_fTimer >= 0.4f && S_Input.GetKey('S') == KEYSTATE::KEY_PUSH)
 	{
+		S_Sound.Play(Effect::ATTACK3);
 		m_pSprite->setIndex(0);
 		m_pEffectObj->setIndex(0);
 		m_fTimer = 0.0f;
 		m_pCharObj->setState(L"Attack3");
+		return true;
 	}
 	m_pEffectObj->Frame();
 	m_pEffectObj->setDrawPos(pt);
@@ -139,7 +144,7 @@ bool PlayerAttack3::Init()
 }
 bool PlayerAttack3::Frame()
 {
-	m_CenterPos->x += m_pCharObj->getDir() * g_fPerSecFrame * 30.0f;
+	m_CenterPos->x += m_pCharObj->getDir() * g_fSecPerFrame * 30.0f;
 
 	m_pEffectObj->setDebugmode(m_pCharObj->getDebugmode());
 	FloatPoint pt;
@@ -192,7 +197,7 @@ bool AirAttack::Init()
 }
 bool AirAttack::Frame()
 {
-	m_CenterPos->y += g_fPerSecFrame + m_fAcceleration;
+	m_CenterPos->y += g_fSecPerFrame + m_fAcceleration;
 
 	m_pEffectObj->setDebugmode(m_pCharObj->getDebugmode());
 	FloatPoint pt;
@@ -265,7 +270,7 @@ bool AirBowAttack::Init()
 }
 bool AirBowAttack::Frame()
 {
-	m_CenterPos->y += g_fPerSecFrame + m_fAcceleration;
+	m_CenterPos->y += g_fSecPerFrame + m_fAcceleration;
 	if (!m_pSprite->Frame())
 	{
 		m_pSprite->setIndex(0);

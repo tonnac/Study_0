@@ -46,7 +46,7 @@ bool SpriteMgr::SpriteSet(T_STR szSpriteList)
 
 	if (!fp.is_open())
 	{
-		MessageBox(nullptr, L"FILE OPEN", L"FILE OPEN ERROR", MB_OK);
+		MessageBox(nullptr, L"FILE OPEN", L"SPRITE OPEN ERROR", MB_OK);
 	}
 	std::vector<std::string> temp;
 	std::string buffer;

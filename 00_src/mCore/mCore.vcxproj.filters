@@ -73,12 +73,19 @@
     <Filter Include="헤더 파일\Object\Character\EffectObj">
       <UniqueIdentifier>{3fad93e0-2585-45c6-aa8a-58e4d16f9451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\FSM">
+      <UniqueIdentifier>{b00f8828-1967-409b-9af2-315499bc3de7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\FSM">
+      <UniqueIdentifier>{6a9f23ec-8bf8-45e2-a288-df545721a948}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Kaho.txt" />
     <Text Include="Monkey.txt" />
     <Text Include="FSM.txt" />
     <Text Include="FSM1.txt" />
+    <Text Include="Sound.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bitmap.h">
@@ -171,9 +178,6 @@
     <ClInclude Include="EnemyBasicState.h">
       <Filter>헤더 파일\State\EnemyState</Filter>
     </ClInclude>
-    <ClInclude Include="FinateStateMachine.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TrapObject.h">
       <Filter>헤더 파일\Object\Terrain</Filter>
     </ClInclude>
@@ -186,14 +190,17 @@
     <ClInclude Include="PlatObject.h">
       <Filter>헤더 파일\Object\Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="mSound.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="FinateStateMachine.h">
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
     <ClInclude Include="FSMMgr.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\FSM</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>헤더 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -284,9 +291,6 @@
     <ClCompile Include="EnemyBasicState.cpp">
       <Filter>소스 파일\State\EnemyState</Filter>
     </ClCompile>
-    <ClCompile Include="FinateStateMachine.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TrapObject.cpp">
       <Filter>소스 파일\Object\Terrain</Filter>
     </ClCompile>
@@ -305,8 +309,11 @@
     <ClCompile Include="mSound.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="FinateStateMachine.cpp">
+      <Filter>소스 파일\FSM</Filter>
+    </ClCompile>
     <ClCompile Include="FSMMgr.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\FSM</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

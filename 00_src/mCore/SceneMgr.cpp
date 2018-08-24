@@ -40,7 +40,6 @@ bool SceneMgr::Render()
 bool SceneMgr::Release()
 {
 	m_pCurrentScene->Release();
-	S_Sound.Release();
 	delete m_pCurrentScene;
 	delete g_UI;
 	delete g_HPBar;

@@ -91,11 +91,21 @@ bool TerrainObject::MoveObject(Object* pObject, const RECT& CollisionArea)
 	{
 		if (CollisionArea.left == m_rtCollision.left)				// 왼쪽에서 충돌
 		{
+			Enemy * ew = dynamic_cast<Enemy*>(pObject);
+			if (ew)
+			{
+				ew->setJumpSpeed(200.0);
+			}
 			pObject->setCenterPos_x(pObjCenterPos.x - (lWidth + 2));
 			pObject->setLanding(false);
 		}
 		else if (CollisionArea.right == m_rtCollision.right)		// 오른쪽에서 충돌
 		{
+			Enemy * ew = dynamic_cast<Enemy*>(pObject);
+			if (ew)
+			{
+				ew->setJumpSpeed(200.0);
+			}
 			pObject->setCenterPos_x(pObjCenterPos.x + lWidth + 2);
 			pObject->setLanding(false);
 		}

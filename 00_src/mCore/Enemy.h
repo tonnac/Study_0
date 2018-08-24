@@ -24,6 +24,7 @@ public:
 	void			setArea(const FloatRect&);
 	void 			setSight(const FloatRect&);
 	void 			setAttackRange(const FloatRect&);
+	void			setJumpSpeed(const FLOAT&);
 public:
 	bool			MoveScrollObj(const LONG&) override;
 private:

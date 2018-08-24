@@ -27,7 +27,7 @@ bool CharacterObject::Frame()
 {
 	if (m_bInvincible)
 	{
-		m_fInvincibleTime += g_fPerSecFrame;
+		m_fInvincibleTime += g_fSecPerFrame;
 		if (m_fInvincibleTime >= m_finvencible)
 		{
 			m_bInvincible = false;

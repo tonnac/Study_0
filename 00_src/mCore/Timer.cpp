@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-float g_fPerSecFrame;
+float g_fSecPerFrame;
 
 bool Timer::Init()
 {
@@ -19,8 +19,8 @@ bool Timer::Frame()
 	//	Sleep(dwDelay);
 	//}
 	m_dwBeforeTick = dwCurrentTick;
-//	m_fSecPerFrame = g_fPerSecFrame = m_dwInterval / 1000.0f;
-	m_fSecPerFrame = g_fPerSecFrame = ElapsedTick / 1000.0f;
+//	m_fSecPerFrame = g_fSecPerFrame = m_dwInterval / 1000.0f;
+	m_fSecPerFrame = g_fSecPerFrame = ElapsedTick / 1000.0f;
 	m_fGameTime += m_fSecPerFrame;
 	m_fTimer += m_fSecPerFrame;
 	if (m_fTimer >= 1.0f)

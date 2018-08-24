@@ -37,7 +37,7 @@ T_STR FSMMgr::LoadFile(T_STR szName, T_STR szFile)
 
 	if (!fp.is_open())
 	{
-		MessageBox(nullptr, L"FILE OPEN", L"FILE OPEN ERROR", MB_OK);
+		MessageBox(nullptr, L"FILE OPEN", L"FSM FILE OPEN ERROR", MB_OK);
 	}
 		
 	if (getFSMPtr(szName))
@@ -83,21 +83,17 @@ T_STR FSMMgr::LoadFile(T_STR szName, T_STR szFile)
 		{
 			eventtype = E_EVENT::OUTATTACKRANGE;
 		}
-		else if (type == "BEATTACKED")
+		else if (type == "BEARROWATTACKED")
 		{
-			eventtype = E_EVENT::BEATTACKED;
-		}
-		else if (type == "BEATTACKED")
-		{
-			eventtype = E_EVENT::BEATTACKED;
+			eventtype = E_EVENT::BEARROWATTACKED;
 		}
 		else if (type == "NOHIT")
 		{
 			eventtype = E_EVENT::NOHIT;
 		}
-		else if (type == "LOSTTARGET")
+		else if (type == "ARRIVE")
 		{
-			eventtype = E_EVENT::LOSTTARGET;
+			eventtype = E_EVENT::ARRIVE;
 		}
 		nFSM->AddStateTransition(s1, eventtype, s2);
 	}

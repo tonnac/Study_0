@@ -95,7 +95,7 @@ bool KahoBowAttack::Init()
 }
 bool KahoBowAttack::Frame()
 {
-	m_CenterPos.x += g_fPerSecFrame * m_fSpeed * 7.0f;
+	m_CenterPos.x += g_fSecPerFrame * m_fSpeed * 7.0f;
 	EffectObj::Frame();
 	return true;
 }

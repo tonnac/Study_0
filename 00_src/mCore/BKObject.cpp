@@ -105,12 +105,12 @@ bool BKObject::MoveScrollBk(const LONG& fsize)
 	}
 	if (fsize < 0)
 	{
-		m_fScroll += -(g_fPerSecFrame * g_fSpeed);
+		m_fScroll += -(g_fSecPerFrame * g_fSpeed);
 		m_rtDraw.left = static_cast<LONG>(m_fScroll);
 	}
 	else
 	{
-		m_fScroll += (g_fPerSecFrame * g_fSpeed);
+		m_fScroll += (g_fSecPerFrame * g_fSpeed);
 		m_rtDraw.left = static_cast<LONG>(m_fScroll);
 	}
 
@@ -201,12 +201,12 @@ bool BKObject::isPlatUp()
 void BKObject::PlatUp()
 {
 	static FLOAT f_Timer = 0.0f;
-	f_Timer += g_fPerSecFrame;
+	f_Timer += g_fSecPerFrame;
 	FloatPoint y1[3] = { *m_pPlatList[0]->getCenterPos() , *m_pPlatList[1]->getCenterPos(), *m_pPlatList[2]->getCenterPos() };
 	if (f_Timer <= 8.0f)
 	{
-		m_pPlatList[0]->setCenterPos_y(y1[0].y -= g_fPerSecFrame * 30.0f);
-		m_pPlatList[1]->setCenterPos_y(y1[1].y -= g_fPerSecFrame * 30.0f);
-		m_pPlatList[2]->setCenterPos_y(y1[2].y -= g_fPerSecFrame * 30.0f);
+		m_pPlatList[0]->setCenterPos_y(y1[0].y -= g_fSecPerFrame * 30.0f);
+		m_pPlatList[1]->setCenterPos_y(y1[1].y -= g_fSecPerFrame * 30.0f);
+		m_pPlatList[2]->setCenterPos_y(y1[2].y -= g_fSecPerFrame * 30.0f);
 	}
 }
