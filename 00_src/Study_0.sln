@@ -10,6 +10,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sample_C_0.c", "SampleC_0.c\SampleC_0.c.vcxproj", "{9EC244ED-C2C7-4E5F-A583-34B972603569}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "000_Note", "000_Note", "{D2173692-925F-4BDD-A7C4-0E66E643629B}"
+	ProjectSection(SolutionItems) = preProject
+		ShortCut.txt = ShortCut.txt
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "A", "A\A.vcxproj", "{4CAF480A-A7D2-4ADE-80F7-F5B005BFDE52}"
 EndProject
