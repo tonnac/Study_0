@@ -40,7 +40,7 @@ public:
 public:
 	void				DebugMode();
 public:
-	bool				LoadFile		(T_STR, T_STR, T_STR = std::basic_string<TCHAR>());
+	virtual bool		LoadFile		(T_STR, T_STR, T_STR = std::basic_string<TCHAR>());
 	virtual void		Set				(const FLOAT&, const FLOAT&,
 										const DWORD& = 0, const DWORD& = 0, const DWORD& = 0, const DWORD& = 0);
 	void				Set				(const FloatPoint&, const RECT&);
