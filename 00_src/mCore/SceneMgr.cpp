@@ -1,13 +1,13 @@
 #include "SceneMgr.h"
 #include "mSound.h"
 
-SceneMgr::SceneMgr() : m_nIndex(4)
+SceneMgr::SceneMgr() : m_nIndex(0)
 {
 }
 
 bool SceneMgr::Init()
 {
-	m_pCurrentScene = CreateScene(4, true);
+	m_pCurrentScene = CreateScene(0, true);
 	return true;
 }
 bool SceneMgr::Frame()

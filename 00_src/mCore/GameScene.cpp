@@ -10,9 +10,8 @@
 #include "mSound.h"
 #include "FSMMgr.h"
 
-
 FadeObject* GameScene5::m_fDeadScene = nullptr;
-Player* g_pPlayer = nullptr;
+Player*					g_pPlayer	 = nullptr;
 
 GameScene::GameScene() : m_pScroll(&m_BKObject, &m_NPCList)
 {}
@@ -21,6 +20,15 @@ GameScene1::GameScene1()
 {}
 bool GameScene1::Init()
 {
+	g_UI = New UI;
+	g_UI->LoadFile(L"UI", L"../../data/bmp/UIColor.bmp", L"../../data/bmp/UIMask.bmp");
+	g_HPBar = New UI;
+	g_HPBar->LoadFile(L"HPBAR", L"../../data/bmp/HPBar.bmp");
+	g_UI->Set(30, 48, 0, 0, 276, 72);
+	g_HPBar->Set(108, 51, 0, 0, 186, 21);
+	g_UI->Init();
+	g_HPBar->Init();
+
 	m_pFadeObject = New FadeObject;
 	m_pFadeObject->Set(0,0,0,0,g_rtClient.right,g_rtClient.bottom);
 	m_pFadeObject->Init();
@@ -372,15 +380,6 @@ GameScene4::GameScene4()
 {}
 bool GameScene4::Init()
 {
-	g_UI = New UI;
-	g_UI->LoadFile(L"UI", L"../../data/bmp/UIColor.bmp", L"../../data/bmp/UIMask.bmp");
-	g_HPBar = New UI;
-	g_HPBar->LoadFile(L"HPBAR", L"../../data/bmp/HPBar.bmp");
-	g_UI->Set(30, 48, 0, 0, 276, 72);
-	g_HPBar->Set(108, 51, 0, 0, 186, 21);
-	g_UI->Init();
-	g_HPBar->Init();
-
 	S_FSMMgr.LoadFile(L"FSM", L"../../data/txt/FSM.txt");
 	S_FSMMgr.LoadFile(L"FSM1", L"../../data/txt/FSM1.txt");
 
@@ -593,7 +592,7 @@ bool GameScene5::Init()
 	t3->Init();
 	m_BKObject.AddPlat(t3);
 
-	g_pPlayer->Set(130, 100, 10, 87, 25, 36);
+	g_pPlayer->Set(130, 300, 10, 87, 25, 36);
 	g_pPlayer->Init();
 	g_pPlayer->setRendering(2.8f, INVERSE::DEFAULT);
 	m_pScroll.Init();
