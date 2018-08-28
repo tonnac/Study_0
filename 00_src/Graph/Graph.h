@@ -5,10 +5,10 @@
 
 enum Vertex
 {
-	A = 0, B, C, D, E, F
+	A = 0, B, C, D, E, F, G
 };
 
-using GraphData = int;
+using GraphData = Vertex;
 using GraphStack = std::stack<GraphData>;
 using GraphList = std::list<GraphData>;
 using GraphIter = std::list<GraphData>::const_iterator;
@@ -16,18 +16,17 @@ using GraphIter = std::list<GraphData>::const_iterator;
 class Graph
 {
 public:
-	Graph();
+	Graph(const int& verNum);
 	~Graph();
 public:
-	void		setVertex			(const int& verNum);
 	void		AddEdge				(const Vertex& fromV, const Vertex& toV);
 	void		ShowGraphEdgeInfo	();
-	void		DFSShowGraphVertex	(const int& startV);
+	void		DFSShowGraphVertex	(const Vertex& startV);
 private:
-	void		VisitVertex			(const Vertex& Ver);
+	bool		VisitVertex			(const Vertex& Ver);
 private:
 	GraphList * m_pGList;
 	int			m_iEdgeNumber;
 	int			m_iVerNumver;
-	int*		m_iVisitInfo;
+	bool*		m_bVisitInfo;
 };
