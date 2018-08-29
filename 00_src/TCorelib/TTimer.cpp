@@ -21,7 +21,7 @@ bool	TTimer::Frame()
 		m_dwFrameCount = 0;
 		m_fTimer -= 1.0f;
 		_stprintf_s(m_csBuffer, 
-			L"FPS:%d TIME:%10.4f SPF:%10.4f", 
+			L"FPS : %d    TIME : %3.4f    SPF : %3.4f", 
 			m_dwFPS, m_fGameTimer, m_fSecPerFrame);
 		//OutputDebugString(m_csBuffer);
 	}
@@ -32,8 +32,8 @@ bool	TTimer::Frame()
 }
 bool	TTimer::Render()
 {
-	SetBkColor(g_hOffScreenDC, RGB(255, 0, 0));
-	SetTextColor(g_hOffScreenDC, RGB(0, 0, 255));
+	SetTextColor(g_hOffScreenDC, RGB(255, 255, 255));
+	SetBkColor(g_hOffScreenDC, RGB(0, 0, 0));
 	//SetBkMode(g_hOffScreenDC, TRANSPARENT);
 	TextOut(g_hOffScreenDC, 0,0, m_csBuffer, wcslen(m_csBuffer));
 	return true;

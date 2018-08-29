@@ -14,7 +14,6 @@ public:
 	void		Set(DWORD dwStyle);
 	void		CenterWindow();
 		bool		SetWindow(HINSTANCE	hInstance,
-		const TCHAR* pTitleName = L"KGCA Sample",
 		UINT iWidth=800, UINT iHeight=600);
 	bool		Run();
 public:

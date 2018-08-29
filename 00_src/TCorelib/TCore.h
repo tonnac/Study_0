@@ -13,6 +13,7 @@ public:
 	HBITMAP m_hOldOffBitmap;
 	HBRUSH  m_hbrBack;
 	HANDLE  m_hPen;
+	bool	FrameShow;
 public:
 	bool	GameInit();
 	bool	GameRun();

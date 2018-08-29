@@ -29,6 +29,25 @@ extern HDC g_hScreenDC;
 extern RECT  g_rtClient;
 extern bool g_bActiveApp;
 extern POINT g_pHeroPos;
+
+struct TIndex
+{
+	int x, y;
+	bool operator == (const TIndex& pos)
+	{
+		return (x == pos.x && y == pos.y);
+	}
+	TIndex(int fX, int fY)
+	{
+		x = fX;
+		y = fY;
+	}
+	TIndex()
+	{
+		x = y = 0.0f;
+	}
+};
+
 template<class T> class TSingleton
 {
 public:

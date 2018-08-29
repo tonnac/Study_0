@@ -32,6 +32,10 @@ bool	TCore::GameInit()
 }
 bool	TCore::GameFrame()
 {	
+	if (I_Input.Key(VK_LCONTROL) == KEY_HOLD && I_Input.Key('F') == KEY_PUSH)
+	{
+		FrameShow = !FrameShow;
+	}
 	m_Timer.Frame();
 	I_Input.Frame();	
 	TSound::Get()->Frame();
@@ -60,8 +64,11 @@ bool	TCore::GameRender()
 	GamePreRender();
 	{
 		Render();
-		m_Timer.Render();
-		I_Input.Render();
+		if (FrameShow)
+		{
+			m_Timer.Render();
+			I_Input.Render();
+		}
 	}
 	GamePostRender();
 	return true;
@@ -86,7 +93,7 @@ bool	TCore::GameRelease()
 	ReleaseDC(m_hWnd, m_hOffScreenDC);
 	return true;
 }
-TCore::TCore()
+TCore::TCore() : FrameShow(false)
 {
 }
 

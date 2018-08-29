@@ -37,7 +37,6 @@ void TWindow::MsgEvent(MSG msg)
 	I_Input.MsgEvent(msg);
 }
 bool TWindow::SetWindow(HINSTANCE	hInst,
-	const TCHAR* pTitleName,
 	UINT iWidth, UINT iHeight)
 {
 	m_hInstance = hInst;
@@ -61,7 +60,7 @@ bool TWindow::SetWindow(HINSTANCE	hInst,
 	AdjustWindowRect(&rt, m_dwStyle, FALSE);
 	//// 윈도우 생성( 등록된 클래스를 사용해서 )
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW,
-		L"MyWindow", pTitleName,
+		L"MyWindow", L"Win",
 		m_dwStyle,
 		0, 0, 
 		rt.right-rt.left, 
