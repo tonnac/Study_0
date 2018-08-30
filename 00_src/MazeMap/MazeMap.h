@@ -3,6 +3,8 @@
 #include "TObject.h"
 #include <bitset>
 
+#define INF 1000000
+
 struct PloydPath
 {
 	DWORD					m_dwCost;
@@ -20,13 +22,8 @@ using TileVec = std::vector<Tile>;
 
 struct MazeBoxInfo
 {
-	MazeBoxInfo()
-	{
-		left = 1;
-		right = 1;
-		top = 1;
-		bottom = 1;
-	}
+	MazeBoxInfo() : left(1), right(1), top(1), bottom(1)
+	{}
 
 	void setLeft	(const int& value) { left = value; }
 	void setRight	(const int& value) { right = value; }
@@ -49,26 +46,28 @@ class MazeMap : public TObject
 public:
 	MazeMap();
 public:
-	void  				Create			(int iWidth, int iHeight, int iScreenWidth, int iScreenHeight);
-	bool  				Render			();
-	bool  				Release			();
-	void  				Reset			();
-	bool  				CreateTile		();
-	bool  				RenderTile		();
-	void  				RenderPath		();
+	void  				Create				(int iWidth, int iHeight, int iScreenWidth, int iScreenHeight);
+	bool  				Render				();
+	bool  				Release				();
+	void  				Reset				();
+	bool  				CreateTile			();
+	bool  				RenderTile			();
+	void  				RenderPath			();
 private:
-	bool				CanMove			(int x, int y);
-	bool				CanMoveLeft		(int x, int y);
-	bool				CanMoveRight	(int x, int y);
-	bool				CanMoveTop		(int x, int y);
-	bool				CanMoveBottom	(int x, int y);
-	void				Visit			(int x, int y);
+	bool				CanMove				(int x, int y);
+	bool				CanMoveLeft			(int x, int y);
+	bool				CanMoveRight		(int x, int y);
+	bool				CanMoveTop			(int x, int y);
+	bool				CanMoveBottom		(int x, int y);
+	void				Visit				(int x, int y);
+public:
+	int	  				GetPloydIndex		(float fX, float fY);
+	PloydPath*			GetPloydPathList(DWORD dwStart, DWORD dwEnd);
+	vector<tPoint>&		PloydListToTileList(DWORD dwStart, DWORD dwEnd);
 private:
-	int	  				GetPloydIndex	(float fX, float fY);
-	TIndex				GetTileID		(float x, float y);
-	bool				MakePloydPass	();
-	bool				ComputePloydPass();
-//	vector<tPoint>&		PloydListToTileList(DWORD dwStart, DWORD dwEnd);
+	TIndex				GetTileID			(float x, float y);
+	bool				MakePloydPass		();
+	bool				ComputePloydPass	();
 private:
 	tPoint				m_fTileDistance;
 	TileVec				m_TileData;
@@ -90,4 +89,5 @@ private:
 	std::vector<tPoint> m_PathList;
 private:
 	HPEN				m_hBluePen;
+	HPEN				m_hRedPen;
 };

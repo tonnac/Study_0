@@ -3,6 +3,7 @@
 MazeMap::MazeMap() : m_pMazeBoxInfo(nullptr), m_pVisited(nullptr)
 {
 	m_hBluePen = CreatePen(PS_SOLID, 10, RGB(0, 0, 255));
+	m_hRedPen = CreatePen(PS_SOLID, 0, RGB(255, 0, 0));
 }
 
 void MazeMap::Create(int iWidth, int iHeight, int iScreenWidth, int iScreenHeight)
@@ -177,12 +178,26 @@ bool MazeMap::RenderTile()
 }
 void MazeMap::RenderPath()
 {
+	HPEN oldpen = (HPEN)SelectObject(g_hOffScreenDC, m_hRedPen);
+	tPoint vStart = { 0,0 };
+	for (int iCnt = 0; iCnt < m_PathList.size(); ++iCnt)
+	{
+		MoveToEx(g_hOffScreenDC, vStart.x, vStart.y, NULL);
+		LineTo(g_hOffScreenDC, m_PathList[iCnt].x, m_PathList[iCnt].y);
+		vStart = m_PathList[iCnt];
+	}
+	SelectObject(g_hOffScreenDC, oldpen);
 	return;
 }
 
 TIndex MazeMap::GetTileID(float x, float y)
 {
-	return { 0, 0 };
+	int iTileIndex = GetPloydIndex(x, y);
+	int iX = iTileIndex % m_iHeight;
+	int iY = iTileIndex / m_iHeight;
+	iX = iX * 2 + 1;
+	iY = iY * 2 + 1;
+	return { iX, iY };
 }
 bool MazeMap::CanMove(int x, int y)
 {
@@ -274,6 +289,13 @@ void MazeMap::Visit(int x, int y)
 
 int	 MazeMap::GetPloydIndex(float fX, float fY)
 {
+	int iFindIndex;
+	int iOffSetWidth = g_rtClient.right / m_iWidth;
+	int iOffSetHeight = g_rtClient.bottom / m_iHeight;
+	int w = fX / iOffSetWidth;
+	int h = fY / iOffSetHeight;
+	iFindIndex = h * m_iWidth + w;
+	return iFindIndex;
 	return 0;
 }
 bool MazeMap::MakePloydPass()
@@ -326,14 +348,77 @@ bool MazeMap::MakePloydPass()
 			}
 		}
 	}
-
+	ComputePloydPass();
 	return true;
 }
 bool MazeMap::ComputePloydPass()
 {
+	for (int i = 0; i < m_dwNumNodes; ++i)
+	{
+		for (int k = 0; k < m_dwNumNodes; ++k)
+		{
+			if (i != k && m_pPloydVertexArray[i*m_dwNumNodes + k] == 0)
+			{
+				m_pPloydVertexArray[i*m_dwNumNodes + k] = INF;
+			}
+			else
+			{
+				m_pPloydPathList[i*m_dwNumNodes + k].m_dwCost = 1;
+				m_pPloydPathList[i*m_dwNumNodes + k].m_VertexList.push_back(k);
+			}
+			if (i == k)
+			{
+				m_pPloydVertexArray[i*m_dwNumNodes + k] = 0;
+			}
+
+		}
+	}
+
+	for (DWORD i = 0; i < m_dwNumNodes; ++i)
+	{
+		for (DWORD j = 0; j < m_dwNumNodes; ++j)
+		{
+			for (DWORD k = 0; k < m_dwNumNodes; ++k)
+			{
+				DWORD NewCost = m_pPloydPathList[m_dwNumNodes * j + i].m_dwCost +
+					m_pPloydPathList[m_dwNumNodes * i + k].m_dwCost;
+				if (NewCost < m_pPloydPathList[m_dwNumNodes * j + k].m_dwCost)
+				{
+					m_pPloydPathList[m_dwNumNodes * j + k].m_dwCost = NewCost;
+
+					m_pPloydPathList[m_dwNumNodes * j + k].m_VertexList.assign
+					(
+						m_pPloydPathList[m_dwNumNodes * j + i].m_VertexList.begin(),
+						m_pPloydPathList[m_dwNumNodes * j + i].m_VertexList.end());
+					m_pPloydPathList[m_dwNumNodes * j + k].m_VertexList.insert
+					(
+						m_pPloydPathList[m_dwNumNodes * j + k].m_VertexList.end(),
+						m_pPloydPathList[m_dwNumNodes * i + k].m_VertexList.begin(),
+						m_pPloydPathList[m_dwNumNodes * i + k].m_VertexList.end()
+					);
+				}
+			}
+		}
+	}
 	return true;
 }
-//vector<tPoint>&	MazeMap::PloydListToTileList(DWORD dwStart, DWORD dwEnd)
-//{
-//
-//}
+vector<tPoint>&	MazeMap::PloydListToTileList(DWORD dwStart, DWORD dwEnd)
+{
+	m_PathList.clear();
+	PloydPath* pPloydPath = GetPloydPathList(dwStart, dwEnd);
+	for (int iPath = 0; iPath < pPloydPath->m_VertexList.size(); ++iPath)
+	{
+		int iNode = pPloydPath->m_VertexList[iPath];
+
+		int iX = iNode % m_iHeight;
+		int iY = iNode / m_iHeight;
+		iX = iX * 2 + 1;
+		iY = iY * 2 + 1;
+		m_PathList.push_back(m_TileData[iY*m_iMaxTileWidth + iX].pos);
+	}
+	return m_PathList;
+}
+PloydPath* MazeMap::GetPloydPathList(DWORD dwStart, DWORD dwEnd)
+{
+	return &m_pPloydPathList[dwStart * m_dwNumNodes + dwEnd];
+}
