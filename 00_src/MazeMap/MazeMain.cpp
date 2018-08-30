@@ -9,7 +9,7 @@ public:
 public:
 	bool Init()
 	{
-		m_maze.Create(2, 2, g_rtClient.right, g_rtClient.bottom);
+		m_maze.Create(2, 1, g_rtClient.right, g_rtClient.bottom);
 		return true;
 	}
 	bool Frame()

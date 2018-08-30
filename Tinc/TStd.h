@@ -9,7 +9,7 @@
 #include <vector>
 #include <tchar.h>
 #pragma comment(lib,"winmm.lib")
-#pragma comment(lib,"TCoreLib.lib")
+#pragma comment(lib,"TCorelib.lib")
 
 using namespace std;
 typedef std::basic_string<char> C_STR;

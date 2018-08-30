@@ -6,7 +6,7 @@ class Sample : public TCore
 public:
 	bool		Init()
 	{
-		m_Maze.CreateMaze(2, 1);
+		m_Maze.CreateMaze(2, 2);
 		m_Maze.Init();
 		return true;
 	}
@@ -16,6 +16,8 @@ public:
 	}
 	bool		Render()
 	{
+		m_Maze.RenderTile();
+		m_Maze.Render();
 		return true;
 	}
 	bool		Release()
