@@ -1,8 +1,9 @@
 #include "Maze.h"
 
-Maze::Maze() : m_pBoxinfo(nullptr), m_pVisited(nullptr)
+Maze::Maze() : m_pBoxinfo(nullptr), m_pVisited(nullptr), m_pPloydPath(nullptr)
 {
 	m_hBluePen = CreatePen(PS_SOLID, 5, RGB(0, 0, 255));
+	m_hRedPen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 }
 Maze::~Maze()
 {
@@ -20,10 +21,19 @@ Maze::~Maze()
 		{
 			delete[] m_pTileSet[i];
 		}
-		delete m_pTileSet;
+		delete[] m_pTileSet;
+	}
+	if (m_pPloydPath)
+	{
+		for (size_t i = 0; i < m_iHeight * m_iWidth; ++i)
+		{
+			delete[] m_pPloydPath[i];
+		}
+		delete[] m_pPloydPath;
 	}
 	m_pBoxinfo = nullptr;
 	m_pTileSet = nullptr;
+	m_pPloydPath = nullptr;
 	DeleteObject(m_hBluePen);
 }
 void Maze::CreateMaze(const int& width, const int& height)
@@ -55,6 +65,7 @@ void Maze::CreateMaze(const int& width, const int& height)
 	m_Road.Load(L"../../data/sand.bmp");
 	m_Road.Init();
 
+	MakeGraphTable();
 	CreatePloydPath();
 
 	CreateTile();
@@ -111,9 +122,47 @@ void Maze::CreateTile()
 		for (size_t j = 0; j < m_iMaxTileWidth; ++j)
 		{
 			m_pTileSet[i][j].m_point = { xTileDistance * j , yTileDistance * i };
+			m_pTileSet[i][j].m_CenterPos = { (xTileDistance * j) + (xTileDistance / 2), 
+				(yTileDistance * i) + (yTileDistance / 2) };
 		}
 	}
 
+}
+Nodeindex Maze::getTargetIndex(const int& x, const int& y)
+{
+	int iOffSetWidth = g_rtClient.right / m_iWidth;
+	int iOffSetHeight = g_rtClient.bottom / m_iHeight;
+
+	return { x / iOffSetWidth, y / iOffSetHeight };
+}
+void Maze::SelectPath(const Nodeindex& nIndex)
+{
+	m_CurrentPath = m_pPloydPath[0][nIndex._y * m_iWidth + nIndex._x];
+}
+bool Maze::Reset()
+{
+	int iScreenWidth = g_rtClient.right - g_rtClient.left;
+	int iScreenHeight = g_rtClient.bottom - g_rtClient.top;
+	if (iScreenWidth == m_iScreenWidth && m_iScreenHeight == iScreenHeight)
+	{
+		return false;
+	}
+	m_iScreenHeight = iScreenHeight;
+	m_iScreenWidth = iScreenWidth;
+
+	FLOAT iOffSetWidth = static_cast<FLOAT>(m_iScreenWidth) / m_iMaxTileWidth;
+	FLOAT iOffSetHeight = static_cast<FLOAT>(m_iScreenHeight) / m_iMaxTileHeight;
+
+	for (size_t i = 0; i < m_iMaxTileHeight; ++i)
+	{
+		for (size_t j = 0; j < m_iMaxTileWidth; ++j)
+		{
+			m_pTileSet[i][j].m_point = { iOffSetWidth * j , iOffSetHeight * i };
+			m_pTileSet[i][j].m_CenterPos = { (iOffSetWidth * j) + (iOffSetWidth / 2),
+				(iOffSetHeight * i) + (iOffSetHeight / 2) };
+		}
+	}
+	return true;
 }
 bool Maze::Render()
 {
@@ -128,11 +177,11 @@ bool Maze::Render()
 		{
 			MazeBoxInfo mbi = m_pBoxinfo[y][x];
 
-			float x1 = static_cast<float>(x * iOffSetWidth);
-			float y1 = static_cast<float>(y * iOffSetHeight);
+			float x1 = m_pTileSet[y * 2][x * 2].m_CenterPos.x;
+			float y1 = m_pTileSet[y * 2][x * 2].m_CenterPos.y;
 			
-			float x2 = static_cast<float>((x + 1)* iOffSetWidth);
-			float y2 = static_cast<float>((y + 1)* iOffSetHeight);
+			float x2 = m_pTileSet[y * 2 + 2][x * 2 + 2].m_CenterPos.x;
+			float y2 = m_pTileSet[y * 2 + 2][x * 2 + 2].m_CenterPos.y;
 
 			if (mbi.getLeft() == 0)
 			{
@@ -159,6 +208,25 @@ bool Maze::Render()
 	SelectObject(g_hOffScreenDC, oldpen);
 	return true;
 }
+bool Maze::RenderPath()
+{
+	HPEN oldpen = static_cast<HPEN>(SelectObject(g_hOffScreenDC, m_hRedPen));
+	Nodeindex vStart(1, 1);
+	for (auto iter : m_CurrentPath.m_pPloydList)
+	{
+		Nodeindex vTarget = iter * 2;
+		vTarget += 1;
+		MoveToEx(g_hOffScreenDC, 
+			m_pTileSet[vStart._y][vStart._x].m_CenterPos.x, 
+			m_pTileSet[vStart._y][vStart._x].m_CenterPos.y, NULL);
+		LineTo(g_hOffScreenDC, 
+			m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.x,
+			m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.y);
+		vStart = vTarget;
+	}
+	SelectObject(g_hOffScreenDC, oldpen);
+	return true;
+}
 bool Maze::RenderTile()
 {
 	FLOAT xTileDistance = static_cast<float>(g_rtClient.right) / m_iMaxTileWidth;
@@ -178,7 +246,8 @@ bool Maze::RenderTile()
 				StretchBlt(g_hOffScreenDC, x, y,
 					static_cast<int>(xTileDistance),
 					static_cast<int>(yTileDistance),
-					RoadBitmap->m_hMemDC, 0, 0, RoadBitmap->m_bmpInfo.bmWidth,
+					RoadBitmap->m_hMemDC, 0, 0, 
+					RoadBitmap->m_bmpInfo.bmWidth,
 					RoadBitmap->m_bmpInfo.bmHeight, SRCCOPY);
 			}
 			else
@@ -186,7 +255,8 @@ bool Maze::RenderTile()
 				StretchBlt(g_hOffScreenDC, x, y,
 					static_cast<int>(xTileDistance),
 					static_cast<int>(yTileDistance),
-					WallBitmap->m_hMemDC, 0, 0, WallBitmap->m_bmpInfo.bmWidth,
+					WallBitmap->m_hMemDC, 0, 0,
+					WallBitmap->m_bmpInfo.bmWidth,
 					WallBitmap->m_bmpInfo.bmHeight, SRCCOPY);
 			}
 		}
@@ -274,43 +344,79 @@ bool Maze::CanMoveBottom(const int& x, const int& y)
 	}
 	return false;
 }
-void Maze::CreatePloydPath()
+void Maze::MakeGraphTable()
 {
-	int ** GraphTable = nullptr;
-	GraphTable = new int*[m_iHeight * m_iWidth];
-	for (size_t i = 0; i < m_iHeight; ++i)
+	m_pPloydPath = new PloydPathNode*[m_iWidth * m_iHeight];
+	for (size_t i = 0; i < m_iHeight * m_iWidth; ++i)
 	{
-		GraphTable[i] = new int[m_iWidth * m_iHeight];
-		memset(GraphTable[i], 0, sizeof(int)* m_iWidth * m_iHeight);
+		m_pPloydPath[i] = new PloydPathNode[m_iWidth * m_iHeight];
 	}
-
+	int k = 0;
 	for (size_t i = 0; i < m_iHeight; ++i)
 	{
 		for (size_t j = 0; j < m_iWidth; ++j)
 		{
-			if (i == j)
-			{
-				GraphTable[i][j] = 0;
-				continue;
-			}
 			MazeBoxInfo mbi = m_pBoxinfo[i][j];
 			if (mbi.getLeft() == 1)
 			{
-				GraphTable[i][j - 1] = 1;
+				m_pPloydPath[k][k - 1].m_iWeight = 1;
+				m_pPloydPath[k][k - 1].m_pPloydList.push_back(Nodeindex(j - 1, i));
 			}
 			if (mbi.getRight() == 1)
 			{
-				GraphTable[i][j + 1] = 1;
+				m_pPloydPath[k][k + 1].m_iWeight = 1;
+				m_pPloydPath[k][k + 1].m_pPloydList.push_back(Nodeindex(j + 1, i));
 			}
 			if (mbi.getTop() == 1)
 			{
-				GraphTable[i - 1][j] = 1;
+				m_pPloydPath[k][k - m_iWidth].m_iWeight = 1;
+				m_pPloydPath[k][k - m_iWidth].m_pPloydList.push_back(Nodeindex(j, i - 1));
 			}
 			if (mbi.getBottom() == 1)
 			{
-				GraphTable[i + 1][j] = 1;
+				m_pPloydPath[k][k + m_iWidth].m_iWeight = 1;
+				m_pPloydPath[k][k + m_iWidth].m_pPloydList.push_back(Nodeindex(j, i + 1));
+			}
+			++k;
+		}
+	}
+	CreatePloydPath();
+}
+void Maze::CreatePloydPath()
+{
+	for (size_t i = 0; i < m_iHeight * m_iWidth; ++i)
+	{
+		for (size_t j = 0; j < m_iHeight * m_iWidth; ++j)
+		{
+			if (i != j && m_pPloydPath[i][j].m_iWeight == 0)
+			{
+				m_pPloydPath[i][j].m_iWeight = INF;
 			}
 		}
 	}
 
+	for (size_t k = 0; k < m_iHeight * m_iWidth; ++k)
+	{
+		for (size_t i = 0; i < m_iHeight * m_iWidth; ++i)
+		{
+			for (size_t j = 0; j < m_iHeight * m_iWidth; ++j)
+			{
+				int NewWeight = m_pPloydPath[i][k].m_iWeight + m_pPloydPath[k][j].m_iWeight;
+				if (NewWeight < m_pPloydPath[i][j].m_iWeight)
+				{
+					m_pPloydPath[i][j].m_iWeight = NewWeight;
+
+					m_pPloydPath[i][j].m_pPloydList.assign(
+						m_pPloydPath[i][k].m_pPloydList.begin(),
+						m_pPloydPath[i][k].m_pPloydList.end()
+					);
+					m_pPloydPath[i][j].m_pPloydList.insert(
+						m_pPloydPath[i][j].m_pPloydList.end(),
+						m_pPloydPath[k][j].m_pPloydList.begin(),
+						m_pPloydPath[k][j].m_pPloydList.end()
+					);
+				}
+			}
+		}
+	}
 }

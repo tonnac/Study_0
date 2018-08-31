@@ -3,14 +3,41 @@
 
 #define INF	1000000
 enum class Dir : unsigned char { LEFT = 0, RIGHT, TOP, BOTTOM };
-using PloydList = std::list<int>;
 
 struct Tile
 {
 	int		m_iType;
 	tPoint	m_point;
+	tPoint	m_CenterPos;
 };
-
+struct Nodeindex
+{
+	Nodeindex operator*(const int& Multipie)
+	{
+		_x *= Multipie;
+		_y *= Multipie;
+		return *this;
+	}
+	Nodeindex operator+=(const int& AddValue)
+	{
+		_x += AddValue;
+		_y += AddValue;
+		return *this;
+	}
+	Nodeindex(const int& x, const int& y) : _x(x), _y(y)
+	{}
+	int _x, _y;
+};
+using PloydList = std::list<Nodeindex>;
+struct PloydPathNode
+{
+	PloydPathNode() : m_iWeight(0)
+	{
+		m_pPloydList.clear();
+	}
+	int			m_iWeight;
+	PloydList	m_pPloydList;
+};
 struct MazeBoxInfo
 {
 public:
@@ -33,31 +60,6 @@ private:
 	unsigned int bottom : 1;
 };
 
-struct PloydPath
-{
-	PloydPath(const int& x, const int& y) : m_iHeight(y)
-	{
-		m_pPloydList = new PloydList*[y];
-		for (size_t i = 0; i < y; ++i)
-		{
-			m_pPloydList[i] = new PloydList[x];
-		}
-	};
-	~PloydPath()
-	{
-		for (size_t i = 0; i < m_iHeight; ++i)
-		{
-			delete[] m_pPloydList;
-		}
-		delete m_pPloydList;
-		m_pPloydList = nullptr;
-	}
-	PloydList	getPloydList(const int& x, const int& y) { return m_pPloydList[y][x]; }
-	void		setPloydList(PloydList ** pPloydList) { m_pPloydList = pPloydList; }
-	PloydList** m_pPloydList;
-	int			m_iHeight;
-};
-
 class Maze : public TObject
 {
 public:
@@ -66,10 +68,15 @@ public:
 public:
 	void			CreateMaze		(const int& width, const int& height);
 public:
-	void			CreateTile		();
+	Nodeindex		getTargetIndex	(const int& x, const int& y);
+	void			SelectPath		(const Nodeindex& nIndex);
 public:
-	bool			Render();
-	bool			RenderTile();
+	bool			Reset			();
+	bool			Render			();
+	bool			RenderPath		();
+	bool			RenderTile		();
+private:
+	void			CreateTile		();
 private:
 	void			VisitVertex		(const int& x, const int& y);
 private:
@@ -79,6 +86,7 @@ private:
 	bool			CanMoveTop		(const int& x, const int& y);
 	bool			CanMoveBottom	(const int& x, const int& y);
 private:
+	void			MakeGraphTable();
 	void			CreatePloydPath();
 private:
 	int				m_iWidth;
@@ -93,8 +101,12 @@ private:
 	MazeBoxInfo **	m_pBoxinfo;
 	bool **			m_pVisited;
 private:
+	PloydPathNode	m_CurrentPath;
+	PloydPathNode **m_pPloydPath;
+private:
 	TObject			m_Wall;
 	TObject			m_Road;
 private:
+	HPEN			m_hRedPen;
 	HPEN			m_hBluePen;
 };

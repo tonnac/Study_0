@@ -1,22 +1,32 @@
 #include "Maze.h"
 #include "TCore.h"
+#include <ctime>
 
 class Sample : public TCore
 {
 public:
 	bool		Init()
 	{
-		m_Maze.CreateMaze(2, 2);
+		srand(time(NULL));
+		m_Maze.CreateMaze(15, 15);
 		m_Maze.Init();
 		return true;
 	}
 	bool		Frame()
 	{
+		DWORD dwKey = I_Input.m_dwMouseState[0];
+		if (dwKey == KEY_PUSH)
+		{
+			Nodeindex TargetNode = m_Maze.getTargetIndex(I_Input.m_MousePos.x, I_Input.m_MousePos.y);
+			m_Maze.SelectPath(TargetNode);
+		}
 		return true;
 	}
 	bool		Render()
 	{
+		m_Maze.Reset();
 		m_Maze.RenderTile();
+		m_Maze.RenderPath();
 		m_Maze.Render();
 		return true;
 	}

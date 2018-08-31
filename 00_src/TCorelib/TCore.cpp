@@ -32,6 +32,8 @@ bool	TCore::GameInit()
 }
 bool	TCore::GameFrame()
 {	
+	GetClientRect(g_hWnd, &m_rtClient);
+	g_rtClient = m_rtClient;
 	if (I_Input.Key(VK_LCONTROL) == KEY_HOLD && I_Input.Key('F') == KEY_PUSH)
 	{
 		FrameShow = !FrameShow;
@@ -45,7 +47,7 @@ bool	TCore::GameFrame()
 bool	TCore::GamePreRender()
 {
 	SelectObject(m_hOffScreenDC, m_hOffScreenBitmap);
-	PatBlt(m_hOffScreenDC, 0, 0,
+	PatBlt(m_hOffScreenDC, m_rtClient.left, m_rtClient.top,
 		m_rtClient.right,
 		m_rtClient.bottom,
 		PATCOPY);
@@ -53,7 +55,7 @@ bool	TCore::GamePreRender()
 }
 bool	TCore::GamePostRender()
 {
-	BitBlt(m_hScreenDC, 0, 0, m_rtClient.right,
+	BitBlt(m_hScreenDC, m_rtClient.left, m_rtClient.top, m_rtClient.right,
 		m_rtClient.bottom,
 		m_hOffScreenDC, 0, 0, SRCCOPY);
 	SelectObject(m_hOffScreenDC, m_hOldOffBitmap);
