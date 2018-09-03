@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <queue>
 using namespace std;
 
 string ReplaceAll(string& src, const string & from, const string & to)
@@ -26,7 +27,6 @@ string ReplaceAll(string& src, const string & from, const string & to)
 	}
 	return src;
 }
-
 
 void ptrswap(int ** ptr)
 {
@@ -56,14 +56,14 @@ int main()
 //	cout << *(iter + 3) << " " << ptr << endl;
 //	p.erase(iter+3);
 
-	std::vector<int> pl;
-	std::vector<int>::iterator iter;
-	pl.clear();
-	pl.empty();
-	pl.push_back(1);
-	iter = pl.begin();
-	pl.erase(iter);
-	pl.empty();
+	//std::vector<int> pl;
+	//std::vector<int>::iterator iter;
+	//pl.clear();
+	//pl.empty();
+	//pl.push_back(1);
+	//iter = pl.begin();
+	//pl.erase(iter);
+	//pl.empty();
 
 	return 0;
 }

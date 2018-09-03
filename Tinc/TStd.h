@@ -57,3 +57,22 @@ public:
 		return theSingleInstance;
 	}
 };
+
+struct Nodeindex
+{
+	Nodeindex operator*(const int& Multipie)
+	{
+		_x *= Multipie;
+		_y *= Multipie;
+		return *this;
+	}
+	Nodeindex operator+=(const int& AddValue)
+	{
+		_x += AddValue;
+		_y += AddValue;
+		return *this;
+	}
+	Nodeindex(const int& x, const int& y) : _x(x), _y(y)
+	{}
+	int _x, _y;
+};
