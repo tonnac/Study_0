@@ -633,6 +633,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "057_Days", "057_Days", "{9C
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AStarMaze", "AStarMaze\AStarMaze.vcxproj", "{A0915631-24FE-452A-B33E-8A7FBAA0C26B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Priority_Queue", "Priority_Queue\Priority_Queue.vcxproj", "{8DA388A4-30FE-4089-B28C-8A37D755414F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2449,6 +2451,14 @@ Global
 		{A0915631-24FE-452A-B33E-8A7FBAA0C26B}.Release|x64.Build.0 = Release|x64
 		{A0915631-24FE-452A-B33E-8A7FBAA0C26B}.Release|x86.ActiveCfg = Release|Win32
 		{A0915631-24FE-452A-B33E-8A7FBAA0C26B}.Release|x86.Build.0 = Release|Win32
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Debug|x64.ActiveCfg = Debug|x64
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Debug|x64.Build.0 = Debug|x64
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Debug|x86.Build.0 = Debug|Win32
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x64.ActiveCfg = Release|x64
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x64.Build.0 = Release|x64
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x86.ActiveCfg = Release|Win32
+		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2752,9 +2762,10 @@ Global
 		{DD3DCE4E-2C9C-4405-84F3-92B4D9BC977C} = {946C520B-BC58-4266-9C86-0F8A6747AAB6}
 		{9CBBFB27-C051-4009-B122-D1EEC332E32A} = {D8786F91-DFCD-4819-BE4B-1926CF452FD5}
 		{A0915631-24FE-452A-B33E-8A7FBAA0C26B} = {9CBBFB27-C051-4009-B122-D1EEC332E32A}
+		{8DA388A4-30FE-4089-B28C-8A37D755414F} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 	EndGlobalSection
 EndGlobal
