@@ -31,21 +31,30 @@ namespace AStar
 	public:
 		Generator();
 	public:
-		void			setWorldSize			(Nodeindex worldSize_);
-		void			setDiagonalMovement		(bool enable_);
-		void			setHeuristic			(HeuristcFunction heuristic_);
-		CoordinateList	findPath				(Nodeindex source_, Nodeindex target_);
-		void			addCollision			(Nodeindex coordinates_);
-		void			removeCollision			(Nodeindex coordinates_);
-		void			clearCollisions();
+		void				setWorldSize			(Nodeindex worldSize_);
+		void				setDiagonalMovement		(bool enable_);
+		void				setHeuristic			(HeuristcFunction heuristic_);
+		CoordinateList		findPath				(Nodeindex source_, Nodeindex target_);
+		void				addCollision			(Nodeindex coordinates_);
+		void				removeCollision			(Nodeindex coordinates_);
+		void				clearCollisions();
 	private:
-		bool			detectCollision			(Nodeindex coordinates_);
-		Node*			findNodeOnList			(NodeList& nodes_, Nodeindex coordinates_);
-		void			releaseNodes			(NodeList& nodes_);
+		bool				detectCollision			(Nodeindex coordinates_);
+		Node*				findNodeOnList			(NodeList& nodes_, Nodeindex coordinates_);
+		void				releaseNodes			(NodeList& nodes_);
 	private:
 		HeuristcFunction	heuristic;
 		CoordinateList		m_Direction, m_Walls;
 		Nodeindex			m_WorldSize;
 		UINT				m_iDirection;
+	};
+
+	class Heuristic
+	{
+		static Nodeindex	getDelta		(Nodeindex source_, Nodeindex target_);
+	public:
+		static UINT			manhatten		(Nodeindex _source, Nodeindex target_);
+		static UINT			euclidean		(Nodeindex _source, Nodeindex target_);
+		static UINT			octagonal		(Nodeindex _source, Nodeindex target_);
 	};
 }

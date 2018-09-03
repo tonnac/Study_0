@@ -72,6 +72,17 @@ struct Nodeindex
 		_y += AddValue;
 		return *this;
 	}
+	bool operator == (const Nodeindex& nIndex)
+	{
+		return ((_x == nIndex._x) && (_y == nIndex._y));
+	}
+	Nodeindex operator+ (const Nodeindex& nIndex)
+	{
+		Nodeindex rn;
+		rn._x = this->_x + nIndex._x;
+		rn._y = this->_y + nIndex._y;
+		return rn;
+	}
 	Nodeindex(const int& x = 0, const int& y = 0) : _x(x), _y(y)
 	{}
 	int _x, _y;

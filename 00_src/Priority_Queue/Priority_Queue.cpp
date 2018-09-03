@@ -15,7 +15,7 @@ struct Node
 		}
 		bool operator() (Node * c, Node * d)
 		{
-			return c->a < d->a;
+			return c->a > d->a;
 		}
 	};
 };

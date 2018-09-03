@@ -11,7 +11,7 @@ UINT AStar::Node::getScore()
 
 bool AStar::NodeCmp::operator () (const Node* n1, const Node* n2)
 {
-	return n1->G < n2->G;
+	return n1->G > n2->G;
 }
 AStar::Generator::Generator()
 {
@@ -46,6 +46,46 @@ AStar::CoordinateList AStar::Generator::findPath(Nodeindex source_, Nodeindex ta
 	while (openSet.empty() == false)
 	{
 		currentNode = openSet.top();
+		if (openSet.top()->getScore() <= currentNode->getScore())
+		{
+			currentNode = openSet.top();
+		}
+
+		if (currentNode->m_coordinates == target_)
+		{
+			break;
+		}
+		closedSet.push(currentNode);
+		openSet.pop();
+
+		for (UINT i = 0; i < m_iDirection; ++i)
+		{
+			Nodeindex newCoordinates(currentNode->m_coordinates + m_Direction[i]);
+			if (detectCollision(newCoordinates))
+			{
+				continue;
+			}
+			if (findNodeOnList(closedSet, newCoordinates))
+			{
+				continue;
+			}
+			
+			UINT totalCost = currentNode->G + ((i < 4) ? 10 : 14);
+
+			Node * successor = findNodeOnList(openSet, newCoordinates);
+			if (successor == nullptr)
+			{
+				successor = new Node(newCoordinates, currentNode);
+				successor->G = totalCost;
+				successor->H = heuristic(successor->m_coordinates, target_);
+				openSet.push(successor);
+			}
+			else if (totalCost < successor->G)
+			{
+				successor->m_pParent = currentNode;
+				successor->G = totalCost;
+			}
+		}
 	}
 }
 void AStar::Generator::addCollision(Nodeindex coordinates_)
@@ -76,6 +116,7 @@ bool AStar::Generator::detectCollision(Nodeindex coordinates_)
 }
 AStar::Node* AStar::Generator::findNodeOnList(NodeList& nodes_, Nodeindex coordinates_)
 {
+
 }
 void AStar::Generator::releaseNodes(NodeList& nodes_)
 {
@@ -85,4 +126,20 @@ void AStar::Generator::releaseNodes(NodeList& nodes_)
 		delete delNode;
 		nodes_.pop();
 	}
+}
+Nodeindex AStar::Heuristic::getDelta(Nodeindex source_, Nodeindex target_)
+{
+
+}
+UINT AStar::Heuristic::manhatten(Nodeindex _source, Nodeindex target_)
+{
+
+}
+UINT AStar::Heuristic::euclidean(Nodeindex _source, Nodeindex target_)
+{
+
+}
+UINT AStar::Heuristic::octagonal(Nodeindex _source, Nodeindex target_)
+{
+
 }
