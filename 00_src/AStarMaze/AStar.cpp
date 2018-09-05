@@ -1,7 +1,7 @@
 #include "AStar.h"
 
 
-AStar::Node::Node(Nodeindex coord_, Node * parent_ = nullptr) :m_coordinates(coord_), m_pParent(parent_)
+AStar::Node::Node(Nodeindex coord_, Node * parent_) :m_coordinates(coord_), m_pParent(parent_)
 {}
 
 UINT AStar::Node::getScore()
@@ -16,7 +16,7 @@ bool AStar::NodeCmp::operator () (const Node* n1, const Node* n2)
 AStar::Generator::Generator()
 {
 	setDiagonalMovement(false);
-	setHeuristic();
+	setHeuristic(&Heuristic::manhatten);
 	m_Direction = {
 	{0,1},
 	{1,0},
@@ -41,22 +41,28 @@ AStar::CoordinateList AStar::Generator::findPath(Nodeindex source_, Nodeindex ta
 {
 	Node * currentNode = nullptr;
 	NodeList openSet, closedSet;
-	openSet.push(currentNode);
+	Node * pl = new Node(source_);
+	pl->G = 0;
+	pl->H = 0;
+	openSet.insert(pl);
 
 	while (openSet.empty() == false)
 	{
-		currentNode = openSet.top();
-		if (openSet.top()->getScore() <= currentNode->getScore())
+		currentNode = *openSet.begin();
+		for (auto node : openSet)
 		{
-			currentNode = openSet.top();
+			if (node->getScore() <= currentNode->getScore())
+			{
+				currentNode = node;
+			}
 		}
 
 		if (currentNode->m_coordinates == target_)
 		{
 			break;
 		}
-		closedSet.push(currentNode);
-		openSet.pop();
+		closedSet.insert(currentNode);
+		openSet.erase(std::find(openSet.begin(), openSet.end(), currentNode));
 
 		for (UINT i = 0; i < m_iDirection; ++i)
 		{
@@ -78,7 +84,7 @@ AStar::CoordinateList AStar::Generator::findPath(Nodeindex source_, Nodeindex ta
 				successor = new Node(newCoordinates, currentNode);
 				successor->G = totalCost;
 				successor->H = heuristic(successor->m_coordinates, target_);
-				openSet.push(successor);
+				openSet.insert(successor);
 			}
 			else if (totalCost < successor->G)
 			{
@@ -87,6 +93,18 @@ AStar::CoordinateList AStar::Generator::findPath(Nodeindex source_, Nodeindex ta
 			}
 		}
 	}
+
+	CoordinateList path;
+	while (currentNode != nullptr)
+	{
+		path.push_back(currentNode->m_coordinates);
+		currentNode = currentNode->m_pParent;
+	}
+
+	releaseNodes(openSet);
+	releaseNodes(closedSet);
+
+	return path;
 }
 void AStar::Generator::addCollision(Nodeindex coordinates_)
 {
@@ -116,30 +134,40 @@ bool AStar::Generator::detectCollision(Nodeindex coordinates_)
 }
 AStar::Node* AStar::Generator::findNodeOnList(NodeList& nodes_, Nodeindex coordinates_)
 {
-
+	for (auto node : nodes_)
+	{
+		if (node->m_coordinates == coordinates_)
+		{
+			return node;
+		}
+	}
+	return nullptr;
 }
 void AStar::Generator::releaseNodes(NodeList& nodes_)
 {
-	while (nodes_.empty() == false)
+	for (auto iter : nodes_)
 	{
-		Node * delNode = nodes_.top();
-		delete delNode;
-		nodes_.pop();
+		delete iter;
+		nodes_.erase(iter);
 	}
 }
 Nodeindex AStar::Heuristic::getDelta(Nodeindex source_, Nodeindex target_)
 {
-
+	return { abs(source_._x - target_._x), abs(source_._y - target_._y) };
 }
 UINT AStar::Heuristic::manhatten(Nodeindex _source, Nodeindex target_)
 {
-
+	auto delta = std::move(getDelta(_source, target_));
+	return static_cast<UINT>(10 * (delta._x + delta._y));
 }
 UINT AStar::Heuristic::euclidean(Nodeindex _source, Nodeindex target_)
 {
-
+	Nodeindex a = getDelta(_source, target_);
+	Nodeindex&& delta = std::move(getDelta(_source, target_));
+	return static_cast<UINT>(10 * sqrt(pow(delta._x, 2) + pow(delta._y, 2)));
 }
 UINT AStar::Heuristic::octagonal(Nodeindex _source, Nodeindex target_)
 {
-
+	auto delta = std::move(getDelta(_source, target_));
+	return 10 * (delta._x + delta._y) + (-6) * min(delta._x, delta._y);
 }

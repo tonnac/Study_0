@@ -3,6 +3,7 @@
 #include <functional>
 #include <queue>
 #include <algorithm>
+#include <set>
 
 namespace AStar
 {
@@ -24,7 +25,7 @@ namespace AStar
 		bool operator () (const Node* n1, const Node* n2);
 	};
 
-	using NodeList = std::priority_queue<Node*, std::vector<Node*>, NodeCmp>;
+	using NodeList = std::set<Node*>;
 
 	class Generator
 	{

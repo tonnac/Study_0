@@ -57,6 +57,7 @@ public:
 	bool			Reset			();
 	bool			Render			();
 	bool			RenderPath		();
+	bool			RenderPath		(const bool& ep);
 	bool			RenderTile		();
 private:
 	void			CreateTile		();
@@ -71,6 +72,9 @@ private:
 private:
 	void			MakeGraphTable();
 	void			CreatePloydPath();
+public:
+	int				getMaxTileWidth();
+	int				getMaxTileHeight();
 private:
 	int				m_iWidth;
 	int				m_iHeight;
@@ -78,11 +82,12 @@ private:
 	int				m_iScreenHeight;
 	int				m_iMaxTileWidth;
 	int				m_iMaxTileHeight;
-private:
+public:
 	Tile **			m_pTileSet;
 	POINT			m_pLocation;
 	MazeBoxInfo **	m_pBoxinfo;
 	bool **			m_pVisited;
+	vector<Nodeindex> m_PathList;
 private:
 	PloydPathNode	m_CurrentPath;
 	PloydPathNode **m_pPloydPath;

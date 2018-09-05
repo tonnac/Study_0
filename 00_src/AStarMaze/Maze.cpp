@@ -227,6 +227,21 @@ bool Maze::RenderPath()
 	SelectObject(g_hOffScreenDC, oldpen);
 	return true;
 }
+bool Maze::RenderPath(const bool& ep)
+{
+	HPEN OldPen = (HPEN)SelectObject(g_hOffScreenDC, m_hRedPen);
+	Nodeindex vStart = { 0,0 };
+	for(auto iter : m_PathList)
+	{
+		Nodeindex vTarget = iter * 2;
+		vTarget += 1;
+		MoveToEx(g_hOffScreenDC, m_pTileSet[vStart._y][vStart._x].m_CenterPos.x, m_pTileSet[vStart._y][vStart._x].m_CenterPos.y, NULL);
+		LineTo(g_hOffScreenDC, m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.x, m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.y);
+		vStart = vTarget;
+	}
+	SelectObject(g_hOffScreenDC, OldPen);
+	return true;
+}
 bool Maze::RenderTile()
 {
 	FLOAT xTileDistance = static_cast<float>(g_rtClient.right) / m_iMaxTileWidth;
@@ -419,4 +434,12 @@ void Maze::CreatePloydPath()
 			}
 		}
 	}
+}
+int Maze::getMaxTileWidth()
+{
+	return m_iMaxTileWidth;
+}
+int Maze::getMaxTileHeight()
+{
+	return m_iMaxTileHeight;
 }
