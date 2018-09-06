@@ -20,12 +20,13 @@ namespace AStar
 		UINT getScore();
 	};
 
+
 	struct NodeCmp
 	{
-		bool operator () (const Node* n1, const Node* n2);
+		bool operator () (Node* n1, Node* n2) const;
 	};
 
-	using NodeList = std::set<Node*>;
+	using NodeList = std::multiset<Node*, NodeCmp>;
 
 	class Generator
 	{
@@ -38,7 +39,7 @@ namespace AStar
 		CoordinateList		findPath				(Nodeindex source_, Nodeindex target_);
 		void				addCollision			(Nodeindex coordinates_);
 		void				removeCollision			(Nodeindex coordinates_);
-		void				clearCollisions();
+		void				clearCollisions			();
 	private:
 		bool				detectCollision			(Nodeindex coordinates_);
 		Node*				findNodeOnList			(NodeList& nodes_, Nodeindex coordinates_);

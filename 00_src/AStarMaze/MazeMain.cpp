@@ -18,15 +18,15 @@ public:
 		{
 			for (int w = 0; w < m_Maze.getMaxTileWidth(); ++w)
 			{
-				if (m_Maze.m_pTileSet[h][w].m_iType == 1)
+				if (m_Maze.m_pTileSet[h][w].m_iType == 0)
 				{
 					generator.addCollision({ w,h });
 				}
 			}
 		}
 
-		generator.setHeuristic(AStar::Heuristic::euclidean);
-		generator.setDiagonalMovement(true);
+		generator.setHeuristic(AStar::Heuristic::octagonal);
+//		generator.setDiagonalMovement(true);
 
 		return true;
 	}
@@ -35,8 +35,12 @@ public:
 		DWORD dwKey = I_Input.m_dwMouseState[0];
 		if (dwKey == KEY_PUSH)
 		{
+			m_Maze.m_PathList.clear();
 			Nodeindex TargetNode = m_Maze.getTargetIndex(I_Input.m_MousePos.x, I_Input.m_MousePos.y);
-	//		m_Maze.SelectPath(TargetNode);
+//			m_Maze.SelectPath(TargetNode);
+			TargetNode = TargetNode * 2;
+			TargetNode += 1;
+
 			AStar::CoordinateList path = generator.findPath({ 0,0 }, TargetNode);
 			for (auto pos : path)
 			{
@@ -51,6 +55,7 @@ public:
 		m_Maze.Reset();
 		m_Maze.RenderTile();
 		m_Maze.RenderPath(true);
+	//	m_Maze.RenderPath();
 		m_Maze.Render();
 		return true;
 	}

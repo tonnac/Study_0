@@ -230,13 +230,16 @@ bool Maze::RenderPath()
 bool Maze::RenderPath(const bool& ep)
 {
 	HPEN OldPen = (HPEN)SelectObject(g_hOffScreenDC, m_hRedPen);
-	Nodeindex vStart = { 0,0 };
+	Nodeindex vStart = { 1,1 };
 	for(auto iter : m_PathList)
 	{
-		Nodeindex vTarget = iter * 2;
-		vTarget += 1;
-		MoveToEx(g_hOffScreenDC, m_pTileSet[vStart._y][vStart._x].m_CenterPos.x, m_pTileSet[vStart._y][vStart._x].m_CenterPos.y, NULL);
-		LineTo(g_hOffScreenDC, m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.x, m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.y);
+		Nodeindex vTarget = iter;
+		MoveToEx(g_hOffScreenDC, 
+			m_pTileSet[vStart._y][vStart._x].m_CenterPos.x, 
+			m_pTileSet[vStart._y][vStart._x].m_CenterPos.y, NULL);
+		LineTo(g_hOffScreenDC, 
+			m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.x, 
+			m_pTileSet[vTarget._y][vTarget._x].m_CenterPos.y);
 		vStart = vTarget;
 	}
 	SelectObject(g_hOffScreenDC, OldPen);

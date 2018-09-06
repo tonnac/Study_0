@@ -635,6 +635,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AStarMaze", "AStarMaze\ASta
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Priority_Queue", "Priority_Queue\Priority_Queue.vcxproj", "{8DA388A4-30FE-4089-B28C-8A37D755414F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maze", "Maze\Maze.vcxproj", "{010C2263-FD52-461D-B4A8-E46F99B458E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2459,6 +2461,14 @@ Global
 		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x64.Build.0 = Release|x64
 		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x86.ActiveCfg = Release|Win32
 		{8DA388A4-30FE-4089-B28C-8A37D755414F}.Release|x86.Build.0 = Release|Win32
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Debug|x64.ActiveCfg = Debug|x64
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Debug|x64.Build.0 = Debug|x64
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Debug|x86.ActiveCfg = Debug|Win32
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Debug|x86.Build.0 = Debug|Win32
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Release|x64.ActiveCfg = Release|x64
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Release|x64.Build.0 = Release|x64
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Release|x86.ActiveCfg = Release|Win32
+		{010C2263-FD52-461D-B4A8-E46F99B458E9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2763,9 +2773,10 @@ Global
 		{9CBBFB27-C051-4009-B122-D1EEC332E32A} = {D8786F91-DFCD-4819-BE4B-1926CF452FD5}
 		{A0915631-24FE-452A-B33E-8A7FBAA0C26B} = {9CBBFB27-C051-4009-B122-D1EEC332E32A}
 		{8DA388A4-30FE-4089-B28C-8A37D755414F} = {60973FBE-E48F-46FB-B66F-19C64965F278}
+		{010C2263-FD52-461D-B4A8-E46F99B458E9} = {9CBBFB27-C051-4009-B122-D1EEC332E32A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

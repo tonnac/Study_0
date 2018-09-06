@@ -1,18 +1,17 @@
 #include "AStar.h"
 
-
-AStar::Node::Node(Nodeindex coord_, Node * parent_) :m_coordinates(coord_), m_pParent(parent_)
+AStar::Node::Node(Nodeindex coord_, Node * parent_) :m_coordinates(coord_), m_pParent(parent_), G(0), H(0)
 {}
 
 UINT AStar::Node::getScore()
 {
 	return G + H;
 }
-
-bool AStar::NodeCmp::operator () (const Node* n1, const Node* n2)
+bool AStar::NodeCmp::operator () (Node* n1, Node* n2) const
 {
-	return n1->G > n2->G;
+	return n1->G < n2->G;
 }
+
 AStar::Generator::Generator()
 {
 	setDiagonalMovement(false);
@@ -39,11 +38,13 @@ void AStar::Generator::setHeuristic(HeuristcFunction heuristic_)
 }
 AStar::CoordinateList AStar::Generator::findPath(Nodeindex source_, Nodeindex target_)
 {
+	if (m_iDirection < 8)
+	{
+		source_ = { 1,1 };
+	}
 	Node * currentNode = nullptr;
 	NodeList openSet, closedSet;
 	Node * pl = new Node(source_);
-	pl->G = 0;
-	pl->H = 0;
 	openSet.insert(pl);
 
 	while (openSet.empty() == false)
@@ -148,8 +149,8 @@ void AStar::Generator::releaseNodes(NodeList& nodes_)
 	for (auto iter : nodes_)
 	{
 		delete iter;
-		nodes_.erase(iter);
 	}
+	nodes_.clear();
 }
 Nodeindex AStar::Heuristic::getDelta(Nodeindex source_, Nodeindex target_)
 {

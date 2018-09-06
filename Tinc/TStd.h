@@ -60,7 +60,7 @@ public:
 
 struct Nodeindex
 {
-	Nodeindex operator*(const int& Multipie)
+	Nodeindex operator*=(const int& Multipie)
 	{
 		_x *= Multipie;
 		_y *= Multipie;
