@@ -19,6 +19,7 @@ public:
 	}
 	bool Render()
 	{
+		_Maze.Render();
 		return true;
 	}
 	bool Release()

@@ -149,9 +149,11 @@
   <ItemGroup>
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="MazeMain.cpp" />
+    <ClCompile Include="PloydPath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="PloydPath.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

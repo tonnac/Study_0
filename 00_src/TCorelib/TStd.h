@@ -62,9 +62,10 @@ struct Nodeindex
 {
 	Nodeindex operator*(const int& Multipie)
 	{
-		_x *= Multipie;
-		_y *= Multipie;
-		return *this;
+		Nodeindex rn = *this;
+		rn._x *= Multipie;
+		rn._y *= Multipie;
+		return rn;
 	}
 	Nodeindex operator+=(const int& AddValue)
 	{
