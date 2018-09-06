@@ -14,8 +14,8 @@
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib,"msimg32.lib")
-#pragma comment(lib,"11_mCore.lib")
-#pragma comment(lib, "fmod64_vc.lib")
+#pragma comment(lib,"MomodoraLibrary.lib")
+#pragma comment(lib,"fmod64_vc.lib")
 
 
 #define New new(__FILE__,__LINE__)
