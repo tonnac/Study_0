@@ -18,6 +18,22 @@ LRESULT TWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_SIZE:
+		{
+			//if( wParam == SIZE_MAXIMIZED )
+			if (wParam != SIZE_MINIMIZED && g_pWindow != NULL)
+			{
+				UINT width = LOWORD(lParam); // Client 변경 영역임.
+				UINT height = HIWORD(lParam);// Client 변경 영역임.
+				g_pWindow->ResizeClient(width, height);
+			}
+		}break;
+		case WM_PAINT://BeginPaint
+		{
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hWnd, &ps);
+			EndPaint(hWnd, &ps);
+		}break;
 		case WM_ACTIVATEAPP:
 			g_bActiveApp = (BOOL)wParam; //wParam에 TRUE가 들어오면 활성화.
 		break;
@@ -137,4 +153,12 @@ TWindow::TWindow()
 
 TWindow::~TWindow()
 {
+}
+
+bool TWindow::ResizeClient(UINT iWidth, UINT iHeight)
+{
+	GetWindowRect(m_hWnd, &m_rtWindow);
+	GetClientRect(m_hWnd, &m_rtClient);
+	g_rtClient = m_rtClient;
+	return true;
 }

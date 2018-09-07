@@ -3,6 +3,22 @@
 
 HDC g_hOffScreenDC = NULL;
 HDC g_hScreenDC = NULL;
+bool	TCore::ResizeClient(UINT iWidth, UINT iHeight)
+{
+	TWindow::ResizeClient(iWidth, iHeight);
+	if (m_hScreenDC == NULL || m_hOffScreenDC == NULL) return true;
+	// 삭제전에는 반드시 적용된 상태를 복원하고 생성해야 한다.
+//	SelectObject(m_hOffScreenDC, m_hOldBitmap);
+//	DeleteObject(m_hOffScreenBitmap);
+
+	m_hOffScreenBitmap = CreateCompatibleBitmap(
+		m_hScreenDC,
+		m_rtClient.right,
+		m_rtClient.bottom);
+	// 반환값 = 이전 선택되어 있던 비트맵
+//	m_hOldBitmap = (HBITMAP)SelectObject(m_hOffScreenDC, m_hOffScreenBitmap);
+	return true;
+}
 bool	TCore::GameInit() 
 {	
 	m_Timer.Init();

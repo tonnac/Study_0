@@ -59,6 +59,25 @@ void Maze::CreateMaze(const int& iWidth, const int& iHeight)
 	
 	CreateTile();
 }
+bool Maze::Reset()
+{
+	int iScreenWidth = g_rtClient.right - g_rtClient.left;
+	int iScreenHeight = g_rtClient.bottom - g_rtClient.top;
+
+	FLOAT iOffSetWidth = static_cast<FLOAT>(iScreenWidth) / _TileSize._x;
+	FLOAT iOffSetHeight = static_cast<FLOAT>(iScreenHeight) / _TileSize._y;
+
+	for (size_t i = 0; i < _TileSize._y; ++i)
+	{
+		for (size_t j = 0; j < _TileSize._x; ++j)
+		{
+			_TileArray[i][j]._DrawPos = { iOffSetWidth * j , iOffSetHeight * i };
+			_TileArray[i][j]._CenterPos = { (iOffSetWidth * j) + (iOffSetWidth / 2),
+				(iOffSetHeight * i) + (iOffSetHeight / 2) };
+		}
+	}
+	return true;
+}
 bool Maze::Render()
 {
 	TBitmap * pRoad = _Road.m_pColorBitmap;
@@ -101,15 +120,15 @@ MazeArray Maze::getMazeArray() const
 {
 	return _MazeArray;
 }
-TileArray* Maze::getTileArray() 
+const TileArray* Maze::getTileArray() const
 {
 	return &_TileArray;
 }
 Nodeindex Maze::getTargetIndex(const POINT& TargetPoint) const
 {
-	int iWidth = g_rtClient.right / _MazeSize._x;
-	int iHeight = g_rtClient.bottom / _MazeSize._y;
-	return { TargetPoint.x / iWidth ,TargetPoint.y / iHeight };
+	float iWidth = (float)g_rtClient.right / _MazeSize._x;
+	float iHeight = (float)g_rtClient.bottom / _MazeSize._y;
+	return { (int)(TargetPoint.x / iWidth) ,(int)(TargetPoint.y / iHeight) };
 }
 bool Maze::CanMove(const int& x, const int& y)
 {
@@ -194,11 +213,11 @@ void Maze::CreateTile()
 	std::vector<MazeTile> tile(_TileSize._x, MazeTile());
 	_TileArray.assign(_TileSize._y, tile);
 
-	int iOffSetWidth = g_rtClient.right / _TileSize._x;
-	int iOffSetHeight = g_rtClient.bottom / _TileSize._y;
+	FLOAT iOffSetWidth = static_cast<FLOAT>(g_rtClient.right) / _TileSize._x;
+	FLOAT iOffSetHeight = static_cast<FLOAT>(g_rtClient.bottom) / _TileSize._y;
 
-	int iHalfX = iOffSetWidth / 2;
-	int iHalfY = iOffSetHeight / 2;
+	FLOAT iHalfX = iOffSetWidth / 2;
+	FLOAT iHalfY = iOffSetHeight / 2;
 
 	for (int y = 0; y < _MazeSize._y; ++y)
 	{

@@ -634,6 +634,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Maze", "Maze\Maze.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MomodoraLibrary", "MomodoraLibrary\MomodoraLibrary.vcxproj", "{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SetSorting", "SetSorting\SetSorting.vcxproj", "{DEB6E324-E717-421F-80A6-52972E5F2474}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2466,6 +2468,14 @@ Global
 		{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0}.Release|x64.Build.0 = Release|x64
 		{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0}.Release|x86.ActiveCfg = Release|Win32
 		{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0}.Release|x86.Build.0 = Release|Win32
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Debug|x64.ActiveCfg = Debug|x64
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Debug|x64.Build.0 = Debug|x64
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Debug|x86.ActiveCfg = Debug|Win32
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Debug|x86.Build.0 = Debug|Win32
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Release|x64.ActiveCfg = Release|x64
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Release|x64.Build.0 = Release|x64
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Release|x86.ActiveCfg = Release|Win32
+		{DEB6E324-E717-421F-80A6-52972E5F2474}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2771,9 +2781,10 @@ Global
 		{8DA388A4-30FE-4089-B28C-8A37D755414F} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 		{010C2263-FD52-461D-B4A8-E46F99B458E9} = {9CBBFB27-C051-4009-B122-D1EEC332E32A}
 		{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0} = {78F6FF22-737F-4C9E-B64C-8DA4FEC2CA96}
+		{DEB6E324-E717-421F-80A6-52972E5F2474} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

@@ -22,6 +22,7 @@ public:
 	bool	GameRender();
 	bool	GamePreRender();
 	bool	GamePostRender();
+	bool	ResizeClient(UINT iWidth, UINT iHeight);
 public:
 	virtual bool	Init(){return true;}
 	virtual bool	Frame(){return true;}

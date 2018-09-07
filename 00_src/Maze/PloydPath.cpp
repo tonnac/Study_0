@@ -2,7 +2,7 @@
 
 PloydPath::PloydPath()
 {
-	_RedPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+	_RedPen = CreatePen(PS_SOLID, 3, RGB(255, 0, 0));
 }
 
 void PloydPath::SetTarget(const Nodeindex& vStart, const Nodeindex& vTarget)
@@ -13,8 +13,8 @@ void PloydPath::SetTarget(const Nodeindex& vStart, const Nodeindex& vTarget)
 bool PloydPath::RenderPath()
 {
 	HPEN oldpen = (HPEN)SelectObject(g_hOffScreenDC, _RedPen);
-	Nodeindex vStart = { 0,0 };
-	for (auto iter : _PloydPath[_TargetTableindex._y][_TargetTableindex._x].m_Path)
+	Nodeindex vStart = { 1,1 };
+	for (auto iter : _PloydPath[_TargetTableindex._x][_TargetTableindex._y].m_Path)
 	{
 		Nodeindex vTarget = iter;
 		vTarget *= 2, vTarget += 1;
@@ -24,10 +24,10 @@ bool PloydPath::RenderPath()
 		LineTo(g_hOffScreenDC, TargetPos.x, TargetPos.y);
 		vStart = vTarget;
 	}
-	DeleteObject(SelectObject(g_hOffScreenDC, _RedPen));
+	SelectObject(g_hOffScreenDC, oldpen);
 	return true;
 }
-void PloydPath::MakePloydPath(Maze& Maze)
+void PloydPath::MakePloydPath(const Maze& Maze)
 {
 	_TileArray = Maze.getTileArray();
 	MazeArray Maze_ = Maze.getMazeArray();

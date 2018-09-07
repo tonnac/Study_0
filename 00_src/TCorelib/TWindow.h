@@ -21,6 +21,7 @@ public:
 	virtual bool	GameInit();
 	virtual bool	GameRun();
 	virtual bool	GameRelease();
+	virtual bool	ResizeClient(UINT iWidth, UINT iHeight);
 	void MsgEvent(MSG msg);
 public:
 	TWindow();
