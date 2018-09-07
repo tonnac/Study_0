@@ -97,9 +97,14 @@ bool Maze::Render()
 	}
 	return true;
 }
-MazeArray Maze::getMazeArray()
+MazeArray Maze::getMazeArray() const
 {
 	return _MazeArray;
+}
+Nodeindex Maze::getTargetIndex(const POINT& TargetPoint) const
+{
+	int iWidth = g_rtClient.right / _MazeSize._x;
+	int iHeight = g_rtClient.bottom / _MazeSize._y;
 }
 bool Maze::CanMove(const int& x, const int& y)
 {

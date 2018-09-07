@@ -16,6 +16,12 @@ public:
 	}
 	bool Frame()
 	{
+		DWORD dwKey = I_Input.m_dwMouseState[0];
+		if (dwKey == KEY_PUSH)
+		{
+			Nodeindex vStart = { 0,0 };
+			Nodeindex vTarget = _Maze.getTargetIndex(I_Input.m_MousePos);
+		}
 
 		return true;
 	}

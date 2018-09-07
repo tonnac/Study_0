@@ -24,12 +24,10 @@ void PloydPath::MakePloydPath(const MazeArray& Maze_)
 			}
 		}
 	}
-	int k = 0;
 }
 void PloydPath::MakeGraphTable(const MazeArray& Maze_)
 {
 	int k = 0;
-	MazeArray& cMaze = const_cast<MazeArray&>(Maze_);
 	size_t Width = Maze_.cbegin()->size();
 	size_t Height = Maze_.size();
 	size_t iWidth = Width * Height;

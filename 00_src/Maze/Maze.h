@@ -13,9 +13,9 @@ struct MazeTile
 {
 	MazeTile() : _TileType(1), _CenterPos({0,0}), _DrawPos({0,0})
 	{}
-	int _TileType;
-	tPoint _CenterPos;
-	tPoint _DrawPos;
+	int		_TileType;
+	tPoint  _CenterPos;
+	tPoint  _DrawPos;
 };
 
 class MazeInfo
@@ -23,23 +23,23 @@ class MazeInfo
 public:
 	MazeInfo();
 public:
-	int		getLeft			() const;
-	int		getTop			() const;
-	int		getRight		() const;
-	int		getBottom		() const;
-	bool	getVisit		() const;
-public:
-	void	setLeft			(const int& Left);
-	void	setTop			(const int& Top);
-	void	setRight		(const int& Right);
-	void	setBottom		(const int& Bottom);
-	void	setVisit		(const bool& Visit);
+	int			 getLeft		() const;
+	int			 getTop			() const;
+	int			 getRight		() const;
+	int			 getBottom		() const;
+	bool		 getVisit		() const;
+public:			 
+	void		 setLeft		(const int& Left);
+	void		 setTop			(const int& Top);
+	void		 setRight		(const int& Right);
+	void		 setBottom		(const int& Bottom);
+	void		 setVisit		(const bool& Visit);
 private:
 	unsigned int left : 1;
 	unsigned int top : 1;
 	unsigned int right : 1;
 	unsigned int bottom : 1;
-	bool _isVisit;
+	bool		 _isVisit;
 };
 
 using MazeArray = std::vector<std::vector<MazeInfo>>;
@@ -52,7 +52,8 @@ public:
 public:
 	bool		Render();
 public:
-	MazeArray	getMazeArray	();
+	MazeArray	getMazeArray	() const;
+	Nodeindex	getTargetIndex	(const POINT& TargetPoint) const;
 private:
 	bool		CanMove			(const int& x, const int& y);
 	bool		CanMoveLeft		(const int& x, const int& y);
