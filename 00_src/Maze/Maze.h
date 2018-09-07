@@ -23,11 +23,11 @@ class MazeInfo
 public:
 	MazeInfo();
 public:
-	int		getLeft			();
-	int		getTop			();
-	int		getRight		();
-	int		getBottom		();
-	bool	getVisit		();
+	int		getLeft			() const;
+	int		getTop			() const;
+	int		getRight		() const;
+	int		getBottom		() const;
+	bool	getVisit		() const;
 public:
 	void	setLeft			(const int& Left);
 	void	setTop			(const int& Top);

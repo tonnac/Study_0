@@ -2,23 +2,23 @@
 
 MazeInfo::MazeInfo() : left(1), top(1), right(1), bottom(1), _isVisit(false)
 {}
-int MazeInfo::getLeft()
+int MazeInfo::getLeft() const
 {
 	return left;
 }
-int MazeInfo::getTop()
+int MazeInfo::getTop() const
 {
 	return top;
 }
-int MazeInfo::getRight()
+int MazeInfo::getRight() const
 {
 	return right;
 }
-int MazeInfo::getBottom()
+int MazeInfo::getBottom() const
 {
 	return bottom;
 }
-bool MazeInfo::getVisit()
+bool MazeInfo::getVisit() const
 {
 	return _isVisit;
 }
@@ -56,7 +56,7 @@ void Maze::CreateMaze(const int& iWidth, const int& iHeight)
 	_Wall.Load(L"../../data/tile4.bmp");
 	_Road.Load(L"../../data/sand.bmp");
 
-
+	
 	CreateTile();
 }
 bool Maze::Render()

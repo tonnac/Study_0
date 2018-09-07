@@ -1,5 +1,6 @@
 #include "TCore.h"
 #include "Maze.h"
+#include "PloydPath.h"
 
 class Sample : public TCore
 {
@@ -10,6 +11,7 @@ public:
 	bool Init()
 	{
 		_Maze.CreateMaze(3, 3);
+		_Ployd.MakePloydPath(_Maze.getMazeArray());
 		return true;
 	}
 	bool Frame()
@@ -20,6 +22,7 @@ public:
 	bool Render()
 	{
 		_Maze.Render();
+		_Ployd.RenderPath();
 		return true;
 	}
 	bool Release()
@@ -28,6 +31,7 @@ public:
 	}
 private:
 	Maze		_Maze;
+	PloydPath	_Ployd;
 };
 
 int WINAPI wWinMain(HINSTANCE hinst, HINSTANCE previnst, LPWSTR szCmdLine, int nCmdShow)
