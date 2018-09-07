@@ -1,12 +1,36 @@
 #include "PloydPath.h"
 
+PloydPath::PloydPath()
+{
+	_RedPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+}
+
+void PloydPath::SetTarget(const Nodeindex& vStart, const Nodeindex& vTarget)
+{
+	_TargetTableindex._x = vStart._y * static_cast<int>(_Height) + vStart._x;
+	_TargetTableindex._y = vTarget._y * static_cast<int>(_Height) + vTarget._x;
+}
 bool PloydPath::RenderPath()
 {
-	// 인덱스를 찾아서 인덱스 별로 선을 잇는다.
+	HPEN oldpen = (HPEN)SelectObject(g_hOffScreenDC, _RedPen);
+	Nodeindex vStart = { 0,0 };
+	for (auto iter : _PloydPath[_TargetTableindex._y][_TargetTableindex._x].m_Path)
+	{
+		Nodeindex vTarget = iter;
+		vTarget *= 2, vTarget += 1;
+		tPoint StartPos = (*_TileArray)[vStart._y][vStart._x]._CenterPos;
+		tPoint TargetPos = (*_TileArray)[vTarget._y][vTarget._x]._CenterPos;
+		MoveToEx(g_hOffScreenDC, StartPos.x, StartPos.y, NULL);
+		LineTo(g_hOffScreenDC, TargetPos.x, TargetPos.y);
+		vStart = vTarget;
+	}
+	DeleteObject(SelectObject(g_hOffScreenDC, _RedPen));
 	return true;
 }
-void PloydPath::MakePloydPath(const MazeArray& Maze_)
+void PloydPath::MakePloydPath(Maze& Maze)
 {
+	_TileArray = Maze.getTileArray();
+	MazeArray Maze_ = Maze.getMazeArray();
 	MakeGraphTable(Maze_);
 	size_t Num = Maze_.cbegin()->size() * Maze_.size();
 	for (size_t k = 0; k < Num; ++k)
@@ -30,14 +54,15 @@ void PloydPath::MakeGraphTable(const MazeArray& Maze_)
 	int k = 0;
 	size_t Width = Maze_.cbegin()->size();
 	size_t Height = Maze_.size();
+	_Height = Height;
 	size_t iWidth = Width * Height;
 	size_t iHeight = iWidth;
 	PathList pl;
 	std::vector<PathList> Path(iWidth, pl);
 	_PloydPath.assign(iHeight, Path);
-	for (size_t y = 0; y < Height; ++y)
+	for (int y = 0; y < Height; ++y)
 	{
-		for (size_t x = 0; x < Width; ++x)
+		for (int x = 0; x < Width; ++x)
 		{
 			if (Maze_.at(y).at(x).getLeft() == 0)
 			{
@@ -62,9 +87,9 @@ void PloydPath::MakeGraphTable(const MazeArray& Maze_)
 			++k;
 		}
 	}
-	for (size_t i = 0; i < iHeight; ++i)
+	for (int i = 0; i < iHeight; ++i)
 	{
-		for (size_t j = 0; j < iWidth; ++j)
+		for (int j = 0; j < iWidth; ++j)
 		{
 			if (i == j)
 			{

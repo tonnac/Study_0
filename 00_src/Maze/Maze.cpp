@@ -72,8 +72,8 @@ bool Maze::Render()
 			if (_TileArray[y][x]._TileType == 0)
 			{
 				StretchBlt(g_hOffScreenDC,
-					_TileArray[y][x]._DrawPos.x,
-					_TileArray[y][x]._DrawPos.y,
+					static_cast<int>(_TileArray[y][x]._DrawPos.x),
+					static_cast<int>(_TileArray[y][x]._DrawPos.y),
 					xDistance, yDistance,
 					pRoad->m_hMemDC,
 					0, 0,
@@ -84,8 +84,8 @@ bool Maze::Render()
 			else
 			{
 				StretchBlt(g_hOffScreenDC,
-					_TileArray[y][x]._DrawPos.x,
-					_TileArray[y][x]._DrawPos.y,
+					static_cast<int>(_TileArray[y][x]._DrawPos.x),
+					static_cast<int>(_TileArray[y][x]._DrawPos.y),
 					xDistance, yDistance,
 					pWall->m_hMemDC,
 					0, 0,
@@ -101,10 +101,15 @@ MazeArray Maze::getMazeArray() const
 {
 	return _MazeArray;
 }
+TileArray* Maze::getTileArray() 
+{
+	return &_TileArray;
+}
 Nodeindex Maze::getTargetIndex(const POINT& TargetPoint) const
 {
 	int iWidth = g_rtClient.right / _MazeSize._x;
 	int iHeight = g_rtClient.bottom / _MazeSize._y;
+	return { TargetPoint.x / iWidth ,TargetPoint.y / iHeight };
 }
 bool Maze::CanMove(const int& x, const int& y)
 {
@@ -195,9 +200,9 @@ void Maze::CreateTile()
 	int iHalfX = iOffSetWidth / 2;
 	int iHalfY = iOffSetHeight / 2;
 
-	for (size_t y = 0; y < _MazeSize._y; ++y)
+	for (int y = 0; y < _MazeSize._y; ++y)
 	{
-		for (size_t x = 0; x < _MazeSize._x; ++x)
+		for (int x = 0; x < _MazeSize._x; ++x)
 		{
 			int tileX = x * 2 + 1;
 			int tileY = y * 2 + 1;

@@ -53,6 +53,7 @@ public:
 	bool		Render();
 public:
 	MazeArray	getMazeArray	() const;
+	TileArray*	getTileArray	();
 	Nodeindex	getTargetIndex	(const POINT& TargetPoint) const;
 private:
 	bool		CanMove			(const int& x, const int& y);

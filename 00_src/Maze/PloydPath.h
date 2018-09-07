@@ -18,11 +18,17 @@ using PloydPathList = std::vector<std::vector<PathList>>;
 class PloydPath
 {
 public:
+	PloydPath();
+public:
+	void			SetTarget		(const Nodeindex& vStart, const Nodeindex& vTarget);
 	bool			RenderPath		();
-	void			MakePloydPath	(const MazeArray& Maze_);
+	void			MakePloydPath	(Maze& Maze);
 private:
-	void			MakeGraphTable	(const MazeArray& Maze_);
+	void			MakeGraphTable	(const MazeArray& Maze);
 private:
-
+	TileArray*		_TileArray;
+	HPEN			_RedPen;
+	Nodeindex		_TargetTableindex;
+	size_t			_Height;
 	PloydPathList	_PloydPath;
 };

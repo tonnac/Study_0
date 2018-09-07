@@ -11,7 +11,7 @@ public:
 	bool Init()
 	{
 		_Maze.CreateMaze(3, 3);
-		_Ployd.MakePloydPath(_Maze.getMazeArray());
+		_Ployd.MakePloydPath(_Maze);
 		return true;
 	}
 	bool Frame()
@@ -21,8 +21,8 @@ public:
 		{
 			Nodeindex vStart = { 0,0 };
 			Nodeindex vTarget = _Maze.getTargetIndex(I_Input.m_MousePos);
+			_Ployd.SetTarget(vStart, vTarget);
 		}
-
 		return true;
 	}
 	bool Render()
