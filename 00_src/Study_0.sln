@@ -638,6 +638,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SetSorting", "SetSorting\Se
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lambda", "Lambda\Lambda.vcxproj", "{A140F3F3-15B5-44FC-836C-03BC9C238771}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Time", "Time\Time.vcxproj", "{48BE11CF-84A8-43FD-8908-6603FA3EC56D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -2486,6 +2488,14 @@ Global
 		{A140F3F3-15B5-44FC-836C-03BC9C238771}.Release|x64.Build.0 = Release|x64
 		{A140F3F3-15B5-44FC-836C-03BC9C238771}.Release|x86.ActiveCfg = Release|Win32
 		{A140F3F3-15B5-44FC-836C-03BC9C238771}.Release|x86.Build.0 = Release|Win32
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Debug|x64.ActiveCfg = Debug|x64
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Debug|x64.Build.0 = Debug|x64
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Debug|x86.ActiveCfg = Debug|Win32
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Debug|x86.Build.0 = Debug|Win32
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Release|x64.ActiveCfg = Release|x64
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Release|x64.Build.0 = Release|x64
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Release|x86.ActiveCfg = Release|Win32
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2793,9 +2803,10 @@ Global
 		{4E9BC1C4-9136-4CC5-89CD-32B63A6B9FC0} = {78F6FF22-737F-4C9E-B64C-8DA4FEC2CA96}
 		{DEB6E324-E717-421F-80A6-52972E5F2474} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 		{A140F3F3-15B5-44FC-836C-03BC9C238771} = {60973FBE-E48F-46FB-B66F-19C64965F278}
+		{48BE11CF-84A8-43FD-8908-6603FA3EC56D} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

@@ -27,7 +27,11 @@ string ReplaceAll(string& src, const string & from, const string & to)
 	}
 	return src;
 }
-
+string FuncName(const string& pe, const int ee = 3)
+{
+	cout << string(__FUNCTION__) << endl;
+	return string(__func__);
+}
 void ptrswap(int ** ptr)
 {
 	int * qe = new int;
@@ -35,9 +39,12 @@ void ptrswap(int ** ptr)
 	*ptr = qe;
 }
 
+#define Func(x) cout << x << endl; string ex(x); cout << __func__ << endl;
 
 int main()
 {
+	string pe(__FUNCTION__);
+	Func(FuncName("jkqwewq",4));
 //	vector<int*> p;
 //	int * ptr = new int[6];
 //	*ptr = 45;
