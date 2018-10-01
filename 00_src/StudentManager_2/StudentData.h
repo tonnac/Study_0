@@ -3,7 +3,7 @@
 #include <iostream>
 #include <ctime>
 
-class DataLinkedList;
+#define MAX_NAME 256
 
 class StudentData
 {
@@ -35,7 +35,7 @@ public:
 private:
 	static int s_iCounter;
 	static int s_iCurNum;
-	char m_cName[20];
+	char m_cName[MAX_NAME];
 	int m_iNum;
 	int m_iKor;
 	int m_iMat;
