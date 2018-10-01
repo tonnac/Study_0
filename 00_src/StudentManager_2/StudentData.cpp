@@ -7,7 +7,7 @@ StudentData::StudentData(const char * _Name, int _Kor, int _Mat, int _Eng)
 	:m_iKor(_Kor), m_iMat(_Mat), m_iEng(_Eng), m_iTotal(_Kor+_Mat+_Eng)
 {
 	m_iNum = s_iCurNum++;
-	strcpy_s(m_cName, 20, _Name);
+	strcpy_s(m_cName, MAX_NAME, _Name);
 	s_iCounter++;
 	m_pNext = nullptr;
 }
@@ -15,14 +15,14 @@ StudentData::StudentData(const char * _Name, int _Kor, int _Mat, int _Eng, int _
 	:m_iKor(_Kor), m_iMat(_Mat), m_iEng(_Eng), m_iTotal(_Kor + _Mat + _Eng), m_iNum(_Num)
 {
 	s_iCurNum++;
-	strcpy_s(m_cName, 20, _Name);
+	strcpy_s(m_cName, MAX_NAME, _Name);
 	s_iCounter++;
 	m_pNext = nullptr;
 }
 StudentData::StudentData(const StudentData & data) : m_iNum(data.m_iNum) ,m_iKor(data.m_iKor),
 m_iMat(data.m_iMat), m_iEng(data.m_iEng), m_iTotal(data.m_iTotal)
 {
-	strcpy_s(m_cName, 20, data.m_cName);
+	strcpy_s(m_cName, MAX_NAME, data.m_cName);
 }
 StudentData::~StudentData()
 {
@@ -54,7 +54,7 @@ void StudentData::OneShow() const
 
 void StudentData::setiNum(const int &src) { m_iNum = src; }
 void StudentData::setCurNum(const int& src) { s_iCurNum = src; }
-void StudentData::setName(const char* src) { strcpy_s(m_cName, 20, src); }
+void StudentData::setName(const char* src) { strcpy_s(m_cName, MAX_NAME, src); }
 void StudentData::setKor(const int& src) 
 {
 	m_iKor = src;
