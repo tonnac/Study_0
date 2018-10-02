@@ -3,6 +3,7 @@
 #include <WinSock2.h>
 #include <vector>
 
+
 #pragma comment(lib,"ws2_32.lib")
 
 std::vector<SOCKET> g_userList;
@@ -42,7 +43,7 @@ int main()
 	SOCKET clientSock;
 	SOCKADDR_IN clientInfo;
 	int addlen = sizeof(clientInfo);
-	char buffer[] = "123123";
+	char buffer[256];
 	while (1)
 	{
 		clientSock = accept(sock, (sockaddr*)&clientInfo, &addlen);
@@ -54,20 +55,11 @@ int main()
 
 		while (1)
 		{
+			send(clientSock, buffer, sizeof(buffer), 0);
 			ret = recv(clientSock, buffer, sizeof(buffer), 0);
-			if (ret == 0)
-			{
-				// 정상종료
-			}
-			else if (ret < 0)
-			{
-				// 비정상 종료
-			}
 		}
-
-		send(clientSock, buffer, sizeof(buffer), 0);
 	}
-
+	closesocket(sock);
 	WSACleanup();
 	return 0;
 }

@@ -4,8 +4,11 @@
 
 #pragma comment(lib,"ws2_32.lib")
 
-int main()
+int main(int argc, char* argv[])
 {
+	const u_short port = atoi(argv[1]);
+	const char* IPAddr = argv[2];
+
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
@@ -30,14 +33,34 @@ int main()
 	{
 		return -1;
 	}
-	char buffer[256] = { 0, };
-	char buffer2[256] = { 0, };
+	
+	char buffer3[] = "Ready";
+	int iRet;
+	//do
+	//{
+	//	iRet = send(sock, buffer3, sizeof(buffer3), 0);
+	//} while(iRet == 0 || iRet == SOCKET_ERROR);
+
+//	iRet = send(sock, buffer3, sizeof(buffer3), 0);
+
+	char buffer2[256];
+
 	while (1)
 	{
-		recv(sock, buffer, sizeof(buffer), 0);
-		std::cout << buffer << std::endl;
-		std::cin >> buffer2;
-		send(sock, buffer2, sizeof(buffer2), 0);
+		char buffer[256] = { 0, };
+		std::cin >> buffer;
+		if (buffer[0] == '0')
+		{
+			break;
+		}
+		send(sock, buffer, strlen(buffer) + 1, 0);
+		iRet = recv(sock, buffer2, sizeof(buffer2), 0);
+		printf("%s\n", buffer2);
+		ZeroMemory(buffer2, sizeof(buffer2));
+		if (iRet == 0 || iRet == SOCKET_ERROR)
+		{
+			break;
+		}
 	}
 	closesocket(sock);
 	WSACleanup();
