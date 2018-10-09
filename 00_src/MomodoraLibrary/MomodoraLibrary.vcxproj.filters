@@ -70,14 +70,14 @@
     <Filter Include="소스 파일\State\EnemyState">
       <UniqueIdentifier>{3047ac2c-99a1-4402-8499-33c843f1b297}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Object\Character\EffectObj">
-      <UniqueIdentifier>{3fad93e0-2585-45c6-aa8a-58e4d16f9451}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\FSM">
       <UniqueIdentifier>{b00f8828-1967-409b-9af2-315499bc3de7}</UniqueIdentifier>
     </Filter>
     <Filter Include="헤더 파일\FSM">
       <UniqueIdentifier>{6a9f23ec-8bf8-45e2-a288-df545721a948}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object\EffectObj">
+      <UniqueIdentifier>{3fad93e0-2585-45c6-aa8a-58e4d16f9451}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -110,7 +110,7 @@
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="EffectObj.h">
-      <Filter>헤더 파일\Object\Character\EffectObj</Filter>
+      <Filter>헤더 파일\Object\EffectObj</Filter>
     </ClInclude>
     <ClInclude Include="PlayerAttack.h">
       <Filter>헤더 파일\State\PlayerState</Filter>
@@ -119,7 +119,7 @@
       <Filter>헤더 파일\State\PlayerState</Filter>
     </ClInclude>
     <ClInclude Include="KahoAttack.h">
-      <Filter>헤더 파일\Object\Character\EffectObj</Filter>
+      <Filter>헤더 파일\Object\EffectObj</Filter>
     </ClInclude>
     <ClInclude Include="Scroll.h">
       <Filter>헤더 파일</Filter>
@@ -318,5 +318,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram2.cd" />
   </ItemGroup>
 </Project>
