@@ -23,7 +23,7 @@ void zMSG(User * pUser, const char* msg)
 
 int main(void)
 {
-	const u_short port = 22333;
+	const u_short port = 10000;
 
 	if (BeginWinSock() == false)
 	{
@@ -65,7 +65,7 @@ int main(void)
 
 	int g_iNumUser = 0;
 
-	while (g_iNumUser < 10)
+	while (g_iNumUser != 1)
 	{
 		User user;
 		int AddrLen = sizeof(user.Addr);
@@ -83,10 +83,10 @@ int main(void)
 			printf("%s, %d\n", inet_ntop(AF_INET, &user.Addr.sin_addr, ip, sizeof(ip)), ntohs(user.Addr.sin_port));
 		}
 	}
-	char recvmsg[256] = { 0, };
-	int iRecvByte = sizeof(recvmsg);
 	while (1)
 	{
+		char recvmsg[256] = { 0, };
+		int iRecvByte = sizeof(recvmsg);
 		std::map<int, User>::iterator iter;
 		for (iter = g_userList.begin(); iter != g_userList.end(); ++iter)
 		{
