@@ -21,7 +21,6 @@ typedef struct
 	INT iIndex;
 	INT iData[20];
 }CHARACTER_INFO;
-
 #pragma pack(pop)
 
 #define PACKET_HEADER_SIZE 4

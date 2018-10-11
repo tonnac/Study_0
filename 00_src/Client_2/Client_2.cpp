@@ -10,13 +10,19 @@ int SendMsg(SOCKET sock, char* msg, WORD type)
 	ZeroMemory(&sendmsg, sizeof(sendmsg));
 	sendmsg.ph.len = strlen(msg);
 	sendmsg.ph.type = type;
-	memcpy(&sendmsg.msg, msg, sizeof(msg));
+	memcpy(&sendmsg.msg, msg, sendmsg.ph.len);
 	int iSendByte = 0;
 	int iTotalSize = sendmsg.ph.len + PACKET_HEADER_SIZE;
+	int iSend = 0;
 	char* pMsg = (char*)&sendmsg;
 	do
 	{
-		iSendByte += send(sock, &pMsg[iSendByte], iTotalSize - iSendByte, 0);
+		iSend = send(sock, &pMsg[iSendByte], iTotalSize - iSendByte, 0);
+		if (iSend == SOCKET_ERROR)
+		{
+			return iSend;
+		}
+		iSendByte += iSend;
 	} while (iTotalSize > iSendByte);
 	return sendmsg.ph.len + PACKET_HEADER_SIZE;
 }
@@ -83,7 +89,7 @@ int main(int argc, char* argv[])
 	SOCKADDR_IN addr;
 	ZeroMemory(&addr, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr("192.168.0.101");
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	addr.sin_port = htons(port);
 
 	int ret;
@@ -92,14 +98,6 @@ int main(int argc, char* argv[])
 	{
 		return -1;
 	}
-	
-	char buffer3[] = "Ready";
-	//do
-	//{
-	//	iRet = send(sock, buffer3, sizeof(buffer3), 0);
-	//} while(iRet == 0 || iRet == SOCKET_ERROR);
-
-//	iRet = send(sock, buffer3, sizeof(buffer3), 0);
 
 	DWORD threadID;
 	HANDLE hThread = CreateThread(NULL, 0, SendThread, (LPVOID)sock, 0, &threadID);

@@ -25,7 +25,7 @@ int main()
 	SOCKADDR_IN addr;
 	ZeroMemory(&addr, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr("192.168.0.51");
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	addr.sin_port = htons(10000);
 
 	int ret = bind(sock, (sockaddr*)&addr, sizeof(addr));
