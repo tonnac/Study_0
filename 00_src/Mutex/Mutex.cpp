@@ -10,6 +10,7 @@ int main(void)
 		return -1;
 	}
 	const u_short port = 10000;
+	const char* IPAddr = "192.168.0.51";
 	if (BeginWinSock() == false)
 	{
 		return -1;
@@ -20,7 +21,7 @@ int main(void)
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(port);
 	//	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	addr.sin_addr.s_addr = inet_addr("192.168.0.51");
+	addr.sin_addr.s_addr = inet_addr(IPAddr);
 //	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
 	int iRet = bind(Listensock, (sockaddr*)&addr, sizeof(addr));

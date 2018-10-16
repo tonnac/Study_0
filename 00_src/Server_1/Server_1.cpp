@@ -3,6 +3,7 @@
 #include <iostream>
 #include <WS2tcpip.h>	// InetNtop(), inet_ntop()
 #include <map>
+#include <set>
 
 #pragma comment(lib, "ws2_32")
 
@@ -24,7 +25,6 @@ void zMSG(User * pUser, const char* msg)
 int main(void)
 {
 	const u_short port = 10000;
-
 	if (BeginWinSock() == false)
 	{
 		return -1;

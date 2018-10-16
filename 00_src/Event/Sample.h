@@ -6,6 +6,7 @@
 #include <map>
 #include "Protocol.h"
 
+
 #pragma comment(lib, "ws2_32")
 
 struct User
@@ -137,7 +138,7 @@ int SendMsg(SOCKET sock, char* msg, WORD type)
 {
 	UPACKET sendmsg;
 	ZeroMemory(&sendmsg, sizeof(sendmsg));
-	sendmsg.ph.len = strlen(msg);
+	sendmsg.ph.len = static_cast<WORD>(strlen(msg));
 	sendmsg.ph.type = type;
 	memcpy(&sendmsg.msg, msg, strlen(msg));
 	int iSendByte = 0;
@@ -179,7 +180,7 @@ int SendMsg(SOCKET sock, PACKET_HEADER ph, char* msg)
 int SendMsg(SOCKET sock, UPACKET* uPacket)
 {
 	int iSendByte = 0;
-	int iTotalSize = strlen(uPacket->msg) + PACKET_HEADER_SIZE;
+	int iTotalSize = static_cast<int>(strlen(uPacket->msg) + PACKET_HEADER_SIZE);
 	char* pMsg = (char*)&uPacket;
 	int iSend = 0;
 	do

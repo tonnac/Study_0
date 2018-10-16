@@ -2,6 +2,8 @@
 
 HANDLE g_hEvent = nullptr;
 
+#define Zerom(x) memset(&(x), 0, (sizeof(x)))
+
 DWORD WINAPI SendThread(LPVOID Param)
 {
 	SOCKET sock = (SOCKET)Param;
@@ -18,15 +20,19 @@ DWORD WINAPI SendThread(LPVOID Param)
 	closesocket(sock);
 	return 1;
 }
+
 DWORD WINAPI ConnectThread(LPVOID Param)
 {
+	const u_short port = 10000;
+	const char* IPAddr = "127.0.0.1";
+
 	SOCKET sock = (SOCKET)Param;
 	SOCKADDR_IN addr;
 	ZeroMemory(&addr, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr("192.168.0.51");
+	addr.sin_addr.s_addr = inet_addr(IPAddr);
 //	addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	addr.sin_port = htons(10000);
+	addr.sin_port = htons(port);
 
 	int ret;
 	ret = connect(sock, (sockaddr*)&addr, sizeof(addr));
@@ -94,10 +100,13 @@ DWORD WINAPI RecvThread(LPVOID Param)
 	closesocket(sock);
 	return 1;
 }
-int main(int argc, char* argv[])
+int main(void)
 {
-	const u_short port = atoi(argv[1]);
-	const char* IPAddr = argv[2];
+	SOCKADDR_IN addr;
+	addr.sin_family = AF_INET;
+	Zerom(addr);
+//	const u_short port = atoi(argv[1]);
+//	const char* IPAddr = argv[2];
 	if (BeginWinSock() == false)
 	{
 		return -1;
@@ -113,10 +122,9 @@ int main(int argc, char* argv[])
 	{
 		return -1;
 	}
-
 	DWORD threadID_1;
 	HANDLE hConnectThread = CreateThread(NULL, 0, ConnectThread, (LPVOID)sock, 0, &threadID_1);
-
+	
 	//Event
 	WaitForSingleObject(g_hEvent, INFINITE);
 	ResetEvent(g_hEvent);

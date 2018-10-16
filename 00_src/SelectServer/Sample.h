@@ -4,7 +4,9 @@
 #include <iostream>
 #include <WS2tcpip.h>	// InetNtop(), inet_ntop()
 #include <map>
+#include <list>
 #include "Protocol.h"
+
 
 #pragma comment(lib, "ws2_32")
 
@@ -12,17 +14,18 @@ struct User
 {
 	SOCKET			sock;
 	SOCKADDR_IN		Addr;
-	User() {}
-	User(SOCKET client, SOCKADDR_IN add) : sock(client), Addr(add)
+	bool			bListen;
+	int				addrLen;
+	User() : bListen(false), addrLen(sizeof(Addr))
 	{}
-	User(const User& user) : sock(user.sock), Addr(user.Addr)
+	User(SOCKET client, SOCKADDR_IN add) : sock(client), Addr(add), bListen(false), addrLen(sizeof(Addr))
+	{}
+	User(const User& user) : sock(user.sock), Addr(user.Addr), bListen(false), addrLen(sizeof(Addr))
 	{}
 };
 
-std::map<SOCKET, User> g_allUser;
-using User_Iter = std::map<SOCKET, User>::iterator;
-CRITICAL_SECTION	g_crit;
-HANDLE				g_hMutex;
+std::list<User> g_allUser;
+using User_Iter = std::list<User>::iterator;
 
 bool BeginWinSock();
 bool EndWinSock();
@@ -65,79 +68,72 @@ int CheckReturn(const int& iRet)
 void ErrorMsg()
 {
 	char* pMsg = nullptr;
-	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (char*)&pMsg, 0, NULL);
+	FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, WSAGetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (char*)&pMsg, 0, nullptr);
 	printf("\n%s", pMsg);
 	LocalFree(pMsg);
 }
 void AddUser(User user)
 {
-	//	EnterCriticalSection(&g_crit);
-	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
-	if (dwRet != WAIT_TIMEOUT)
-	{
-		g_allUser.insert(std::make_pair(user.sock, user));
-	}
-	ReleaseMutex(g_hMutex);
-	//	LeaveCriticalSection(&g_crit);
+	g_allUser.push_back(user);
 }
-DWORD WINAPI ClientThread(LPVOID arg)
-{
-	SOCKET sock = (SOCKET)arg;
-	User* pUser = &g_allUser[sock];
-	int iRecvByte = 0;
-	int iRet = 0;
-	char buffer[BUF_SIZE] = { 0, };
-	bool bConnect = true;
-	while (bConnect == true)
-	{
-		iRet = recv(sock, &buffer[iRecvByte], sizeof(char) * PACKET_HEADER_SIZE - iRecvByte, 0);
-		if (CheckReturn(iRet) <= 0)
-		{
-			break;
-		}
-		iRecvByte += iRet;
-		if (iRecvByte == PACKET_HEADER_SIZE)
-		{
-			UPACKET packet;
-			ZeroMemory(&packet, sizeof(packet));
-			memcpy(&packet.ph.len, buffer, sizeof(char) * PACKET_HEADER_SIZE);
-			int rByte = 0;
-			do
-			{
-				int iRecvByte2 = recv(sock, (char*)&packet.msg[rByte], sizeof(char) * packet.ph.len - rByte, 0);
-				if (CheckReturn(iRecvByte2) <= 0)
-				{
-					ErrorMsg();
-					bConnect = false;
-					break;
-				}
-				rByte += iRecvByte2;
-			} while (packet.ph.len > rByte);
-
-			iRecvByte = 0;
-
-			if (bConnect == true)
-			{
-				switch (packet.ph.type)
-				{
-					case PACKET_CHAT_MSG:
-					{
-						BroadCasting(packet.msg);
-						printf("패킷완성%s", packet.msg);
-					}break;
-				}
-			}
-		}
-		Sleep(1);
-	}
-	DelUser(pUser);
-	return 1;
-}
+//DWORD WINAPI ClientThread(LPVOID arg)
+//{
+//	SOCKET sock = (SOCKET)arg;
+//	User* pUser = &g_allUser[sock];
+//	int iRecvByte = 0;
+//	int iRet = 0;
+//	char buffer[BUF_SIZE] = { 0, };
+//	bool bConnect = true;
+//	while (bConnect == true)
+//	{
+//		iRet = recv(sock, &buffer[iRecvByte], sizeof(char) * PACKET_HEADER_SIZE - iRecvByte, 0);
+//		if (CheckReturn(iRet) <= 0)
+//		{
+//			break;
+//		}
+//		iRecvByte += iRet;
+//		if (iRecvByte == PACKET_HEADER_SIZE)
+//		{
+//			UPACKET packet;
+//			ZeroMemory(&packet, sizeof(packet));
+//			memcpy(&packet.ph.len, buffer, sizeof(char) * PACKET_HEADER_SIZE);
+//			int rByte = 0;
+//			do
+//			{
+//				int iRecvByte2 = recv(sock, (char*)&packet.msg[rByte], sizeof(char) * packet.ph.len - rByte, 0);
+//				if (CheckReturn(iRecvByte2) <= 0)
+//				{
+//					ErrorMsg();
+//					bConnect = false;
+//					break;
+//				}
+//				rByte += iRecvByte2;
+//			} while (packet.ph.len > rByte);
+//
+//			iRecvByte = 0;
+//
+//			if (bConnect == true)
+//			{
+//				switch (packet.ph.type)
+//				{
+//				case PACKET_CHAT_MSG:
+//				{
+//					BroadCasting(packet.msg);
+//					printf("패킷완성%s", packet.msg);
+//				}break;
+//				}
+//			}
+//		}
+//		Sleep(1);
+//	}
+//	DelUser(pUser);
+//	return 1;
+//}
 int SendMsg(SOCKET sock, char* msg, WORD type)
 {
 	UPACKET sendmsg;
 	ZeroMemory(&sendmsg, sizeof(sendmsg));
-	sendmsg.ph.len = strlen(msg);
+	sendmsg.ph.len = static_cast<WORD>(strlen(msg));
 	sendmsg.ph.type = type;
 	memcpy(&sendmsg.msg, msg, strlen(msg));
 	int iSendByte = 0;
@@ -179,7 +175,7 @@ int SendMsg(SOCKET sock, PACKET_HEADER ph, char* msg)
 int SendMsg(SOCKET sock, UPACKET* uPacket)
 {
 	int iSendByte = 0;
-	int iTotalSize = strlen(uPacket->msg) + PACKET_HEADER_SIZE;
+	int iTotalSize = static_cast<int>(strlen(uPacket->msg) + PACKET_HEADER_SIZE);
 	char* pMsg = (char*)&uPacket;
 	int iSend = 0;
 	do
@@ -193,42 +189,32 @@ int SendMsg(SOCKET sock, UPACKET* uPacket)
 	} while (iTotalSize > iSendByte);
 	return uPacket->ph.len + PACKET_HEADER_SIZE;
 }
-void DelUser(User* pUser)
-{
-	printf("\nip:%s, port=%d 나감\n", inet_ntoa(pUser->Addr.sin_addr), ntohs(pUser->Addr.sin_port));
-	//	EnterCriticalSection(&g_crit);
-	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
-	{
-		User_Iter iter = g_allUser.find(pUser->sock);
-		if (iter != g_allUser.end())
-		{
-			g_allUser.erase(iter);
-		}
-	}
-	ReleaseMutex(g_hMutex);
-	//	LeaveCriticalSection(&g_crit);
-}
+//void DelUser(User* pUser)
+//{
+//	printf("\nip:%s, port=%d 나감\n", inet_ntoa(pUser->Addr.sin_addr), ntohs(pUser->Addr.sin_port));
+//	User_Iter iter = g_allUser.find(pUser->sock);
+//	if (iter != g_allUser.end())
+//	{
+//		g_allUser.erase(iter);
+//	}
+//	closesocket(iter->second.sock);
+//}
 int BroadCasting(char * pMsg)
 {
-	//	EnterCriticalSection(&g_crit);
-	DWORD dwRet = WaitForSingleObject(g_hMutex, INFINITE);
 	for (User_Iter iter = g_allUser.begin(); iter != g_allUser.end();)
 	{
-		User * pUser = &iter->second;
-		if (pUser != nullptr)
+		User user = (User)*iter;
+
+		if (SendMsg(user.sock, pMsg, PACKET_CHAT_MSG) <= 0)
 		{
-			if (SendMsg(pUser->sock, pMsg, PACKET_CHAT_MSG) <= 0)
-			{
-				closesocket(pUser->sock);
-				g_allUser.erase(iter++);
-			}
-			else
-			{
-				++iter;
-			}
+			closesocket(user.sock);
+			g_allUser.erase(iter++);
 		}
+		else
+		{
+			++iter;
+		}
+
 	}
-	ReleaseMutex(g_hMutex);
-	//	LeaveCriticalSection(&g_crit);
 	return -1;
 }
