@@ -67,6 +67,14 @@ LRESULT CALLBACK wndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		{
 			if (WSAGETSELECTERROR(lParam))
 			{
+				User::g_sock = wParam;
+				User_Iter iter = std::find_if(g_allUser.begin(), g_allUser.end(), User());
+				if (RecvData(*iter) <= 0)
+				{
+					char ip[512] = { 0, };
+					printf("%s, %d 立辆1\n", inet_ntop(AF_INET, &iter->Addr.sin_addr, ip, sizeof(ip)), ntohs(iter->Addr.sin_port));
+					iter = g_allUser.erase(iter);
+				}
 				closesocket(wParam);
 			}
 			else
@@ -190,84 +198,6 @@ int main(void)
 		DispatchMessage(&msg);
 	}
 
-	//bool bEnding = false;
-	//while (bEnding == false)
-	//{
-	//	User_Iter iter = g_allUser.begin();
-	//	while (iter != g_allUser.end())
-	//	{
-	//		FD_SET(iter->sock, &rSet);
-	//		FD_SET(iter->sock, &wSet);
-	//		FD_SET(iter->sock, &eSet);
-	//		++iter;
-	//	}
-	//	timeval time;
-	//	time.tv_sec = 1;
-	//	time.tv_usec = 0;
-	//	int iValue = select(0, &rSet, &wSet, &eSet, &time);
-	//	if (iValue == SOCKET_ERROR) break;
-	//	if (iValue == 0) {} // timeout
-	//	else
-	//	{
-	//		if (FD_ISSET(Listensock, &rSet))
-	//		{
-	//			User addUser;
-	//			addUser.sock = accept(Listensock, (sockaddr*)&addUser.Addr, &addUser.addrLen);
-	//			char ip[512] = { 0, };
-	//			printf("%s, %d 立加\n", inet_ntop(AF_INET, &addUser.Addr.sin_addr, ip, sizeof(ip)), ntohs(addUser.Addr.sin_port));
-	//			if (addUser.sock == INVALID_SOCKET)
-	//			{
-	//				bEnding = true;
-	//				break;
-	//			}
-	//			AddUser(addUser);
-	//		}
-	//		iter = g_allUser.begin();
-	//		while (iter != g_allUser.end())
-	//		{
-	//			User user = (User)*iter;
-	//			SOCKET sock = user.sock;
-	//			if (FD_ISSET(iter->sock, &rSet))
-	//			{
-	//				if (RecvData(user) <= 0)
-	//				{
-	//					char ip[512] = { 0, };
-	//					printf("%s, %d 立辆1\n", inet_ntop(AF_INET, &user.Addr.sin_addr, ip, sizeof(ip)), ntohs(user.Addr.sin_port));
-	//					iter = g_allUser.erase(iter);
-	//					continue;
-	//				}
-	//			}
-	//			if (FD_ISSET(sock, &wSet))
-	//			{
-	//				int kkk = 0;
-	//			}
-	//			if (FD_ISSET(sock, &eSet))
-	//			{
-	//				char ip[512] = { 0, };
-	//				printf("%s, %d 立辆2\n", inet_ntop(AF_INET, &user.Addr.sin_addr, ip, sizeof(ip)), ntohs(user.Addr.sin_port));
-	//				closesocket(iter->sock);
-	//				iter = g_allUser.erase(iter);
-	//				continue;
-	//			}
-	//			++iter;
-	//		}
-	//	}
-	//}
-
-	//SOCKET client;
-	//SOCKADDR_IN clientaddr;
-	//int AddrLen = sizeof(clientaddr);
-	//client = accept(Listensock, (sockaddr*)&clientaddr, &AddrLen);
-	//if (client != SOCKET_ERROR)
-	//{
-	//	User user;
-	//	user.sock = client;
-	//	user.Addr = clientaddr;
-	//	AddUser(user);
-	//	printf("%s, %d\n", inet_ntop(AF_INET, &clientaddr.sin_addr, ip, sizeof(ip)), ntohs(clientaddr.sin_port));
-	//	DWORD threadID;
-	//	HANDLE hThread = CreateThread(0, 0, ClientThread, (LPVOID)g_allUser[user.sock], 0, &threadID);
-	//}
 	closesocket(Listensock);
 	if (EndWinSock() == false)
 	{
