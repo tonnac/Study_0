@@ -33,7 +33,6 @@ wChar_Ptr GetM2W(const char* data)
 	CopyMemory(pData, cData, iLength);
 	return lData;
 }
-
 std::string w2m(std::wstring& data)
 {
 	std::string ret = std::string(data.begin(), data.end());
@@ -163,7 +162,7 @@ int main(void)
 			if (ret == TRUE)
 			{
 				QueryPerformanceCounter(&Frequency2);
-				printf("\nfinish time %4f", (Frequency2.LowPart - Frequency1.LowPart) / (float)Frequency.LowPart);
+				printf("\nfinish time %4f.", (Frequency2.LowPart - Frequency1.LowPart) / (float)Frequency.LowPart);
 				break;
 			}
 			else
