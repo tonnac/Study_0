@@ -18,6 +18,7 @@ public:
 	char		m_szReadBuffer[MAX_READ_SIZE];
 	OVERLAPPED	m_hReadOV;
 	OVERLAPPED	m_hWriteOV;
+	bool		m_bEnd;
 public:
 	void Init();
 	void Frame();
@@ -42,11 +43,12 @@ public:
 
 void Iocp::Init()
 {
+	m_bEnd = false;
 	m_hEventKillThread = ::CreateEvent(NULL, TRUE, FALSE, L"KillThread");
 	::ResetEvent(m_hEventKillThread);
 
 	m_hFileRead = CreateFile(
-	L"aaa.zip", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
+	L"Momodora.zip", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
 	m_hFileWrite = CreateFile(
 	L"copy.zip", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
 
@@ -112,6 +114,11 @@ bool Iocp::DispatchWrite(DWORD dwTransfer)
 	data.QuadPart = dwTransfer;
 	m_hWriteOV.Offset += data.LowPart;
 	m_hWriteOV.OffsetHigh += data.HighPart;
+
+	if (m_bEnd == true && dwTransfer < MAX_READ_SIZE)
+	{
+		::SetEvent(m_hEventKillThread);
+	}
 	return true;
 }
 DWORD WINAPI Iocp::WorkerThread(LPVOID arg)
@@ -146,6 +153,12 @@ DWORD WINAPI Iocp::WorkerThread(LPVOID arg)
 			{
 				continue;
 			}
+			if (GetLastError() == ERROR_HANDLE_EOF)
+			{
+				iocp->m_bEnd = true;
+				continue;
+
+			}
 			// Error ºÎºÐ
 		}
 	}
@@ -156,6 +169,6 @@ int main()
 	Iocp iocp;
 	iocp.Init();
 	iocp.Frame();
-		
+
 	return 0;
 }
