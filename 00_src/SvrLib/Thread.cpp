@@ -18,6 +18,7 @@ unsigned int WINAPI Thread::HandleRunner(LPVOID Param)
 
 Thread::Thread()
 {
+	CreateThread();
 }
 Thread::~Thread()
 {

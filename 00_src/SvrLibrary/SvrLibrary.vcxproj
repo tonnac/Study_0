@@ -87,7 +87,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -99,8 +99,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>copy "*.h" "$(SolutionDir)../Svr/include"
-copy "$(TargetDir)$(TargetName)$(TargetExt)" "$(SolutionDir)../Svr/lib"</Command>
+      <Command>copy "*.h" "$(SolutionDir)../include/Svr/"
+copy "$(TargetDir)$(TargetName)$(TargetExt)" "$(SolutionDir)../lib/Svr/"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -154,25 +154,20 @@ copy "$(TargetDir)$(TargetName)$(TargetExt)" "$(SolutionDir)../Svr/lib"</Command
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="abcde.h" />
     <ClInclude Include="Accept.h" />
     <ClInclude Include="Network.h" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="SvrObject.h" />
-    <ClInclude Include="Synchronize.h" />
-    <ClInclude Include="targetver.h" />
+    <ClInclude Include="SvrUtil.h" />
+    <ClInclude Include="Syncc.h" />
     <ClInclude Include="Thread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="abcde.cpp" />
     <ClCompile Include="Accept.cpp" />
     <ClCompile Include="Network.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="SvrObject.cpp" />
-    <ClCompile Include="Synchronize.cpp" />
+    <ClCompile Include="Syncc.cpp" />
     <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

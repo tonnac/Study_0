@@ -155,7 +155,7 @@ DWORD WINAPI Iocp::WorkerThread(LPVOID arg)
 			}
 			if (GetLastError() == ERROR_HANDLE_EOF)
 			{
-				iocp->m_bEnd = true;
+				::SetEvent(iocp->m_hEventKillThread);
 				continue;
 
 			}

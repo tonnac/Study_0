@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Thread.h">
+    <ClInclude Include="Syncc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SvrObject.h">
+    <ClInclude Include="Thread.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Accept.h">
@@ -27,21 +27,15 @@
     <ClInclude Include="Network.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SvrObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="SvrUtil.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Syncc.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="abcde.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Thread.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SvrObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Accept.cpp">
@@ -50,10 +44,10 @@
     <ClCompile Include="Network.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Syncc.cpp">
+    <ClCompile Include="SvrObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="abcde.cpp">
+    <ClCompile Include="Syncc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

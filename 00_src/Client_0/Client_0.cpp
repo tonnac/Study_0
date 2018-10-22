@@ -4,11 +4,8 @@
 
 #pragma comment(lib,"ws2_32.lib")
 
-int main(int argc, char* argv[])
+int main(void)
 {
-	const u_short port = atoi(argv[1]);
-	const char* IPAddr = argv[2];
-
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
@@ -25,7 +22,7 @@ int main(int argc, char* argv[])
 	ZeroMemory(&addr, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
-	addr.sin_port = htons(10000);
+	addr.sin_port = htons(10001);
 
 	int ret;
 	ret = connect(sock, (sockaddr*)&addr, sizeof(addr));

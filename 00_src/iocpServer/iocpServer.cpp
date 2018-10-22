@@ -35,7 +35,7 @@ HANDLE m_hWorkThread[MAX_WORK_THREAD];
 
 int main()
 {
-	const u_short port = 10000;
+	const u_short port = 10001;
 	const char IPAddr[] = "127.0.0.1";
 	BeginWinSock();
 
@@ -136,7 +136,19 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 			}
 			else
 			{
+				DWORD trans = 0, flag = 0;
+				int iRet = WSARecv(pUser->sock, &pUser->buffer, 1, &trans, &flag, (LPOVERLAPPED)&pUser->ov, NULL);
+				if (iRet == SOCKET_ERROR || iRet == -1)
+				{
+					if (WSAGetLastError() != WSA_IO_PENDING)
+					{
 
+					}
+				}
+				else
+				{
+					ovex->flag = RECV;
+				}
 			}
 			
 			//	if (keyValue == (ULONG_PTR)iocp->m_hFileRead)

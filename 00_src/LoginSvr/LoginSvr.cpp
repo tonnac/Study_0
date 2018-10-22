@@ -1,33 +1,19 @@
-#include "stdafx.h"
-#include "Accept.h"
-#include "Synchronize.h"
+#include "LoginSvr.h"
 
-class LoginSvr : public Thread
-{
-public:
-	void Run() override;
-	void Frame()
-	{
-		while (1)
-		{
-		}
-	}
-};
 
 void LoginSvr::Run()
 {
 	while (1)
 	{
-		Synchronize sync(this);
+		int a = 5;
 	}
-	int kkk = 0;
 }
 
 int main()
 {
 	LoginSvr Svr;
 
-	Svr.Frame();
+	Svr.Run();
 
 	return 0;
 }
