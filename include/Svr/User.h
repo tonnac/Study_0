@@ -1,6 +1,6 @@
 #pragma once
-#include "SvrStd.h"
-#include "SvrObject.h"
+#include "StreamPacket.h"
+#include "Thread.h"
 
 typedef struct _OVERLAPPED_EX : public OVERLAPPED
 {
@@ -16,6 +16,7 @@ public:
 	WSABUF			m_wsaBuffer;
 	char			m_strBuffer[BUF_SIZE];
 	OVERLAPPED_EX	m_oV;
+	StreamPacket	m_StreamPack;
 public:
 	void Dispatch(DWORD bytes, LPOVERLAPPED_EX ovex);
 	void RecvData();
@@ -27,12 +28,16 @@ public:
 	virtual ~User();
 };
 
-class UserManager : public Singleton<UserManager>, public SvrObject
+class UserManager : public Singleton<UserManager>, public Thread
 {
 	friend class Singleton<UserManager>;
 private:
 	UserManager();
 public:
+	StreamPacket m_PacketList;
+	void AddPacket(T_PACKET pack);
+public:
+	void Run() override;
 	User* getUser();
 	User* AddUser(SOCKET clientSock, SOCKADDR_IN clientAddr);
 	bool DelUser(SOCKET clientSock);
