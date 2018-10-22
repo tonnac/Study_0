@@ -156,7 +156,9 @@ copy "$(TargetDir)/$(TargetName)$(TargetExt)" "$(SolutionDir)../lib/Svr/"</Comma
     <ClInclude Include="Accept.h" />
     <ClInclude Include="LogError.h" />
     <ClInclude Include="Network.h" />
+    <ClInclude Include="Protocol.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreamPacket.h" />
     <ClInclude Include="SvrIOCP.h" />
     <ClInclude Include="SvrObject.h" />
     <ClInclude Include="SvrStd.h" />
@@ -176,6 +178,7 @@ copy "$(TargetDir)/$(TargetName)$(TargetExt)" "$(SolutionDir)../lib/Svr/"</Comma
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="StreamPacket.cpp" />
     <ClCompile Include="SvrIOCP.cpp" />
     <ClCompile Include="SvrObject.cpp" />
     <ClCompile Include="Synchronize.cpp" />

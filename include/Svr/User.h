@@ -2,11 +2,24 @@
 #include "SvrStd.h"
 #include "SvrObject.h"
 
-class User
+typedef struct _OVERLAPPED_EX : public OVERLAPPED
+{
+	enum { MODE_RECV = 0, MODE_SEND = 1 };
+	int m_iFlags;
+} OVERLAPPED_EX, *LPOVERLAPPED_EX;
+
+class User : public SvrObject
 {
 public:
-	SOCKET m_Sock;
-	SOCKADDR_IN m_Addr;
+	SOCKET			m_Sock;
+	SOCKADDR_IN		m_Addr;
+	WSABUF			m_wsaBuffer;
+	char			m_strBuffer[BUF_SIZE];
+	OVERLAPPED_EX	m_oV;
+public:
+	void Dispatch(DWORD bytes, LPOVERLAPPED_EX ovex);
+	void RecvData();
+	void SendData();
 public:
 	User();
 	User(SOCKET Sock, SOCKADDR_IN Addr);
@@ -21,7 +34,7 @@ private:
 	UserManager();
 public:
 	User* getUser();
-	bool AddUser(SOCKET clientSock, SOCKADDR_IN clientAddr);
+	User* AddUser(SOCKET clientSock, SOCKADDR_IN clientAddr);
 	bool DelUser(SOCKET clientSock);
 public:
 	std::list<User*> m_UserList;

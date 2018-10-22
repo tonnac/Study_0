@@ -3,6 +3,24 @@
 #include "Synchronize.h"
 #include "LogError.h"
 
+void User::Dispatch(DWORD bytes, LPOVERLAPPED_EX ovex)
+{
+	{
+		Synchronize sync(this);
+		if (ovex->m_iFlags == OVERLAPPED_EX::MODE_RECV)
+		{
+			// 메모리에 받은 데이터가 있다.
+			// 패킷처리 -> 패킷 완성 -> 패킷 풀에 저장.
+			m_StreamPack.Put(m_strBuffer, bytes, this);
+			RecvData();
+		}
+		else
+		{
+			SendData();
+		}
+	}
+}
+
 void User::RecvData()
 {
 	DWORD Transfer, flags = 0;
@@ -15,6 +33,10 @@ void User::RecvData()
 			I_LOG.T_ERROR();
 		}
 	}
+}
+void User::SendData()
+{
+
 }
 
 User::User()
@@ -38,6 +60,36 @@ User::~User()
 	m_wsaBuffer.len = BUF_SIZE;
 }
 
+void UserManager::AddPacket(T_PACKET pack)
+{
+	{
+		Synchronize sync(this);
+		m_PacketList.m_packetList.push_back(pack);
+	}
+}
+void UserManager::Run()
+{
+	{
+		std::list<T_PACKET>::iterator iter;
+		Synchronize sync(this);
+		for (iter = m_PacketList.m_packetList.begin(); iter != m_PacketList.m_packetList.end(); ++iter)
+		{
+			LPT_PACKET pData = &(*iter);
+			LPUPACKET pPacket = &pData->packet;
+			switch (pPacket->ph.type)
+			{
+				case PACKET_CHAT_MSG:
+				{
+
+				}break;
+				default:
+				{
+
+				}break;
+			}
+		}
+	}
+}
 User* UserManager::getUser()
 {
 	User * pUser = new User;
