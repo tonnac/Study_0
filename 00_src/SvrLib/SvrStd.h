@@ -1,11 +1,4 @@
 #pragma once
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <process.h>
-#include <Windows.h>
-
-#pragma comment(lib, "SvrLib")
-#pragma comment(lib, "ws2_32")
 
 #ifndef ExptSocketError
 #define ExptSocketError(x)			\
@@ -17,3 +10,16 @@
 	}								\
 }
 #endif
+
+template <typename X>
+class Singleton
+{
+protected:
+	Singleton();
+public:
+	static X& getInst()
+	{
+		static X inst;
+		return inst;
+	}
+};

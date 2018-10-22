@@ -1,6 +1,4 @@
-#include "stdafx.h"
 #include "Network.h"
-#include "SvrStd.h"
 
 bool Network::Set(const u_short port, const char* address)
 {
@@ -11,6 +9,7 @@ bool Network::Set(const u_short port, const char* address)
 	{
 		return false;
 	}
+
 	SOCKADDR_IN servAdr;
 	ZeroMemory(&servAdr, sizeof(servAdr));
 	servAdr.sin_family = AF_INET;

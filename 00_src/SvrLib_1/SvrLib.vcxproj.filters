@@ -13,15 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="IOCP">
-      <UniqueIdentifier>{7f6a0e19-ed71-4bd1-b082-99db02cdc326}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Syncc.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Thread.h">
@@ -36,29 +30,11 @@
     <ClInclude Include="SvrObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Synchronize.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SvrStd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="SvrIOCP.h">
-      <Filter>IOCP</Filter>
-    </ClInclude>
-    <ClInclude Include="WorkThread.h">
-      <Filter>IOCP</Filter>
-    </ClInclude>
-    <ClInclude Include="LogError.h">
+    <ClInclude Include="SvrUtil.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Thread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -71,19 +47,7 @@
     <ClCompile Include="SvrObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Synchronize.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="User.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SvrIOCP.cpp">
-      <Filter>IOCP</Filter>
-    </ClCompile>
-    <ClCompile Include="WorkThread.cpp">
-      <Filter>IOCP</Filter>
-    </ClCompile>
-    <ClCompile Include="LogError.cpp">
+    <ClCompile Include="Syncc.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,4 @@
 #pragma once
-#include "SvrUtil.h"
 class SvrObject
 {
 public:

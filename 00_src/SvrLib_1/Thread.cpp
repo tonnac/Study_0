@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Thread.h"
 
 void Thread::CreateThread()
