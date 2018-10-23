@@ -20,5 +20,4 @@ bool SvrIOCP::Init()
 void SvrIOCP::Add(HANDLE sock, ULONG_PTR Key)
 {
 	CreateIoCompletionPort(sock, m_hIOCP, Key, WORKER_THREAD_COUNT);
-
 }

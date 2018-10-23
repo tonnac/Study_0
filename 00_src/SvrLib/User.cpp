@@ -56,8 +56,6 @@ User::User(const User& user) : m_Sock(user.m_Sock), m_Addr(user.m_Addr)
 }
 User::~User()
 {
-	m_wsaBuffer.buf = m_strBuffer;
-	m_wsaBuffer.len = BUF_SIZE;
 }
 
 void UserManager::AddPacket(T_PACKET pack)
@@ -80,7 +78,7 @@ void UserManager::Run()
 			{
 				case PACKET_CHAT_MSG:
 				{
-
+					
 				}break;
 				default:
 				{
