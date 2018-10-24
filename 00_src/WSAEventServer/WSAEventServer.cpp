@@ -12,7 +12,7 @@ void DelSock(const int& idx, const int& socknum);
 
 int main(void)
 {
-	const u_short port = 12345;
+	const u_short port = 12346;
 	WSADATA wsaData;
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 
@@ -32,64 +32,77 @@ int main(void)
 	servAdr.sin_port = htons(port);
 	servAdr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	bind(hServSock, (SOCKADDR*)&servAdr, sizeof(servAdr));
-	listen(hServSock, SOMAXCONN);
+	int iRet;
+	iRet = bind(hServSock, (SOCKADDR*)&servAdr, sizeof(servAdr));
+	iRet = listen(hServSock, SOMAXCONN);
 
 	wEvent = WSACreateEvent();
 	hEventArr[numofSock] = wEvent;
 	hSockArr[numofSock] = hServSock;
+	WSAEventSelect(hServSock, wEvent, FD_ACCEPT);
 	++numofSock;
 
 	while (1)
 	{
-		int idx = WSAWaitForMultipleEvents(numofSock, hEventArr, TRUE, INFINITE, FALSE);
+		int idx = WSAWaitForMultipleEvents(numofSock, hEventArr, FALSE, WSA_INFINITE, FALSE);
 		int startidx = idx - WSA_WAIT_EVENT_0;
 
 		for (i = startidx; i < numofSock; ++i)
 		{
-			int sigeventIdx = WSAWaitForMultipleEvents(1, hEventArr, FALSE, 0, FALSE);
-			WSANETWORKEVENTS netevent;
-			WSAEnumNetworkEvents(hSockArr[sigeventIdx], hEventArr[sigeventIdx], &netevent);
-			if (netevent.lNetworkEvents & FD_ACCEPT)
+			int sigeventIdx = WSAWaitForMultipleEvents(1, &hEventArr[i], FALSE, NULL, FALSE);
+			if (sigeventIdx == WSA_WAIT_TIMEOUT || sigeventIdx == WSA_WAIT_FAILED)
 			{
-				if (netevent.iErrorCode[FD_ACCEPT_BIT] != 0)
-				{
-					std::cout << "Accept Error" << std::endl;
-					exit(-1);
-				}
-				hclntSock = accept(hServSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
-				if (hclntSock == INVALID_SOCKET)
-				{
-					std::cout << "accept Error" << std::endl;
-					break;
-				}
-				wEvent = WSACreateEvent();
-				char IPAddr[INET_ADDRSTRLEN];
-				InetNtopA(AF_INET, &clntAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
-				std::cout << "Client Connected IP : " << IPAddr << " Port : " << ntohs(clntAdr.sin_port) << std::endl;
-				hEventArr[numofSock] = wEvent;
-				hSockArr[numofSock] = hclntSock;
-				++numofSock;
+				continue;
 			}
-			if (netevent.lNetworkEvents & FD_READ)
+			else
 			{
-				if (netevent.iErrorCode[FD_READ_BIT] != 0)
+				sigeventIdx = i;
+				WSANETWORKEVENTS netevent;
+				WSAEnumNetworkEvents(hSockArr[sigeventIdx], hEventArr[sigeventIdx], &netevent);
+				if (netevent.lNetworkEvents & FD_ACCEPT)
 				{
-					std::cout << "Read Error" << std::endl;
-					exit(-1);
+					if (netevent.iErrorCode[FD_ACCEPT_BIT] != 0)
+					{
+						std::cout << "Accept Error" << std::endl;
+						exit(-1);
+					}
+					hclntSock = accept(hServSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
+					if (hclntSock == INVALID_SOCKET)
+					{
+						std::cout << "accept Error" << std::endl;
+						break;
+					}
+					wEvent = WSACreateEvent();
+					char IPAddr[INET_ADDRSTRLEN];
+					InetNtopA(AF_INET, &clntAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
+					std::cout << "Client Connected IP : " << IPAddr << " Port : " << ntohs(clntAdr.sin_port) << std::endl;
+					hEventArr[numofSock] = wEvent;
+					hSockArr[numofSock] = hclntSock;
+					WSAEventSelect(hclntSock, wEvent, FD_READ | FD_CLOSE);
+					++numofSock;
 				}
-				int RecvByte = recv(hSockArr[sigeventIdx], buf, BUF_SZ, 0);
-				send(hSockArr[sigeventIdx], buf, RecvByte, 0);
-			}
-			if (netevent.lNetworkEvents & FD_CLOSE)
-			{
-				if (netevent.iErrorCode[FD_CLOSE_BIT] != 0)
+				if (netevent.lNetworkEvents & FD_READ)
 				{
-					std::cout << "Close Error" << std::endl;
-					exit(-1);
+					if (netevent.iErrorCode[FD_READ_BIT] != 0)
+					{
+						std::cout << "Read Error" << std::endl;
+						exit(-1);
+					}
+					int RecvByte = recv(hSockArr[sigeventIdx], buf, BUF_SZ, 0);
+					send(hSockArr[sigeventIdx], buf, RecvByte, 0);
 				}
-				--numofSock;
-				DelSock(sigeventIdx, numofSock);
+				if (netevent.lNetworkEvents & FD_CLOSE)
+				{
+					if (netevent.iErrorCode[FD_CLOSE_BIT] != 0)
+					{
+						std::cout << "Close Error" << std::endl;
+					}
+					WSACloseEvent(hEventArr[numofSock]);
+					closesocket(hSockArr[numofSock]);
+
+					--numofSock;
+					DelSock(sigeventIdx, numofSock);
+				}
 			}
 		}
 	}

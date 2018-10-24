@@ -16,6 +16,8 @@ int main()
 {
 	map<int, a> pe;
 	a ee;
+	void * ptr = &ee.b;
+	void * ptr2 = &ee;
 	pe.insert(make_pair(1, ee));
 
 	LPVOID lll = &pe[1];
