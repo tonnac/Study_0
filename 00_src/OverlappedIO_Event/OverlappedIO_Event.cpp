@@ -1,6 +1,7 @@
 #include <iostream>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include <process.h>
 
 #pragma comment(lib, "ws2_32")
 #define BUF_SZ 1024
@@ -27,7 +28,7 @@ LPSOCK_INFO SockArr[WSA_MAXIMUM_WAIT_EVENTS];
 WSAEVENT EventArr[WSA_MAXIMUM_WAIT_EVENTS];
 CRITICAL_SECTION cs;
 
-DWORD WINAPI WorkerThread(LPVOID arg);
+UINT WINAPI WorkerThread(LPVOID arg);
 
 BOOL AddSocketInfo(const SOCKET& sock, const SOCKADDR_IN& sockAdr);
 void RemoveSocketInfo(const int& nIndex);
@@ -57,6 +58,8 @@ int main(void)
 	iRet = bind(hServSock, (SOCKADDR*)&servAdr, sizeof(servAdr));
 	iRet = listen(hServSock, SOMAXCONN);
 
+	_beginthreadex(NULL, 0, WorkerThread, NULL, 0, NULL);
+
 	while (1)
 	{
 		ZeroMemory(&clntAdr, sizeof(clntAdr));
@@ -82,7 +85,7 @@ int main(void)
 	return 0;
 }
 
-DWORD WINAPI WorkerThread(LPVOID arg)
+UINT WINAPI WorkerThread(LPVOID arg)
 {
 	int retval;
 	while (1)
@@ -104,19 +107,60 @@ DWORD WINAPI WorkerThread(LPVOID arg)
 		if (retval == FALSE || cbTrans == 0)
 		{
 			RemoveSocketInfo(index);
-			std::cout << "Disconnected IP : " << IPAddr << "Port : " << ntohs(clntAdr.sin_port) << std::endl;
+			std::cout << "Disconnected IP : " << IPAddr << ", Port : " << ntohs(clntAdr.sin_port) << std::endl;
 			continue;
 		}
 
 		if (lpSockinfo->recvBytes == 0)
 		{
 			lpSockinfo->recvBytes = cbTrans;
+			lpSockinfo->sendBytes = 0;
 
+			std::cout << "IP : " << IPAddr << ", Port : " << ntohs(clntAdr.sin_port) << " : " << lpSockinfo->buf;
+		}
+		else
+		{
+			lpSockinfo->sendBytes += cbTrans;
+		}
+
+		if (lpSockinfo->recvBytes > lpSockinfo->sendBytes)
+		{
+			ZeroMemory(&lpSockinfo->Overlapped, sizeof(OVERLAPPED));
+			lpSockinfo->Overlapped.hEvent = EventArr[index];
+			lpSockinfo->wsabuf.buf = lpSockinfo->buf + lpSockinfo->sendBytes;
+			lpSockinfo->wsabuf.len = lpSockinfo->recvBytes - lpSockinfo->sendBytes;
+
+			DWORD SendBytes;
+			retval = WSASend(lpSockinfo->sock, &lpSockinfo->wsabuf, 1, &SendBytes, 0, &lpSockinfo->Overlapped, NULL);
+			if (retval == SOCKET_ERROR)
+			{
+				if (WSAGetLastError() == WSA_IO_PENDING)
+				{
+					continue;
+				}
+			}
+		}
+		else
+		{
+			lpSockinfo->recvBytes = 0;
+
+			ZeroMemory(&lpSockinfo->Overlapped, sizeof(OVERLAPPED));
+			lpSockinfo->Overlapped.hEvent = EventArr[index];
+			lpSockinfo->wsabuf.buf = lpSockinfo->buf;
+			lpSockinfo->wsabuf.len = BUF_SZ;
+			
+			DWORD recvBytes, flaginfo = 0;
+			retval = WSARecv(lpSockinfo->sock, &lpSockinfo->wsabuf, 1, &recvBytes, &flaginfo, &lpSockinfo->Overlapped, NULL);
+			if (retval == SOCKET_ERROR)
+			{
+				if (WSAGetLastError() == WSA_IO_PENDING)
+				{
+					continue;
+				}
+			}
 		}
 
 	}
-
-
 	return 1;
 }
 

@@ -8,11 +8,14 @@
 
 #define BUF_SZ 512
 UINT WINAPI ThreadFunc(LPVOID arg);
-HANDLE g_Event;
+BOOL Quit;
+char buf[BUF_SZ];
+
+void CALLBACK CompRoutine(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
 
 int main()
 {
-	g_Event = CreateEvent(NULL, TRUE, FALSE, NULL);
+	Quit = FALSE;
 	const u_short port = 12346;
 	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
 	SOCKET hSock;
@@ -28,24 +31,36 @@ int main()
 	sockAdr.sin_port = htons(port);
 	InetPtonA(AF_INET, IPAddr, &sockAdr.sin_addr);
 
+	WSAOVERLAPPED wsaOverlapped;
+	WSABUF wsaBuf;
+	wsaBuf.buf = buf;
+	wsaBuf.len = BUF_SZ;
+	ZeroMemory(&wsaOverlapped, sizeof(WSAOVERLAPPED));
+	wsaOverlapped.hEvent = &wsaBuf;
 	connect(hSock, (SOCKADDR*)&sockAdr, sizeof(sockAdr));
 	HANDLE ThreadHandle = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, (LPVOID)hSock, 0, NULL);
 	DWORD dwRet;
 	do
 	{
-		int RecvByte;
-		char buf[BUF_SZ];
-		RecvByte = recv(hSock, buf, BUF_SZ, 0);
-		if (RecvByte == SOCKET_ERROR)
+		SleepEx(100, TRUE);
+		DWORD recvBytes, flaginfo = 0;
+		int retval;
+		retval = WSARecv(hSock, &wsaBuf, 1, &recvBytes, &flaginfo, &wsaOverlapped, CompRoutine);
+		if (retval == SOCKET_ERROR)
 		{
-			SetEvent(g_Event);
-			std::cout << "Disconnected Server" << std::endl;
-			break;
+			if (WSAGetLastError() == WSA_IO_PENDING)
+			{
+				continue;
+			}
 		}
-		std::cout << "Receive Message : " << buf;
-		dwRet = WaitForSingleObject(ThreadHandle, NULL);
-	} while (dwRet != WAIT_OBJECT_0);
+	} while (Quit != TRUE);
 
+	dwRet = WaitForSingleObject(ThreadHandle, INFINITE);
+	if (dwRet == WAIT_FAILED)
+	{
+		std::cout << "Thread Error" << std::endl;
+		return -1;
+	}
 
 
 	return 0;
@@ -54,17 +69,36 @@ int main()
 UINT WINAPI ThreadFunc(LPVOID arg)
 {
 	SOCKET hSock = (SOCKET)arg;
-	DWORD dwRet;
 	do
 	{
 		char buf[BUF_SZ];
 		fgets(buf, BUF_SZ, stdin);
 		if (_stricmp(buf, "q\n") == 0)
 		{
-			break;
+			Quit = TRUE;
+			continue;
 		}
 		int SentByte = send(hSock, buf, strlen(buf) + 1, 0);
-		dwRet = WaitForSingleObject(g_Event, NULL);
-	} while (dwRet != WAIT_OBJECT_0);
+	} while (Quit != TRUE);
 	return 1;
+}
+
+void CALLBACK CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlapped, DWORD flags)
+{
+	if (dwError != 0 || dwByte == 0)
+	{
+		std::cout << "Server Disconnect" << std::endl;
+		Quit = TRUE;
+		return;
+	}
+	HANDLE bufhandle = lpOverlapped->hEvent;
+	WSABUF wsaBuf = *((LPWSABUF)lpOverlapped->hEvent);
+
+	std::cout << "Received Message : " << wsaBuf.buf;
+
+	ZeroMemory(lpOverlapped, sizeof(WSAOVERLAPPED));
+	wsaBuf.buf = buf;
+	wsaBuf.len = BUF_SZ;
+	lpOverlapped->hEvent = bufhandle;
+
 }

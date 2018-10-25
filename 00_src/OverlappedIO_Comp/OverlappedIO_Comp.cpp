@@ -83,24 +83,24 @@ void CALLBACK ReadCompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOve
 	}
 	else
 	{
+		DWORD sendByes;
 		bufInfo->len = dwByte;
-		WSASend(hSock, bufInfo, 1, NULL, 0, lpOverlapped, WriteCompRoutine);
+		WSASend(hSock, bufInfo, 1, &sendByes, 0, lpOverlapped, WriteCompRoutine);
 	}
 }
 void CALLBACK WriteCompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlapped, DWORD flags)
 {
+	HANDLE hbhandle = lpOverlapped->hEvent;
 	LPPER_IO_DATA hbinfo = (LPPER_IO_DATA)lpOverlapped->hEvent;
 	SOCKET hSock = hbinfo->sock;
 	SOCKADDR_IN sockAdr = hbinfo->sockAdr;
 	LPWSABUF bufInfo = &(hbinfo->wsaBuf);
 
-	LPPER_IO_DATA nhbinfo = new PER_IO;
-	nhbinfo->sock = hSock;
-	CopyMemory(&nhbinfo->sockAdr, &sockAdr, sizeof(sockAdr));
-	lpOverlapped->hEvent = (HANDLE)nhbinfo;
-
-	delete hbinfo;
+	ZeroMemory(lpOverlapped, sizeof(OVERLAPPED));
+	hbinfo->wsaBuf.buf = hbinfo->buf;
+	hbinfo->wsaBuf.len = BUF_SZ;
+	lpOverlapped->hEvent = hbhandle;
 
 	DWORD recvByte, flaginfo = 0;
-	WSARecv(hSock, &nhbinfo->wsaBuf, 1, NULL, &flaginfo, lpOverlapped, ReadCompRoutine);
+	WSARecv(hSock, &hbinfo->wsaBuf, 1, &recvByte, &flaginfo, lpOverlapped, ReadCompRoutine);
 }
