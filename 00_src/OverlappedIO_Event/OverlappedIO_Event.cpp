@@ -159,7 +159,6 @@ UINT WINAPI WorkerThread(LPVOID arg)
 				}
 			}
 		}
-
 	}
 	return 1;
 }

@@ -17,7 +17,7 @@ int main()
 {
 	Quit = FALSE;
 	const u_short port = 12346;
-	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
+	const char IPAddr[INET_ADDRSTRLEN] = "192.168.0.51";
 	SOCKET hSock;
 	SOCKADDR_IN sockAdr;
 	WSADATA wsaData;
@@ -72,13 +72,16 @@ UINT WINAPI ThreadFunc(LPVOID arg)
 	do
 	{
 		char buf[BUF_SZ];
-		fgets(buf, BUF_SZ, stdin);
-		if (_stricmp(buf, "q\n") == 0)
+		if (_kbhit())
 		{
-			Quit = TRUE;
-			continue;
+			fgets(buf, BUF_SZ, stdin);
+			if (_stricmp(buf, "q\n") == 0)
+			{
+				Quit = TRUE;
+				continue;
+			}
+			int SentByte = send(hSock, buf, strlen(buf) + 1, 0);
 		}
-		int SentByte = send(hSock, buf, strlen(buf) + 1, 0);
 	} while (Quit != TRUE);
 	return 1;
 }
@@ -100,5 +103,4 @@ void CALLBACK CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlap
 	wsaBuf.buf = buf;
 	wsaBuf.len = BUF_SZ;
 	lpOverlapped->hEvent = bufhandle;
-
 }

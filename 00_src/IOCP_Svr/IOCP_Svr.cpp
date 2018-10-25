@@ -106,8 +106,8 @@ UINT WINAPI EchoThread(LPVOID arg)
 				if (Bytes == SOCKET_ERROR || Bytes == 0)
 				{
 					char IPAddr[INET_ADDRSTRLEN];
-					InetNtopA(AF_INET, &hbinfo->sockAdr, IPAddr, INET_ADDRSTRLEN);
-					std::cout << "Client Disconnected IP : " << IPAddr << ", Port : " << ntohs(hbinfo->sockAdr.sin_port) << std::endl;
+					InetNtopA(AF_INET, &hbinfo->sockAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
+					std::cout << "Client Disconnected IP : " << IPAddr << " Port : " << ntohs(hbinfo->sockAdr.sin_port) << std::endl;
 					closesocket(hbinfo->sock);
 					delete ioinfo; delete hbinfo;
 				}
@@ -118,15 +118,15 @@ UINT WINAPI EchoThread(LPVOID arg)
 					WSASend(hbinfo->sock, &ioinfo->wsaBuf, 1, &Bytes, 0, &ioinfo->overlapped, NULL);
 				}
 			}break;
-				case IOState::SEND:
-				{
-					DWORD flaginfo = 0;
-					std::cout << "Message Send!" << std::endl;
-					delete ioinfo;
-					LPPER_IO_DATA nioinfo = new PER_IO;
-					WSARecv(hbinfo->sock, &nioinfo->wsaBuf, 1, &Bytes, &flaginfo, &nioinfo->overlapped, NULL);
+			case IOState::SEND:
+			{
+				DWORD flaginfo = 0;
+				std::cout << "Message Send!" << std::endl;
+				delete ioinfo;
+				LPPER_IO_DATA nioinfo = new PER_IO;
+				WSARecv(hbinfo->sock, &nioinfo->wsaBuf, 1, &Bytes, &flaginfo, &nioinfo->overlapped, NULL);
 
-				}break;
+			}break;
 			default:
 				break;
 		}
