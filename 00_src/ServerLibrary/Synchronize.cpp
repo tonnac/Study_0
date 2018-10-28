@@ -1,5 +1,4 @@
 #include "Synchronize.h"
-#include "ServerObj.h"
 
 Synchronize::Synchronize(ServerObj* serverObj) : mServerObj(serverObj)
 {

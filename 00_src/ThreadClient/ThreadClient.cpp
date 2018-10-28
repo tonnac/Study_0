@@ -3,21 +3,30 @@
 #include <WS2tcpip.h>
 #include <process.h>
 #include <conio.h>
+#include <vector>
+#include "Protocol.h"
 
 #pragma comment(lib, "ws2_32")
 
-#define BUF_SZ 512
-UINT WINAPI ThreadFunc(LPVOID arg);
-BOOL Quit;
-char buf[BUF_SZ];
 
+namespace GlobalVal
+{
+	std::vector<UPACKET> packetList;
+	BOOL Quit;
+	char buf[BUF_SZ];
+}
+
+UINT WINAPI ThreadFunc(LPVOID arg);
 void CALLBACK CompRoutine(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
+int SendPacket(SOCKET hLisnSock, char * buffer, int bufferSz);
+void DispatchMsg(DWORD Trans, LPWSAOVERLAPPED lpOverlapped);
+void ProcessPacket();
 
 int main()
 {
-	Quit = FALSE;
-	const u_short port = 12346;
-	const char IPAddr[INET_ADDRSTRLEN] = "192.168.0.51";
+	GlobalVal::Quit = FALSE;
+	const u_short port = 12347;
+	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
 	SOCKET hSock;
 	SOCKADDR_IN sockAdr;
 	WSADATA wsaData;
@@ -33,7 +42,7 @@ int main()
 
 	WSAOVERLAPPED wsaOverlapped;
 	WSABUF wsaBuf;
-	wsaBuf.buf = buf;
+	wsaBuf.buf = GlobalVal::buf;
 	wsaBuf.len = BUF_SZ;
 	ZeroMemory(&wsaOverlapped, sizeof(WSAOVERLAPPED));
 	wsaOverlapped.hEvent = &wsaBuf;
@@ -44,16 +53,21 @@ int main()
 	{
 		SleepEx(100, TRUE);
 		DWORD recvBytes, flaginfo = 0;
+		if (!GlobalVal::packetList.empty())
+		{
+			ProcessPacket();
+		}
 		int retval;
 		retval = WSARecv(hSock, &wsaBuf, 1, &recvBytes, &flaginfo, &wsaOverlapped, CompRoutine);
 		if (retval == SOCKET_ERROR)
 		{
-			if (WSAGetLastError() == WSA_IO_PENDING)
+			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
+				GlobalVal::Quit = TRUE;
 				continue;
 			}
 		}
-	} while (Quit != TRUE);
+	} while (GlobalVal::Quit != TRUE);
 
 	dwRet = WaitForSingleObject(ThreadHandle, INFINITE);
 	if (dwRet == WAIT_FAILED)
@@ -71,36 +85,124 @@ UINT WINAPI ThreadFunc(LPVOID arg)
 	SOCKET hSock = (SOCKET)arg;
 	do
 	{
-		char buf[BUF_SZ];
+		char chatbuf[BUF_SZ];
 		if (_kbhit())
 		{
-			fgets(buf, BUF_SZ, stdin);
-			if (_stricmp(buf, "q\n") == 0)
+			fgets(chatbuf, BUF_SZ, stdin);
+			if (_stricmp(chatbuf, "q\n") == 0)
 			{
-				Quit = TRUE;
+				GlobalVal::Quit = TRUE;
 				continue;
 			}
-			int SentByte = send(hSock, buf, strlen(buf) + 1, 0);
+			int retVal = SendPacket(hSock, chatbuf, (int)strlen(chatbuf) + 1);
 		}
-	} while (Quit != TRUE);
+	} while (GlobalVal::Quit != TRUE);
 	return 1;
 }
 
 void CALLBACK CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlapped, DWORD flags)
 {
-	if (dwError != 0 || dwByte == 0)
+	static int cnt = 0;
+	if (cnt == 0 && (dwError != 0 || dwByte == 0))
 	{
+		++cnt;
 		std::cout << "Server Disconnect" << std::endl;
-		Quit = TRUE;
+		GlobalVal::Quit = TRUE;
 		return;
 	}
 	HANDLE bufhandle = lpOverlapped->hEvent;
-	WSABUF wsaBuf = *((LPWSABUF)lpOverlapped->hEvent);
+	LPWSABUF wsabuf = (LPWSABUF)bufhandle;
 
-	std::cout << "Received Message : " << wsaBuf.buf;
+	DispatchMsg(dwByte, lpOverlapped);
 
+	lpOverlapped->hEvent = nullptr;
 	ZeroMemory(lpOverlapped, sizeof(WSAOVERLAPPED));
-	wsaBuf.buf = buf;
-	wsaBuf.len = BUF_SZ;
 	lpOverlapped->hEvent = bufhandle;
+	int k = 5;
+}
+
+void DispatchMsg(DWORD Trans, LPWSAOVERLAPPED lpOverlapped)
+{
+	static DWORD WritePos = 0;
+	static DWORD ReadPos = 0;
+	static DWORD StartPos = 0;
+	static char Buffer[BUF_SZ * 4] = { 0, };
+
+	if (WritePos + Trans > BUF_SZ * 4)
+	{
+		char temp[BUF_SZ * 4];
+		CopyMemory(temp, &Buffer[StartPos], ReadPos);
+		ZeroMemory(Buffer, BUF_SZ * 4);
+		CopyMemory(Buffer, temp, ReadPos);
+		StartPos = 0;
+		WritePos = ReadPos;
+	}
+
+	LPWSABUF wsaBuf = ((LPWSABUF)lpOverlapped->hEvent);
+	CopyMemory(&Buffer[WritePos], wsaBuf->buf, Trans);
+
+	WritePos += Trans;
+	ReadPos += Trans;
+
+	if (ReadPos < PACKET_HEADER_SIZE) return;
+
+	P_UPACKET Packet = (P_UPACKET)&Buffer[StartPos];
+
+	if (ReadPos >= Packet->ph.len)
+	{
+		do
+		{
+			UPACKET addPacket;
+			CopyMemory(&addPacket, Packet, Packet->ph.len);
+
+			ReadPos -= Packet->ph.len;
+			StartPos += Packet->ph.len;
+
+			GlobalVal::packetList.push_back(addPacket);
+
+			if (ReadPos < PACKET_HEADER_SIZE)
+			{
+				break;
+			}
+
+			Packet = (P_UPACKET)wsaBuf->buf;
+		} while (ReadPos >= Packet->ph.len);
+	}
+}
+void ProcessPacket()
+{
+	std::vector<UPACKET>::iterator iter;
+	for (iter = GlobalVal::packetList.begin(); iter != GlobalVal::packetList.end(); ++iter)
+	{
+		UPACKET packet = ((UPACKET)*iter);
+
+		switch (packet.ph.type)
+		{
+			case PACKET_CHAT_MSG:
+			{
+				std::cout << packet.msg << std::endl;
+			}break;
+		}
+	}
+	GlobalVal::packetList.clear();
+}
+int SendPacket(SOCKET hLisnSock, char * buffer, int bufferSz)
+{
+	UPACKET packet;
+	packet.ph.type = PACKET_CHAT_MSG;
+	packet.ph.len = bufferSz + PACKET_HEADER_SIZE;
+	CopyMemory(packet.msg, buffer, bufferSz);
+	int Sendbyte;
+	int TotalSendbyte = 0;
+	char* SendMsg = (char*)&packet;
+	do
+	{
+		Sendbyte = send(hLisnSock, &SendMsg[TotalSendbyte], packet.ph.len - TotalSendbyte, 0);
+		if (Sendbyte == SOCKET_ERROR || Sendbyte == 0)
+		{
+			return Sendbyte;
+		}
+		TotalSendbyte += Sendbyte;
+	} while (packet.ph.len > TotalSendbyte);
+	return packet.ph.len;
 }

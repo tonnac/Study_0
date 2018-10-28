@@ -69,11 +69,8 @@ DWORD WINAPI SendThread(LPVOID Param)
 	return 1;
 }
 
-int main(int argc, char* argv[])
+int main(void)
 {
-	const u_short port = atoi(argv[1]);
-	const char* IPAddr = argv[2];
-
 	WSADATA wsaData;
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
@@ -89,8 +86,8 @@ int main(int argc, char* argv[])
 	SOCKADDR_IN addr;
 	ZeroMemory(&addr, sizeof(SOCKADDR_IN));
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr("192.168.0.101");
-	addr.sin_port = htons(port);
+	addr.sin_addr.s_addr = inet_addr("219.254.48.7");
+	addr.sin_port = htons(12345);
 
 	int ret;
 	ret = connect(sock, (sockaddr*)&addr, sizeof(addr));

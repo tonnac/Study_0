@@ -1,12 +1,11 @@
 #pragma once
-
-class SvrObject;
+#include "ServerObj.h"
 
 class Synchronize
 {
 public:
-	SvrObject * m_pSvrObj;
-public:
-	Synchronize(SvrObject * pSvrObj);
-	virtual ~Synchronize();
+	Synchronize(ServerObj* serverObj);
+	~Synchronize();
+private:
+	ServerObj * mServerObj;
 };

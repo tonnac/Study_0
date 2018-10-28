@@ -7,14 +7,15 @@ Thread::Thread()
 }
 Thread::~Thread()
 {
-	CloseHandle((HANDLE)mhThread);
+	CloseHandle(mhThread);
 }
 
-void Thread::CreateThread()
+HANDLE Thread::CreateThreadandRun()
 {
-	if (misStart) return;
-	mhThread = _beginthreadex(nullptr, 0, HandleRunner, this, 0, &miThreadID);
+	if (misStart) return nullptr;
+	mhThread = (HANDLE)_beginthreadex(nullptr, 0, HandleRunner, this, 0, &miThreadID);
 	misStart = true;
+	return mhThread;
 }
 bool Thread::Run()
 {

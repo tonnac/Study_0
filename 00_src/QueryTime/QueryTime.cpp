@@ -2,8 +2,10 @@
 #include <cstdint>
 #include <iostream>
 
+
 int main()
 {
+
 	__int64 dl;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&dl);
 	double mTimetick = 1 / (double)dl;

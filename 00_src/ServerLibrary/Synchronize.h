@@ -1,6 +1,5 @@
 #pragma once
-
-class ServerObj;
+#include "ServerObj.h"
 
 class Synchronize
 {

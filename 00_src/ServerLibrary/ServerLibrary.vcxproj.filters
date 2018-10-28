@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\ServerModel">
+      <UniqueIdentifier>{bf189393-6c1d-4ecf-8745-bc8a4f39d399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ServerModel">
+      <UniqueIdentifier>{fb494f09-9c31-46a9-86ab-881bc624756e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SrvUtil.h">
@@ -34,6 +40,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="ServerModel.h">
+      <Filter>헤더 파일\ServerModel</Filter>
+    </ClInclude>
+    <ClInclude Include="IOCP.h">
+      <Filter>헤더 파일\ServerModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StreamPacket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,10 +69,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ServerModel.cpp">
+      <Filter>소스 파일\ServerModel</Filter>
+    </ClCompile>
+    <ClCompile Include="IOCP.cpp">
+      <Filter>소스 파일\ServerModel</Filter>
+    </ClCompile>
+    <ClCompile Include="StreamPacket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

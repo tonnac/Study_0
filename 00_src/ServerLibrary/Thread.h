@@ -7,11 +7,12 @@ public:
 	Thread();
 	virtual ~Thread();
 public:
-	void CreateThread();
-	virtual bool Run();
+	virtual HANDLE CreateThreadandRun();
 	static UINT WINAPI HandleRunner(LPVOID arg);
 protected:
-	UINT mhThread	= 0;
+	virtual bool Run();
+protected:
+	HANDLE mhThread	= 0;
 	UINT miThreadID = 0;
 	bool misStart	= false;
 };

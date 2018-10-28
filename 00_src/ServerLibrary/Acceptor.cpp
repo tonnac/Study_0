@@ -8,10 +8,15 @@ Acceptor::Acceptor(Server * server) : mServer(server)
 }
 Acceptor::~Acceptor()
 {
-	closesocket(mlistenSock);
 }
-
-bool Acceptor::setIPAndPort(u_short port, const TCHAR * IPAddr = nullptr)
+HANDLE Acceptor::CreateThreadandRun()
+{
+	EnterCriticalSection(&SrvUtil::mCs);
+	SrvUtil::mThreadName.push_back("Accept");
+	LeaveCriticalSection(&SrvUtil::mCs);
+	return Thread::CreateThreadandRun();
+}
+bool Acceptor::setIPAndPort(u_short port, const TCHAR * IPAddr)
 {
 	int iRet;
 	mlistenSock = socket(AF_INET, SOCK_STREAM, 0);
@@ -45,12 +50,21 @@ bool Acceptor::setIPAndPort(u_short port, const TCHAR * IPAddr = nullptr)
 		SrvUtil::ErrorMsg(_T("Listen Error"));
 		return false;
 	}
-	CreateThread();
 	return true;
+}
+void Acceptor::Release()
+{
+	closesocket(mlistenSock);
+	EnterCriticalSection(&SrvUtil::mCs);
+	std::vector<std::string>::iterator iter;
+	iter = std::find(SrvUtil::mThreadName.begin(), SrvUtil::mThreadName.end(), std::string("Accept"));
+	if (iter != SrvUtil::mThreadName.end())
+		SrvUtil::mThreadName.erase(iter);
+	LeaveCriticalSection(&SrvUtil::mCs);
+	WaitForSingleObject(mhThread, INFINITE);
 }
 bool Acceptor::Run()
 {
-	int iRet;
 	SOCKET clntSock;
 	SOCKADDR_IN clntAdr;
 	int clntAdrSz = sizeof(clntAdr);
@@ -58,7 +72,7 @@ bool Acceptor::Run()
 	mAcceptEvent = WSACreateEvent();
 	WSAEventSelect(mlistenSock, mAcceptEvent, FD_ACCEPT);
 
-	while (!mServer->isExit())
+	while (!isExit)
 	{
 		DWORD dwRet;
 		dwRet = WSAWaitForMultipleEvents(1, &mAcceptEvent, true, 100, false);
@@ -74,7 +88,11 @@ bool Acceptor::Run()
 			continue;
 		}
 		ZeroMemory(&clntAdr, sizeof(clntAdr));
-		accept(clntSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		clntSock = accept(mlistenSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		if (clntSock == INVALID_SOCKET)
+		{
+			continue;
+		}
 		mServer->AddUser(clntSock, clntAdr);
 	}
 	return true;

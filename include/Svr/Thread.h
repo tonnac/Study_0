@@ -1,16 +1,18 @@
 #pragma once
-#include "SvrObject.h"
+#include "ServerObj.h"
 
-class Thread : public SvrObject
+class Thread : public ServerObj
 {
-public:
-	unsigned int m_hThread;
-	unsigned int m_iThreadID;
-public:
-	void CreateThread();
-	virtual void Run();
-	static unsigned int WINAPI HandleRunner(LPVOID Param);
 public:
 	Thread();
 	virtual ~Thread();
+public:
+	virtual HANDLE CreateThreadandRun();
+	static UINT WINAPI HandleRunner(LPVOID arg);
+protected:
+	virtual bool Run();
+protected:
+	HANDLE mhThread	= 0;
+	UINT miThreadID = 0;
+	bool misStart	= false;
 };
