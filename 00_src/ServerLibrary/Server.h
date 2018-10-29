@@ -25,6 +25,17 @@ struct User
 		mWsaBuf.len = BUF_SZ;
 		mOverlappedex.mioState = IOState::RECV;
 	}
+	User(SOCKET sock, const SOCKADDR_IN& useradr) : mUserSock(sock), mUserAdr(useradr)
+	{
+		ZeroMemory(&mOverlappedex, sizeof(mOverlappedex));
+		mWsaBuf.buf = mBuf;
+		mWsaBuf.len = BUF_SZ;
+		mOverlappedex.mioState = IOState::RECV;
+	}
+	~User()
+	{
+		closesocket(mUserSock);
+	}
 	void Dispatch(DWORD Trans, LPOVERLAPPEDEX lpoverlapped)
 	{
 		if (Trans == 0) return;

@@ -6,7 +6,7 @@ bool isExit = false;
 CRITICAL_SECTION SrvUtil::mCs;
 std::vector<std::string> SrvUtil::mThreadName;
 
-Server::Server() : mAcceptor(this)
+Server::Server()
 {
 
 }
@@ -42,9 +42,7 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 	{
 		WaitForSingleObject(mMutex, INFINITE);
 		Synchronize(this);
-		UserPtr user = std::make_shared<User>();
-		user->mUserSock = clntSock;
-		user->mUserAdr = clntAdr;
+		UserPtr user = std::make_shared<User>(clntSock, clntAdr);
 		mUserList.push_back(user);
 		mServerModel->AddUser(user.get());
 		DWORD Transfer, flag = 0;
@@ -62,7 +60,6 @@ void Server::RemoveUser(User* user)
 			char IPAddr[INET_ADDRSTRLEN];
 			InetNtopA(AF_INET, &user->mUserAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
 			std::cout << "[ID: " << user->mUserID << ", IP: " << IPAddr << ", Port: " << ntohs(user->mUserAdr.sin_port) << "] Disconnect" << std::endl;
-			closesocket((*iter)->mUserSock);
 			mUserList.erase(iter);
 		}
 		ReleaseMutex(mMutex);
@@ -78,9 +75,6 @@ void Server::ProcessPacket()
 		PACKET_ITER iter;
 		for (iter = mStreamPacket.PacketBegin(); iter != mStreamPacket.PacketEnd(); ++iter)
 		{
-			UPACKET PacketMsg;
-			ZeroMemory(&PacketMsg, sizeof(PacketMsg));
-
 			LPTPACKET tPacket = &(*iter);
 			UPACKET* pPacket = &(tPacket->mPacket);
 

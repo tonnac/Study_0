@@ -1,12 +1,10 @@
 #pragma once
 #include "Thread.h"
 
-class Server;
-
 class Acceptor : public Thread
 {
 public:
-	Acceptor(Server * server);
+	Acceptor();
 	virtual ~Acceptor();
 public:
 	HANDLE CreateThreadandRun() override;
@@ -17,5 +15,4 @@ private:
 private:
 	WSAEVENT mAcceptEvent;
 	SOCKET mlistenSock;
-	Server* mServer;
 };

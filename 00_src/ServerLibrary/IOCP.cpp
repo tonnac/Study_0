@@ -1,6 +1,20 @@
 #include "IOCP.h"
 #include "Server.h"
 
+WorkerThread::WorkerThread()
+{
+
+}
+WorkerThread::~WorkerThread()
+{
+	EnterCriticalSection(&SrvUtil::mCs);
+	std::vector<std::string>::iterator iter;
+	iter = std::find(SrvUtil::mThreadName.begin(), SrvUtil::mThreadName.end(), std::string("WorkerThread"));
+	if (iter != SrvUtil::mThreadName.end())
+		SrvUtil::mThreadName.erase(iter);
+	LeaveCriticalSection(&SrvUtil::mCs);
+}
+
 HANDLE WorkerThread::CreateThreadandRun()
 {
 	EnterCriticalSection(&SrvUtil::mCs);
@@ -94,4 +108,5 @@ bool IOCP::Run()
 void IOCP::Release()
 {
 	WaitForMultipleObjects(mNumofProcess, miocpThread.mThreadHandle.data(), TRUE, INFINITE);
+	miocpThread.mWorkerthread.clear();
 }

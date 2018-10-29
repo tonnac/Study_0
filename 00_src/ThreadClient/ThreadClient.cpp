@@ -118,7 +118,6 @@ void CALLBACK CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlap
 	lpOverlapped->hEvent = nullptr;
 	ZeroMemory(lpOverlapped, sizeof(WSAOVERLAPPED));
 	lpOverlapped->hEvent = bufhandle;
-	int k = 5;
 }
 
 void DispatchMsg(DWORD Trans, LPWSAOVERLAPPED lpOverlapped)
@@ -126,13 +125,13 @@ void DispatchMsg(DWORD Trans, LPWSAOVERLAPPED lpOverlapped)
 	static DWORD WritePos = 0;
 	static DWORD ReadPos = 0;
 	static DWORD StartPos = 0;
-	static char Buffer[BUF_SZ * 4] = { 0, };
+	static char Buffer[MAX_BUF_SZ] = { 0, };
 
-	if (WritePos + Trans > BUF_SZ * 4)
+	if (WritePos + Trans > MAX_BUF_SZ)
 	{
-		char temp[BUF_SZ * 4];
+		char temp[BUF_SZ];
 		CopyMemory(temp, &Buffer[StartPos], ReadPos);
-		ZeroMemory(Buffer, BUF_SZ * 4);
+		ZeroMemory(Buffer, MAX_BUF_SZ);
 		CopyMemory(Buffer, temp, ReadPos);
 		StartPos = 0;
 		WritePos = ReadPos;

@@ -6,7 +6,10 @@ class Server;
 class WorkerThread : public Thread
 {
 public:
-	virtual HANDLE CreateThreadandRun() override;
+	WorkerThread();
+	virtual ~WorkerThread();
+public:
+	virtual HANDLE  CreateThreadandRun() override;
 	void setHandle(const HANDLE& handle);
 private:
 	bool Run() override;

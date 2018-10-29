@@ -2,7 +2,7 @@
 #include "SrvUtil.h"
 #include "Server.h"
 
-Acceptor::Acceptor(Server * server) : mServer(server)
+Acceptor::Acceptor()
 {
 
 }
@@ -93,7 +93,7 @@ bool Acceptor::Run()
 		{
 			continue;
 		}
-		mServer->AddUser(clntSock, clntAdr);
+		S_Server.AddUser(clntSock, clntAdr);
 	}
 	return true;
 }

@@ -1,7 +1,6 @@
 #pragma once
 #include "Synchronize.h"
 #include "Protocol.h"
-#define MAX_BUF_SZ 10000
 
 struct User;
 

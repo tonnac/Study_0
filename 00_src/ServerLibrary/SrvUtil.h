@@ -20,6 +20,7 @@
 #pragma comment(lib, "ws2_32")
 
 #define BUF_SZ 2048
+#define MAX_BUF_SZ 10000
 
 namespace std
 {
@@ -67,6 +68,7 @@ public:
 	static std::vector<std::string> mThreadName;
 
 	static CRITICAL_SECTION mCs;
+
 };
 
 template <typename X>
