@@ -9,6 +9,23 @@ Acceptor::Acceptor()
 Acceptor::~Acceptor()
 {
 }
+UINT WINAPI Acceptor::AcceptThread(LPVOID arg)
+{
+	User * pUser = (User*)&arg;
+
+	UPACKET upacket;
+	upacket.ph.type = PACKET_CHAT_NAME_ACK;
+	sprintf_s(upacket.msg, sizeof(upacket.msg), "ID를 입력하세요.");
+	upacket.ph.len = PACKET_HEADER_SIZE + (int)strlen(upacket.msg) + 1;
+	BOOL ret = Packet::SendPacket(pUser->mUserSock, upacket);
+	if (ret == FALSE)
+	{
+		return -1;
+	}
+
+
+	return 1;
+}
 HANDLE Acceptor::CreateThreadandRun()
 {
 	EnterCriticalSection(&SrvUtil::mCs);
@@ -93,7 +110,9 @@ bool Acceptor::Run()
 		{
 			continue;
 		}
-		S_Server.AddUser(clntSock, clntAdr);
+		UserPtr adduser = std::make_shared<User>(clntSock, clntAdr);
+		_beginthreadex(nullptr, 0, AcceptThread, (LPVOID)adduser.get(), 0, nullptr);
+	//	S_Server.AddUser(clntSock, clntAdr);
 	}
 	return true;
 }

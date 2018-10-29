@@ -26,7 +26,7 @@ int main()
 {
 	GlobalVal::Quit = FALSE;
 	const u_short port = 12347;
-	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
+	const char IPAddr[INET_ADDRSTRLEN] = "192.168.0.51";
 	SOCKET hSock;
 	SOCKADDR_IN sockAdr;
 	WSADATA wsaData;
