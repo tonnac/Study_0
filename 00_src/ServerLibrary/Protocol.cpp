@@ -1,4 +1,6 @@
-#include "Packet.h"
+#include "Protocol.h"
+
+using namespace PacketUtil;
 
 Packet::Packet(const WORD& type)
 {
@@ -10,6 +12,7 @@ Packet::Packet(const WORD& type)
 Packet::Packet()
 {
 	ZeroMemory(&m_uPacket, sizeof(m_uPacket));
+	m_uPacket.ph.len = PACKET_HEADER_SIZE;
 	m_pOffset = m_uPacket.msg;
 }
 
@@ -21,7 +24,7 @@ void Packet::PutData(const char* pData, int iSize)
 }
 Packet& Packet::operator << (const char* data)
 {
-	int iSize = strlen(data) + 1;
+	int iSize = (int)strlen(data) + 1;
 	PutData(data, iSize);
 	return *this;
 }
@@ -32,7 +35,7 @@ Packet& Packet::operator << (const int& data)
 }
 Packet& Packet::operator << (const std::string& data)
 {
-	PutData(data.c_str(), data.length());
+	PutData(data.c_str(), (int)data.length());
 	return *this;
 }
 
@@ -43,7 +46,7 @@ void Packet::GetData(const char* pData, int iSize)
 }
 Packet& Packet::operator >> (const char* data)
 {
-	int iSize = strlen(m_pOffset) + 1;
+	int iSize = (int)strlen(m_pOffset) + 1;
 	GetData(const_cast<char*>(data), iSize);
 	return *this;
 }
@@ -54,7 +57,7 @@ Packet& Packet::operator >> (const int& data)
 }
 Packet& Packet::operator >> (const std::string& data)
 {
-	int iSize = strlen(m_pOffset) + 1;
+	int iSize = (int)strlen(m_pOffset) + 1;
 	char buffer[256] = { 0, };
 	GetData(buffer, iSize);
 	const_cast<std::string&>(data) = buffer;

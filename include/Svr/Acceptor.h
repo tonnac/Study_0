@@ -7,11 +7,11 @@ public:
 	Acceptor();
 	virtual ~Acceptor();
 public:
-	static UINT WINAPI AcceptThread(LPVOID arg);
 	HANDLE CreateThreadandRun() override;
 	bool setIPAndPort(u_short port, const TCHAR * IPAddr = nullptr);
 	void Release();
 private:
+	bool ClientPermission(const SOCKET& sock, const SOCKADDR_IN& sockAdr);
 	bool Run() override;
 private:
 	WSAEVENT mAcceptEvent;

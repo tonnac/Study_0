@@ -5,15 +5,20 @@
 #include <conio.h>
 #include <vector>
 #include "Protocol.h"
+#include "SrvUtil.h"
 
 #pragma comment(lib, "ws2_32")
 
+using namespace PacketUtil;
 
 namespace GlobalVal
 {
 	std::vector<UPACKET> packetList;
 	BOOL Quit;
 	char buf[BUF_SZ];
+	char BanMsg[BUF_SZ];
+	std::list<std::string> ChatLog;
+	HANDLE gMutex;
 }
 
 UINT WINAPI ThreadFunc(LPVOID arg);
@@ -21,12 +26,36 @@ void CALLBACK CompRoutine(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
 int SendPacket(SOCKET hLisnSock, char * buffer, int bufferSz);
 void DispatchMsg(DWORD Trans, LPWSAOVERLAPPED lpOverlapped);
 void ProcessPacket();
+bool ServerConnect(const SOCKET& sock, const SOCKADDR_IN& sockAdr);
+bool InputID(const SOCKET& sock);
+void QuitProgram(const SOCKET& sock);
+void ShowChat();
+void gotoxy(int x, int y)
+{
+
+	COORD pos = { x,y };
+
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+
+}
+COORD getXY() {
+	COORD Cur;
+	CONSOLE_SCREEN_BUFFER_INFO a;
+
+	GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &a);
+	Cur.X = a.dwCursorPosition.X;
+	Cur.Y = a.dwCursorPosition.Y;
+	return Cur;
+}
+void PushChat(const std::string& str);
+
 
 int main()
 {
+	GlobalVal::gMutex = CreateMutex(nullptr, FALSE, nullptr);
 	GlobalVal::Quit = FALSE;
-	const u_short port = 12347;
-	const char IPAddr[INET_ADDRSTRLEN] = "192.168.0.51";
+	const u_short port = 12345;
+	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
 	SOCKET hSock;
 	SOCKADDR_IN sockAdr;
 	WSADATA wsaData;
@@ -40,18 +69,34 @@ int main()
 	sockAdr.sin_port = htons(port);
 	InetPtonA(AF_INET, IPAddr, &sockAdr.sin_addr);
 
+	if (ServerConnect(hSock, sockAdr) == false)
+	{
+		QuitProgram(hSock);
+		return 0;
+	}
+
+	if (InputID(hSock) == false)
+	{
+		QuitProgram(hSock);
+		return 0;
+	}
+
 	WSAOVERLAPPED wsaOverlapped;
 	WSABUF wsaBuf;
 	wsaBuf.buf = GlobalVal::buf;
 	wsaBuf.len = BUF_SZ;
 	ZeroMemory(&wsaOverlapped, sizeof(WSAOVERLAPPED));
 	wsaOverlapped.hEvent = &wsaBuf;
-	connect(hSock, (SOCKADDR*)&sockAdr, sizeof(sockAdr));
+
 	HANDLE ThreadHandle = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, (LPVOID)hSock, 0, NULL);
 	DWORD dwRet;
 	do
 	{
 		SleepEx(100, TRUE);
+		if (GetAsyncKeyState(VK_F11) & 0x8000)
+		{
+			system("cls");
+		}
 		DWORD recvBytes, flaginfo = 0;
 		if (!GlobalVal::packetList.empty())
 		{
@@ -63,6 +108,7 @@ int main()
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
+				SrvUtil::ErrorMsg(_T("WsaRecv()"));
 				GlobalVal::Quit = TRUE;
 				continue;
 			}
@@ -76,25 +122,36 @@ int main()
 		return -1;
 	}
 
-
+	QuitProgram(hSock);
 	return 0;
 }
 
 UINT WINAPI ThreadFunc(LPVOID arg)
 {
+	static bool See = false;
 	SOCKET hSock = (SOCKET)arg;
 	do
 	{
-		char chatbuf[BUF_SZ];
+		if (See == false)
+		{
+			WaitForSingleObject(GlobalVal::gMutex, INFINITE);
+			gotoxy(0, 25);
+			std::cout << "\n\t\t\t\t\t\t\t\r";
+			std::cout << "채팅 입력(Q 종료):";
+			See = true;
+			ReleaseMutex(GlobalVal::gMutex);
+		}
+		char chatbuf[BUF_SZ] = { 0, };
 		if (_kbhit())
 		{
-			fgets(chatbuf, BUF_SZ, stdin);
-			if (_stricmp(chatbuf, "q\n") == 0)
+			std::cin.getline(chatbuf, BUF_SZ);
+			if (_stricmp(chatbuf, "q") == 0)
 			{
 				GlobalVal::Quit = TRUE;
 				continue;
 			}
 			int retVal = SendPacket(hSock, chatbuf, (int)strlen(chatbuf) + 1);
+			See = false;
 		}
 	} while (GlobalVal::Quit != TRUE);
 	return 1;
@@ -179,7 +236,7 @@ void ProcessPacket()
 		{
 			case PACKET_CHAT_MSG:
 			{
-				std::cout << packet.msg << std::endl;
+				PushChat(packet.msg);
 			}break;
 		}
 	}
@@ -204,4 +261,83 @@ int SendPacket(SOCKET hLisnSock, char * buffer, int bufferSz)
 		TotalSendbyte += Sendbyte;
 	} while (packet.ph.len > TotalSendbyte);
 	return packet.ph.len;
+}
+bool ServerConnect(const SOCKET& sock, const SOCKADDR_IN& sockAdr)
+{
+	connect(sock, (SOCKADDR*)&sockAdr, sizeof(sockAdr));
+	UPACKET packet;
+	BOOL Ret = RecvPacket(sock, &packet);
+	if (Ret == FALSE || packet.ph.type == PACKET_BANIP)
+	{
+		if (packet.ph.type == PACKET_BANIP)
+		{
+			CopyMemory(GlobalVal::BanMsg, packet.msg, packet.ph.len);
+		}
+		return false;
+	}
+	return true;
+}
+bool InputID(const SOCKET& sock)
+{
+	UPACKET packet;
+	while (1)
+	{
+		BOOL Ret = RecvPacket(sock, &packet);
+		if (Ret == FALSE)
+		{
+			return false;
+		}
+		switch (packet.ph.type)
+		{
+			case PACKET_CHAT_NAME_REQ:
+			{
+				char NameBuffer[256] = { 0, };
+				std::cout << packet.msg;
+				std::cin.getline(NameBuffer, sizeof(NameBuffer));
+				UPACKET sendpacket = (Packet(PACKET_CHAT_NAME_ACK) << NameBuffer).getPacket();
+				SendPacket(sock, sendpacket);
+			}break;
+			case PACKET_CHAT_MSG:
+			{
+				system("cls");
+				PushChat(packet.msg);
+				return true;
+			};
+			default:
+				break;
+		}
+	}
+}
+void QuitProgram(const SOCKET& sock)
+{
+	CloseHandle(GlobalVal::gMutex);
+	closesocket(sock);
+	WSACleanup();
+	system("cls");
+	std::cout << GlobalVal::BanMsg << std::endl;
+	std::cout << "연결이 종료되었습니다. 아무키나 누르세요." << std::endl;
+	_getch();
+}
+void ShowChat()
+{
+	WaitForSingleObject(GlobalVal::gMutex, INFINITE);
+	COORD pos = getXY();
+	gotoxy(0, 0);
+	std::list<std::string>::iterator iter;
+	for (iter = GlobalVal::ChatLog.begin(); iter != GlobalVal::ChatLog.end(); ++iter)
+	{
+		std::cout << "\t\t\t\t\t\t\t\t\t\t\r";
+		std::cout << *iter << std::endl;
+	}
+	gotoxy(pos.X, pos.Y);
+	ReleaseMutex(GlobalVal::gMutex);
+}
+void PushChat(const std::string& str)
+{
+	if (GlobalVal::ChatLog.size() >= 25)
+	{
+		GlobalVal::ChatLog.pop_back();
+	}
+	GlobalVal::ChatLog.push_front(str);
+	ShowChat();
 }

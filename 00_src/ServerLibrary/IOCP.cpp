@@ -36,9 +36,13 @@ bool WorkerThread::Run()
 	LPOVERLAPPEDEX lpOverlapped = nullptr;
 	User* pUser = nullptr;
 	DWORD Trans;
-	while (!isExit)
+	while (1)
 	{
-		BOOL ret = GetQueuedCompletionStatus(mhComport, &Trans, (PULONG_PTR)&pUser, (LPOVERLAPPED*)&lpOverlapped, 100);
+		BOOL ret = GetQueuedCompletionStatus(mhComport, &Trans, (PULONG_PTR)&pUser, (LPOVERLAPPED*)&lpOverlapped, INFINITE);
+		if (isExit == true)
+		{
+			break;
+		}
 		if (pUser == nullptr)
 		{
 			continue;

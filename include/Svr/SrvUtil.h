@@ -15,6 +15,8 @@
 #include <algorithm>
 #include <ctime>
 #include <string>
+#include <cstring>
+#include <conio.h>
 
 #pragma comment(lib, "ServerLibrary")
 #pragma comment(lib, "ws2_32")

@@ -9,6 +9,14 @@ enum class IOState : unsigned char
 	SEND
 };
 
+enum class MENU : unsigned char
+{
+	USERINFO = 1,
+	USERBAN,
+	SERVERQUIT = 0
+};
+
+
 typedef struct OVERLAPPEDEX
 {
 	OVERLAPPED mOverlapped;
@@ -17,7 +25,7 @@ typedef struct OVERLAPPEDEX
 
 struct User
 {
-	User()
+	User() : misActive(false)
 	{
 		ZeroMemory(&mOverlappedex, sizeof(mOverlappedex));
 		ZeroMemory(&mUserAdr, sizeof(mUserAdr));
@@ -25,7 +33,7 @@ struct User
 		mWsaBuf.len = BUF_SZ;
 		mOverlappedex.mioState = IOState::RECV;
 	}
-	User(SOCKET sock, const SOCKADDR_IN& useradr) : mUserSock(sock), mUserAdr(useradr)
+	User(SOCKET sock, const SOCKADDR_IN& useradr) : mUserSock(sock), mUserAdr(useradr), misActive(false)
 	{
 		ZeroMemory(&mOverlappedex, sizeof(mOverlappedex));
 		mWsaBuf.buf = mBuf;
@@ -68,6 +76,7 @@ struct User
 	WSABUF				mWsaBuf;
 	StreamPacket		mStreamPacket;
 	std::string			mUserID;
+	bool				misActive;
 	char				mBuf[BUF_SZ];
 };
 
@@ -105,14 +114,25 @@ public:
 public:
 	void							Initialize();
 	void							Run();
+	void							AddID(User * pUser, P_UPACKET pPacket);
 	void							AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr);
 	void							RemoveUser(User* user);
 	void							ProcessPacket();
 	void							AddPacket(const TPACKET& pack);
+	bool							CheckUser(const std::string& IPaddr);
 	int								SendPacket(User* pUser, const UPACKET& packetMsg);
 private:
+	u_short							PortSet();
+	void							ChatRun();
+	void							ShowUser();
+	void							UserBan();
+	User*							SearchByID(char * IPAddr);
+	User*							SearchByPort(char * IPAddr);
+	User*							SearchByIP(char * IPAddr);
+protected:
 	StreamPacket					mStreamPacket;
 	HANDLE							mMutex;
+	std::vector<std::string>		mBanIP;
 	std::list<UserPtr>				mUserList;
 	std::shared_ptr<ServerModel>	mServerModel;
 	Acceptor						mAcceptor;
