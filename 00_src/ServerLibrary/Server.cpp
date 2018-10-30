@@ -33,7 +33,7 @@ void Server::Initialize()
 {
 	WSADATA wsaData;
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
-
+	
 	u_short port = PortSet();
 
 	InitializeCriticalSection(&SrvUtil::mCs);
@@ -53,9 +53,23 @@ void Server::Run()
 {
 	return;
 }
-void Server::AddID(User * pUser, P_UPACKET pPacket)
+void Server::AddInfo(User * pUser, P_UPACKET pPacket, DWORD flag)
 {
-	std::string temp = "[" + pUser->mUserID + "] : " + std::string(pPacket->msg);
+	std::string temp;
+	if (flag & ADD_ID)
+	{
+		temp = pUser->mUserID + " : " + std::string(pPacket->msg);
+	}
+	if (flag & ADD_TIME)
+	{
+		time_t mTime = time(nullptr);
+		struct tm lt;
+		localtime_s(&lt, &mTime);
+		char timestr[256] = { 0, };
+		strftime(timestr, 256, "%I:%M:%S", &lt);
+		std::string temp1 = temp;
+		temp = "[" + std::string(timestr) + "] " + temp1;
+	}
 	UPACKET packet = (Packet(PACKET_CHAT_MSG) << temp).getPacket();
 	*pPacket = packet;
 }
@@ -82,9 +96,13 @@ void Server::RemoveUser(User* user)
 		UserIter iter = std::find_if(mUserList.begin(), mUserList.end(), UserPred(user));
 		if (iter != mUserList.end())
 		{
-			char IPAddr[INET_ADDRSTRLEN];
-			InetNtopA(AF_INET, &user->mUserAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
-	//		std::cout << "[ID: " << user->mUserID << ", IP: " << IPAddr << ", Port: " << ntohs(user->mUserAdr.sin_port) << "] Disconnect" << std::endl;
+			char buf[256] = { 0, };
+			sprintf_s(buf, 256, "%s님이 나가셨습니다.", user->mUserID.data());
+			TPACKET tpacket;
+			UPACKET packet = (PacketUtil::Packet(PACKET_LEAVE) << buf).getPacket();
+			tpacket.mPacket = packet;
+			tpacket.mUser = user;
+			S_Server->AddPacket(tpacket);
 			mUserList.erase(iter);
 		}
 		ReleaseMutex(mMutex);
@@ -104,12 +122,13 @@ void Server::ProcessPacket()
 
 			switch (pPacket->ph.type)
 			{
+				case PACKET_LEAVE:
 				case PACKET_CHAT_MSG:
 				{
-					UserIter iter;
-					for (iter = mUserList.begin(); iter != mUserList.end(); ++iter)
+					UserIter useriter;
+					for (useriter = mUserList.begin(); useriter != mUserList.end(); ++useriter)
 					{
-						User* pUser = (*iter).get();
+						User* pUser = (*useriter).get();
 						if (pUser->misActive == true)
 						{
 							if (SendPacket(pUser, tPacket->mPacket) <= 0)
@@ -131,10 +150,10 @@ void Server::ProcessPacket()
 					}
 					else
 					{
-						UserIter iter;
-						for (iter = mUserList.begin(); iter != mUserList.end(); ++iter)
+						UserIter useriter;
+						for (useriter = mUserList.begin(); useriter != mUserList.end(); ++useriter)
 						{
-							std::string UserName = (*iter)->mUserID;
+							std::string UserName = (*useriter)->mUserID;
 							if (!_stricmp(UserName.data(), pPacket->msg))
 							{
 								isExist = true;
@@ -166,11 +185,20 @@ void Server::ProcessPacket()
 		ReleaseMutex(mMutex);
 	}
 }
-void Server::AddPacket(const TPACKET& pack)
+void Server::AddPacket(TPACKET& pack)
 {
 	WaitForSingleObject(mMutex, INFINITE);
-	if(pack.mPacket.ph.type == PACKET_CHAT_MSG)
-		AddID(pack.mUser, const_cast<P_UPACKET>(&pack.mPacket));
+	if (pack.mPacket.ph.type == PACKET_CHAT_MSG)
+	{
+		AddInfo(pack.mUser, &pack.mPacket, ADD_TIME | ADD_ID);
+	}
+	if (pack.mPacket.ph.type == PACKET_ENTER)
+	{
+		char buf[256] = { 0, };
+		sprintf_s(buf, sizeof(buf), "%s님이 입장하였습니다", pack.mUser->mUserID.data());
+		UPACKET _packet = (Packet(PACKET_CHAT_MSG) << buf).getPacket();
+		CopyMemory(&pack.mPacket, &_packet, sizeof(UPACKET));
+	}
 	mStreamPacket.AddPacket(pack);
 	ReleaseMutex(mMutex);
 }

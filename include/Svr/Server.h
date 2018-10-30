@@ -3,6 +3,9 @@
 #include "ServerModel.h"
 #include "StreamPacket.h"
 
+#define ADD_TIME 0x0001
+#define ADD_ID 0x0010
+
 enum class IOState : unsigned char
 {
 	RECV = 0,
@@ -107,11 +110,11 @@ public:
 	void							Initialize();
 	void							ServerRun();
 	virtual void					Run();
-	void							AddID(User * pUser, P_UPACKET pPacket);
+	void							AddInfo(User * pUser, P_UPACKET pPacket, DWORD flag);
 	void							AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr);
 	void							RemoveUser(User* user);
 	void							ProcessPacket();
-	void							AddPacket(const TPACKET& pack);
+	void							AddPacket(TPACKET& pack);
 	bool							CheckUser(const std::string& IPaddr);
 	int								SendPacket(User* pUser, const UPACKET& packetMsg);
 protected:

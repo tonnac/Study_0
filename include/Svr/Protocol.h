@@ -33,6 +33,8 @@ typedef struct UPACKET
 #define PACKET_BANIP 1003
 #define PACKET_QUIT_ACK 1004
 #define PACKET_PERMISSION 1005
+#define PACKET_ENTER 1006
+#define PACKET_LEAVE 1007
 
 namespace PacketUtil
 {

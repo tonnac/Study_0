@@ -61,7 +61,6 @@ bool WorkerThread::Run()
 					if (ret == FALSE)
 					{
 						S_Server->RemoveUser(pUser);
-						continue;
 					}
 				}
 			}

@@ -783,6 +783,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatServer", "ChatServer\Ch
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatClient", "ChatClient\ChatClient.vcxproj", "{51228860-337E-497D-9F51-E4CA1E3D40CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{72EEEE75-C2EF-4534-8B7C-0BFE3FDB6358} = {72EEEE75-C2EF-4534-8B7C-0BFE3FDB6358}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -3326,7 +3329,7 @@ Global
 		{51228860-337E-497D-9F51-E4CA1E3D40CE} = {A9057D56-7C4B-4E49-BB70-B2A065C393C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

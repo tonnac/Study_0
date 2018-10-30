@@ -326,7 +326,7 @@ void ShowChat()
 	std::list<std::string>::iterator iter;
 	for (iter = GlobalVal::ChatLog.begin(); iter != GlobalVal::ChatLog.end(); ++iter)
 	{
-		std::cout << "                                                                                 \r";
+		std::cout << "                                            \r";
 		std::cout << *iter << std::endl;
 	}
 	gotoxy(pos.X, pos.Y);

@@ -157,10 +157,16 @@ UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 		char chatbuf[BUF_SZ] = { 0, };
 		if (_kbhit())
 		{
-			std::cin >> chatbuf;
+		//	std::cin >> chatbuf;
+			std::cin.getline(chatbuf, sizeof(chatbuf));
 			if (_stricmp(chatbuf, "q") == 0)
 			{
 				pClnt->mQuit = TRUE;
+				continue;
+			}
+			if (strlen(chatbuf) > 40)
+			{
+				See = false;
 				continue;
 			}
 			int retVal = SendPacket(pClnt->mhSock, chatbuf, (int)strlen(chatbuf) + 1);
@@ -213,6 +219,8 @@ bool ChatClient::InputID()
 		{
 			system("cls");
 			PushChat(packet.msg);
+			UPACKET sendpacket = (Packet(PACKET_ENTER) << ".").getPacket();
+			SendPacket(mhSock, sendpacket);
 			return true;
 		};
 		default:
@@ -229,6 +237,7 @@ void ChatClient::ProcessPacket()
 
 		switch (packet.ph.type)
 		{
+		case PACKET_LEAVE:
 		case PACKET_CHAT_MSG:
 		{
 			PushChat(packet.msg);
@@ -245,7 +254,7 @@ void ChatClient::ShowChat()
 	std::list<std::string>::iterator iter;
 	for (iter = mChatLog.begin(); iter != mChatLog.end(); ++iter)
 	{
-		std::cout << "                                                                                 \r";
+		std::cout << "\n									\r";
 		std::cout << *iter << std::endl;
 	}
 	gotoxy(pos.X, pos.Y);
@@ -253,7 +262,7 @@ void ChatClient::ShowChat()
 }
 void ChatClient::PushChat(const std::string& str)
 {
-	if (mChatLog.size() >= 25)
+	if (mChatLog.size() >= 12)
 	{
 		mChatLog.pop_back();
 	}

@@ -11,6 +11,7 @@ int main(void)
 	printf("ctime:%s", ctime(&now));
 	printf("asctime:%s", asctime(lt));
 	strftime(output, MAX_OUTPUT, "%Y³â %m¿ù %dÀÏ %X", lt);
+	strftime(output, MAX_OUTPUT, "%I:%M:%S", lt);
 	printf("strftime:%s\n", output);
 
 	return 0;
