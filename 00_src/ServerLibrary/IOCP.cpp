@@ -111,6 +111,7 @@ bool IOCP::Run()
 }
 void IOCP::Release()
 {
+	CloseHandle(mhComport);
 	WaitForMultipleObjects(mNumofProcess, miocpThread.mThreadHandle.data(), TRUE, INFINITE);
 	miocpThread.mWorkerthread.clear();
 }

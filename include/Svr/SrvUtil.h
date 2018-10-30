@@ -17,6 +17,7 @@
 #include <string>
 #include <cstring>
 #include <conio.h>
+#include <queue>
 
 #pragma comment(lib, "ServerLibrary")
 #pragma comment(lib, "ws2_32")

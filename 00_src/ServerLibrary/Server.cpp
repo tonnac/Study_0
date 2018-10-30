@@ -86,7 +86,7 @@ void Server::RemoveUser(User* user)
 		{
 			char IPAddr[INET_ADDRSTRLEN];
 			InetNtopA(AF_INET, &user->mUserAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
-			std::cout << "[ID: " << user->mUserID << ", IP: " << IPAddr << ", Port: " << ntohs(user->mUserAdr.sin_port) << "] Disconnect" << std::endl;
+	//		std::cout << "[ID: " << user->mUserID << ", IP: " << IPAddr << ", Port: " << ntohs(user->mUserAdr.sin_port) << "] Disconnect" << std::endl;
 			mUserList.erase(iter);
 		}
 		ReleaseMutex(mMutex);
@@ -373,8 +373,8 @@ User* Server::SearchByID(char * IPAddr)
 	{
 		return nullptr;
 	}
-	return (*iter).get();
 	ReleaseMutex(mMutex);
+	return (*iter).get();
 }
 User* Server::SearchByPort(char * IPAddr)
 {
@@ -396,8 +396,8 @@ User* Server::SearchByPort(char * IPAddr)
 	{
 		return nullptr;
 	}
-	return (*iter).get();
 	ReleaseMutex(mMutex);
+	return (*iter).get();
 }
 User* Server::SearchByIP(char * IPAddr)
 {
@@ -419,6 +419,6 @@ User* Server::SearchByIP(char * IPAddr)
 	{
 		return nullptr;
 	}
-	return (*iter).get();
 	ReleaseMutex(mMutex);
+	return (*iter).get();
 }
