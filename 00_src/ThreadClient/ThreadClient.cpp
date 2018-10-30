@@ -55,7 +55,7 @@ int main()
 	GlobalVal::gMutex = CreateMutex(nullptr, FALSE, nullptr);
 	GlobalVal::Quit = FALSE;
 	const u_short port = 12345;
-	const char IPAddr[INET_ADDRSTRLEN] = "219.254.48.7";
+	const char IPAddr[INET_ADDRSTRLEN] = "192.168.0.51";
 	SOCKET hSock;
 	SOCKADDR_IN sockAdr;
 	WSADATA wsaData;
@@ -136,7 +136,7 @@ UINT WINAPI ThreadFunc(LPVOID arg)
 		{
 			WaitForSingleObject(GlobalVal::gMutex, INFINITE);
 			gotoxy(0, 25);
-			std::cout << "\n\t\t\t\t\t\t\t\r";
+			std::cout << "\n                                                                                 \r";
 			std::cout << "채팅 입력(Q 종료):";
 			See = true;
 			ReleaseMutex(GlobalVal::gMutex);
