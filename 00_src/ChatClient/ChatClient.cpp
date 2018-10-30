@@ -85,6 +85,7 @@ void ChatClient::InputIPAndPort()
 	{
 		std::cout << "포트번호를 입력하세요(1024 ~ 49151): ";
 		std::cin >> port;
+		std::cin.ignore();
 		if (port <= 1024 || port > 49151)
 		{
 			system("cls");
@@ -156,7 +157,7 @@ UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 		char chatbuf[BUF_SZ] = { 0, };
 		if (_kbhit())
 		{
-			std::cin.getline(chatbuf, BUF_SZ);
+			std::cin >> chatbuf;
 			if (_stricmp(chatbuf, "q") == 0)
 			{
 				pClnt->mQuit = TRUE;

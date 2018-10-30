@@ -62,10 +62,10 @@ void Server::AddID(User * pUser, P_UPACKET pPacket)
 void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 {
 	{
-		WaitForSingleObject(mMutex, INFINITE);
-		Synchronize(this);
 		UserPtr user = std::make_shared<User>(clntSock, clntAdr);
+		WaitForSingleObject(mMutex, INFINITE);
 		mUserList.push_back(user);
+		ReleaseMutex(mMutex);
 		mServerModel->AddUser(user.get());
 		DWORD Transfer;
 		UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
@@ -73,7 +73,6 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 		user->mWsaBuf.len = packet.ph.len;
 		user->mOverlappedex.mioState = IOState::SEND;
 		WSASend(user->mUserSock, &user->mWsaBuf, 1, &Transfer, 0, &user->mOverlappedex.mOverlapped, nullptr);
-		ReleaseMutex(mMutex);
 	}
 }
 void Server::RemoveUser(User* user)
