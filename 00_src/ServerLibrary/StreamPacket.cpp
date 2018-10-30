@@ -40,7 +40,7 @@ void StreamPacket::Put(char* recvBuffer, int RecvSize, User* pUser)
 
 				if (pUser != nullptr)
 				{
-					S_Server.AddPacket(add);
+					S_Server->AddPacket(add);
 				}
 
 				mReadPos -= mPacket->ph.len;

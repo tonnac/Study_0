@@ -80,6 +80,27 @@ namespace PacketUtil
 		return TRUE;
 	}
 
+	static int SendPacket(SOCKET hLisnSock, char * buffer, int bufferSz)
+	{
+		UPACKET packet;
+		packet.ph.type = PACKET_CHAT_MSG;
+		packet.ph.len = bufferSz + PACKET_HEADER_SIZE;
+		CopyMemory(packet.msg, buffer, bufferSz);
+		int Sendbyte;
+		int TotalSendbyte = 0;
+		char* SendMsg = (char*)&packet;
+		do
+		{
+			Sendbyte = send(hLisnSock, &SendMsg[TotalSendbyte], packet.ph.len - TotalSendbyte, 0);
+			if (Sendbyte == SOCKET_ERROR || Sendbyte == 0)
+			{
+				return Sendbyte;
+			}
+			TotalSendbyte += Sendbyte;
+		} while (packet.ph.len > TotalSendbyte);
+		return packet.ph.len;
+	}
+
 	class Packet
 	{
 	public:

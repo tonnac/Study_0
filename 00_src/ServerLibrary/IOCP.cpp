@@ -60,13 +60,13 @@ bool WorkerThread::Run()
 				{
 					if (ret == FALSE)
 					{
-						S_Server.RemoveUser(pUser);
+						S_Server->RemoveUser(pUser);
 						continue;
 					}
 				}
 			}
 		}
-		S_Server.ProcessPacket();
+		S_Server->ProcessPacket();
 	}
 	return true;
 }

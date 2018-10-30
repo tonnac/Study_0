@@ -98,9 +98,9 @@ class Server : public ServerObj
 protected:
 	Server();
 public:
-	static Server getInstance()
+	static Server* getInstance()
 	{
-		return *mServer;
+		return mServer;
 	}
 	virtual ~Server();
 public:

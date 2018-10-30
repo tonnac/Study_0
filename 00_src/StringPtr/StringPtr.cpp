@@ -5,6 +5,12 @@
 
 using namespace std;
 
+void chww(char* ee)
+{
+	ee[0] = 'e';
+	ee[1] = 'q';
+}
+
 string retchar(const wchar_t* src)
 {
 	string retstr;

@@ -69,7 +69,7 @@ bool Acceptor::ClientPermission(const SOCKET& sock, const SOCKADDR_IN& sockAdr)
 {
 	char IPAddr[INET_ADDRSTRLEN];
 	InetNtopA(AF_INET, &sockAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);
-	if (S_Server.CheckUser(std::string(IPAddr)) == false)
+	if (S_Server->CheckUser(std::string(IPAddr)) == false)
 	{
 		UPACKET packet = (Packet(PACKET_BANIP) << "해당 IP는 접속할수 없습니다.\n").getPacket();
 		SendPacket(sock, packet);
@@ -114,7 +114,7 @@ bool Acceptor::Run()
 		{
 			continue;
 		}
-		S_Server.AddUser(clntSock, clntAdr);
+		S_Server->AddUser(clntSock, clntAdr);
 	}
 	return true;
 }
