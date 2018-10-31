@@ -24,9 +24,30 @@ bool ChatClient::Initialize()
 		return false;
 	}
 	InputIPAndPort();
-	if (ServerConnect() == false)
+	HANDLE ConnectHandle = (HANDLE)_beginthreadex(nullptr, 0, ConnectFunc, (LPVOID)this, 0, nullptr);
+	int Cnt = 0;
+	while(true)
 	{
-		return false;
+		DWORD dwRet = WaitForSingleObject(ConnectHandle, 1000);
+		if (dwRet == WAIT_OBJECT_0)
+		{
+			break;
+		}
+		else
+		{
+			++Cnt;
+			std::cout.width(100); std::cout.fill(' '); std::cout << '\r';
+			std::cout << "연결중";
+			for (int i = 0; i < Cnt; ++i)
+			{
+				std::cout << ".";
+			}
+			if (Cnt >= 5)
+			{
+				MessageBox(nullptr, L"서버와 연결이 되지않습니다.", L"Error", MB_ICONERROR);
+				return false;
+			}
+		}
 	}
 	return true;
 }
@@ -43,10 +64,6 @@ void ChatClient::Run()
 	do
 	{
 		SleepEx(100, TRUE);
-		if (GetAsyncKeyState(VK_F11) & 0x8000)
-		{
-			system("cls");
-		}
 		DWORD recvBytes, flaginfo = 0;
 		if (!mPacketList.empty())
 		{
@@ -84,44 +101,24 @@ void ChatClient::InputIPAndPort()
 	while (1)
 	{
 		std::cout << "포트번호를 입력하세요(1024 ~ 49151): ";
-		std::cin >> port;
-		std::cin.ignore();
-		if (port <= 1024 || port > 49151)
-		{
-			system("cls");
-			std::cout << "잘못된 번호입니다." << std::endl;
-		}
-		else
+		char portbuf[20];
+		std::cin.getline(portbuf, sizeof(portbuf));
+		port = std::stoi(portbuf);
+		if (port > 1024 || port <= 49151)
 		{
 			system("cls");
 			break;
 		}
+		else
+		{
+			system("cls");
+			std::cout << "잘못된 번호입니다." << std::endl;
+		}
 	}
 
 	msockAdr.sin_family = AF_INET;
-
 	msockAdr.sin_port = htons(port);
 	InetPtonA(AF_INET, IPAddr, &msockAdr.sin_addr);
-}
-bool ChatClient::ServerConnect()
-{
-	int iRet = connect(mhSock, (SOCKADDR*)&msockAdr, sizeof(msockAdr));
-	if (iRet == SOCKET_ERROR)
-	{
-		SrvUtil::ErrorMsg(_T("Connect"));
-		return false;
-	}
-	UPACKET packet;
-	BOOL Ret = RecvPacket(mhSock, &packet);
-	if (Ret == FALSE || packet.ph.type == PACKET_BANIP)
-	{
-		if (packet.ph.type == PACKET_BANIP)
-		{
-			CopyMemory(mBanMsg, packet.msg, packet.ph.len);
-		}
-		return false;
-	}
-	return true;
 }
 void ChatClient::gotoxy(int x, int y)
 {
@@ -139,6 +136,27 @@ COORD ChatClient::getXY()
 	Cur.Y = a.dwCursorPosition.Y;
 	return Cur;
 }
+UINT WINAPI ChatClient::ConnectFunc(LPVOID arg)
+{
+	ChatClient * pClnt = (ChatClient*)arg;
+	int iRet = connect(pClnt->mhSock, (SOCKADDR*)&pClnt->msockAdr, sizeof(msockAdr));
+	if (iRet == SOCKET_ERROR)
+	{
+		SrvUtil::ErrorMsg(_T("Connect"));
+		return false;
+	}
+	UPACKET packet;
+	BOOL Ret = RecvPacket(pClnt->mhSock, &packet);
+	if (Ret == FALSE || packet.ph.type == PACKET_BANIP)
+	{
+		if (packet.ph.type == PACKET_BANIP)
+		{
+			CopyMemory(pClnt->mBanMsg, packet.msg, packet.ph.len);
+		}
+		return 1;
+	}
+	return 2;
+}
 UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 {
 	static bool See = false;
@@ -149,29 +167,26 @@ UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 		{
 			WaitForSingleObject(pClnt->mMutex, INFINITE);
 			gotoxy(0, 25);
-			std::cout << "\n                                                                                 \r";
+			std::cout.width(400); std::cout.fill(' '); std::cout << '\r';
+			gotoxy(0, 25);
 			std::cout << "채팅 입력(Q 종료):";
 			See = true;
 			ReleaseMutex(pClnt->mMutex);
 		}
 		char chatbuf[BUF_SZ] = { 0, };
-		if (_kbhit())
+		std::cin.getline(chatbuf, sizeof(chatbuf));
+		if (_stricmp(chatbuf, "q") == 0)
 		{
-		//	std::cin >> chatbuf;
-			std::cin.getline(chatbuf, sizeof(chatbuf));
-			if (_stricmp(chatbuf, "q") == 0)
-			{
-				pClnt->mQuit = TRUE;
-				continue;
-			}
-			if (strlen(chatbuf) > 40)
-			{
-				See = false;
-				continue;
-			}
-			int retVal = SendPacket(pClnt->mhSock, chatbuf, (int)strlen(chatbuf) + 1);
-			See = false;
+			pClnt->mQuit = TRUE;
+			continue;
 		}
+		if (strlen(chatbuf) > 40)
+		{
+			See = false;
+			continue;
+		}
+		int retVal = SendPacket(pClnt->mhSock, chatbuf, (int)strlen(chatbuf) + 1);
+		See = false;
 	} while (pClnt->mQuit != TRUE);
 	return 1;
 }
@@ -254,7 +269,7 @@ void ChatClient::ShowChat()
 	std::list<std::string>::iterator iter;
 	for (iter = mChatLog.begin(); iter != mChatLog.end(); ++iter)
 	{
-		std::cout << "\n									\r";
+		std::cout.width(100); std::cout.fill(' '); std::cout << '\r';
 		std::cout << *iter << std::endl;
 	}
 	gotoxy(pos.X, pos.Y);
@@ -262,7 +277,7 @@ void ChatClient::ShowChat()
 }
 void ChatClient::PushChat(const std::string& str)
 {
-	if (mChatLog.size() >= 12)
+	if (mChatLog.size() >= 22)
 	{
 		mChatLog.pop_back();
 	}

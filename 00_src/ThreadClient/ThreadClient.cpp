@@ -150,7 +150,7 @@ UINT WINAPI ThreadFunc(LPVOID arg)
 				GlobalVal::Quit = TRUE;
 				continue;
 			}
-			int retVal = SendPacket(hSock, chatbuf, (int)strlen(chatbuf) + 1);
+			int retVal = ::SendPacket(hSock, chatbuf, (int)strlen(chatbuf) + 1);
 			See = false;
 		}
 	} while (GlobalVal::Quit != TRUE);

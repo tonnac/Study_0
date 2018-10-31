@@ -22,6 +22,11 @@ string retchar(const wchar_t* src)
 
 int main()
 {
+	char buf[10];
+	cin.getline(buf, 10);
+
+	cout << buf << endl;
+
 	const wchar_t wide[] = L"dsssdddaa";
 	void * ptr;
 	{

@@ -81,12 +81,12 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 		mUserList.push_back(user);
 		ReleaseMutex(mMutex);
 		mServerModel->AddUser(user.get());
-		DWORD Transfer;
 		UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
-		CopyMemory(user->mBuf, &packet, packet.ph.len);
-		user->mWsaBuf.len = packet.ph.len;
-		user->mOverlappedex.mioState = IOState::SEND;
-		WSASend(user->mUserSock, &user->mWsaBuf, 1, &Transfer, 0, &user->mOverlappedex.mOverlapped, nullptr);
+		SendPacket(user.get(), packet);
+		//CopyMemory(user->mBuf, &packet, packet.ph.len);
+		//user->mWsaBuf.len = packet.ph.len;
+		//user->mOverlappedex.mioState = IOState::SEND;
+		//WSASend(user->mUserSock, &user->mWsaBuf, 1, &Transfer, 0, &user->mOverlappedex.mOverlapped, nullptr);
 	}
 }
 void Server::RemoveUser(User* user)
@@ -140,7 +140,6 @@ void Server::ProcessPacket()
 				}break;
 				case PACKET_CHAT_NAME_ACK:
 				{
-					DWORD SendByte;
 					UPACKET packet;
 					bool isExist = false;
 					User * pUser = tPacket->mUser;
@@ -173,11 +172,7 @@ void Server::ProcessPacket()
 							pUser->misActive = true;
 						}
 					}
-					CopyMemory(tPacket->mUser->mBuf, &packet, packet.ph.len);
-					pUser->mWsaBuf.len = packet.ph.len;
-					pUser->mOverlappedex.mioState = IOState::SEND;
-					WSASend(pUser->mUserSock, &pUser->mWsaBuf, 1, &SendByte, 0,
-						&pUser->mOverlappedex.mOverlapped, nullptr);
+					SendPacket(pUser, packet);
 				}break;
 			}
 		}
@@ -222,7 +217,7 @@ bool Server::CheckUser(const std::string& IPaddr)
 }
 int Server::SendPacket(User* pUser, const UPACKET& packetMsg)
 {
-	pUser->mWsaBuf.buf = (char*)&packetMsg;
+	CopyMemory(pUser->mBuf, &packetMsg, packetMsg.ph.len);
 	pUser->mWsaBuf.len = packetMsg.ph.len;
 	pUser->mOverlappedex.mioState = IOState::SEND;
 	DWORD dwSendByte = packetMsg.ph.len;

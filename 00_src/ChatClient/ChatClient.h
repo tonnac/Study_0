@@ -10,7 +10,6 @@ public:
 	bool Initialize();
 	void Run();
 private:
-	bool ServerConnect();
 	bool InputID();
 	void InputIPAndPort();
 	void ProcessPacket();
@@ -22,6 +21,7 @@ private:
 	static void gotoxy(int x, int y);
 	static COORD getXY();
 private:
+	static UINT WINAPI ConnectFunc(LPVOID arg);
 	static UINT WINAPI ThreadFunc(LPVOID arg);
 	static void CALLBACK CompRoutine(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
 private:
