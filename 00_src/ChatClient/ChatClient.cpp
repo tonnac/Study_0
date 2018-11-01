@@ -302,7 +302,6 @@ void ChatClient::ShowChat()
 }
 void ChatClient::PushChat(const std::string& str)
 {
-	fd_set;
 	if (mChatLog.size() >= 22)
 	{
 		mChatLog.pop_back();
