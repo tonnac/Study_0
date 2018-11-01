@@ -125,7 +125,7 @@ protected:
 	HANDLE							mMutex;
 	std::vector<std::string>		mBanIP;
 	std::list<UserPtr>				mUserList;
-	std::shared_ptr<ServerModel>	mServerModel;
+	std::unique_ptr<ServerModel>	mServerModel;
 	Acceptor						mAcceptor;
 };
 

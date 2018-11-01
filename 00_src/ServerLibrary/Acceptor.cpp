@@ -56,7 +56,6 @@ bool Acceptor::setIPAndPort(u_short port, const TCHAR * IPAddr)
 }
 void Acceptor::Release()
 {
-	WSACloseEvent(mAcceptEvent);
 	closesocket(mlistenSock);
 	EnterCriticalSection(&SrvUtil::mCs);
 	std::vector<std::string>::iterator iter;
@@ -86,39 +85,19 @@ bool Acceptor::Run()
 	SOCKET clntSock;
 	SOCKADDR_IN clntAdr;
 	int clntAdrSz = sizeof(clntAdr);
-	
-	mAcceptEvent = WSACreateEvent();
-	WSAEventSelect(mlistenSock, mAcceptEvent, FD_ACCEPT);
-
 	while (!isExit)
 	{
-		DWORD dwRet;
-		dwRet = WSAWaitForMultipleEvents(1, &mAcceptEvent, true, 100, false);
-		if (dwRet == WSA_WAIT_TIMEOUT || dwRet == WSA_WAIT_FAILED)
+		ZeroMemory(&clntAdr, sizeof(clntAdr));
+		clntSock = accept(mlistenSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
+		if (clntSock == INVALID_SOCKET)
 		{
 			continue;
 		}
-		WSANETWORKEVENTS networkEvent;
-		WSAEnumNetworkEvents(mlistenSock, mAcceptEvent, &networkEvent);
-		if (networkEvent.lNetworkEvents & FD_ACCEPT)
+		if (!ClientPermission(clntSock, clntAdr))
 		{
-			if (networkEvent.iErrorCode[FD_ACCEPT_BIT] != 0)
-			{
-				SrvUtil::ErrorMsg(_T("Accept Error"));
-				continue;
-			}
-			ZeroMemory(&clntAdr, sizeof(clntAdr));
-			clntSock = accept(mlistenSock, (SOCKADDR*)&clntAdr, &clntAdrSz);
-			if (clntSock == INVALID_SOCKET)
-			{
-				continue;
-			}
-			if (!ClientPermission(clntSock, clntAdr))
-			{
-				continue;
-			}
-			S_Server->AddUser(clntSock, clntAdr);
+			continue;
 		}
+		S_Server->AddUser(clntSock, clntAdr);
 	}
 	return true;
 }

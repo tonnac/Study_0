@@ -10,6 +10,7 @@ ChatClient::ChatClient() : mQuit(FALSE)
 	mWsaBuf.buf = mbuf;
 	mWsaBuf.len = BUF_SZ;
 	mMutex = CreateMutex(nullptr, FALSE, nullptr);
+	mEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 	mWsaOverlapped.hEvent = (HANDLE)this;
 }
 
@@ -31,6 +32,11 @@ bool ChatClient::Initialize()
 		DWORD dwRet = WaitForSingleObject(ConnectHandle, 1000);
 		if (dwRet == WAIT_OBJECT_0)
 		{
+			if (mQuit == TRUE)
+			{
+				QuitProgram();
+				return false;
+			}
 			break;
 		}
 		else
@@ -59,16 +65,15 @@ void ChatClient::Run()
 		return;
 	}
 
-	HANDLE ThreadHandle = (HANDLE)_beginthreadex(NULL, 0, ThreadFunc, (LPVOID)this, 0, NULL);
+	HANDLE ThreadHandle = (HANDLE)_beginthreadex(nullptr, 0, ThreadFunc, (LPVOID)this, 0, nullptr);
+	CloseHandle(ThreadHandle);
+	HANDLE ChatHandle = (HANDLE)_beginthreadex(nullptr, 0, ShowChat, (LPVOID)this, 0, nullptr);
+	CloseHandle(ChatHandle);
 	DWORD dwRet;
 	do
 	{
 		SleepEx(100, TRUE);
 		DWORD recvBytes, flaginfo = 0;
-		if (!mPacketList.empty())
-		{
-			ProcessPacket();
-		}
 		int retval;
 		retval = WSARecv(mhSock, &mWsaBuf, 1, &recvBytes, &flaginfo, &mWsaOverlapped, CompRoutine);
 		if (retval == SOCKET_ERROR)
@@ -104,7 +109,7 @@ void ChatClient::InputIPAndPort()
 		char portbuf[20];
 		std::cin.getline(portbuf, sizeof(portbuf));
 		port = std::stoi(portbuf);
-		if (port > 1024 || port <= 49151)
+		if (port > 1024 && port <= 49151)
 		{
 			system("cls");
 			break;
@@ -143,7 +148,8 @@ UINT WINAPI ChatClient::ConnectFunc(LPVOID arg)
 	if (iRet == SOCKET_ERROR)
 	{
 		SrvUtil::ErrorMsg(_T("Connect"));
-		return false;
+		pClnt->mQuit = TRUE;
+		return 1;
 	}
 	UPACKET packet;
 	BOOL Ret = RecvPacket(pClnt->mhSock, &packet);
@@ -152,6 +158,7 @@ UINT WINAPI ChatClient::ConnectFunc(LPVOID arg)
 		if (packet.ph.type == PACKET_BANIP)
 		{
 			CopyMemory(pClnt->mBanMsg, packet.msg, packet.ph.len);
+			pClnt->mQuit = TRUE;
 		}
 		return 1;
 	}
@@ -180,7 +187,7 @@ UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 			pClnt->mQuit = TRUE;
 			continue;
 		}
-		if (strlen(chatbuf) > 40)
+		if (strlen(chatbuf) > 40 || chatbuf[0] == 0)
 		{
 			See = false;
 			continue;
@@ -188,6 +195,19 @@ UINT WINAPI ChatClient::ThreadFunc(LPVOID arg)
 		int retVal = SendPacket(pClnt->mhSock, chatbuf, (int)strlen(chatbuf) + 1);
 		See = false;
 	} while (pClnt->mQuit != TRUE);
+	return 1;
+}
+UINT WINAPI ChatClient::ShowChat(LPVOID arg)
+{
+	ChatClient * pClnt = (ChatClient*)arg;
+	while (pClnt->mQuit != TRUE)
+	{
+		{
+			WaitForSingleObject(pClnt->mEvent, INFINITE);
+			pClnt->ProcessPacket();
+			ResetEvent(pClnt->mEvent);
+		}
+	}
 	return 1;
 }
 void CALLBACK ChatClient::CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPPED lpOverlapped, DWORD flags)
@@ -209,6 +229,11 @@ void CALLBACK ChatClient::CompRoutine(DWORD dwError, DWORD dwByte, LPWSAOVERLAPP
 	ZeroMemory(pClnt->mbuf, BUF_SZ);
 	ZeroMemory(lpOverlapped, sizeof(WSAOVERLAPPED));
 	lpOverlapped->hEvent = bufhandle;
+
+	if (!pClnt->mPacketList.empty())
+	{
+		SetEvent(pClnt->mEvent);
+	}
 }
 bool ChatClient::InputID()
 {
@@ -222,24 +247,24 @@ bool ChatClient::InputID()
 		}
 		switch (packet.ph.type)
 		{
-		case PACKET_CHAT_NAME_REQ:
-		{
-			char NameBuffer[256] = { 0, };
-			std::cout << packet.msg;
-			std::cin.getline(NameBuffer, sizeof(NameBuffer));
-			UPACKET sendpacket = (Packet(PACKET_CHAT_NAME_ACK) << NameBuffer).getPacket();
-			SendPacket(mhSock, sendpacket);
-		}break;
-		case PACKET_CHAT_MSG:
-		{
-			system("cls");
-			PushChat(packet.msg);
-			UPACKET sendpacket = (Packet(PACKET_ENTER) << ".").getPacket();
-			SendPacket(mhSock, sendpacket);
-			return true;
-		};
-		default:
-			break;
+			case PACKET_CHAT_NAME_REQ:
+			{
+				char NameBuffer[256] = { 0, };
+				std::cout << packet.msg;
+				std::cin.getline(NameBuffer, sizeof(NameBuffer));
+				UPACKET sendpacket = (Packet(PACKET_CHAT_NAME_ACK) << NameBuffer).getPacket();
+				SendPacket(mhSock, sendpacket);
+			}break;
+			case PACKET_CHAT_MSG:
+			{
+				system("cls");
+				PushChat(packet.msg);
+				UPACKET sendpacket = (Packet(PACKET_ENTER) << ".").getPacket();
+				SendPacket(mhSock, sendpacket);
+				return true;
+			};
+			default:
+				break;
 		}
 	}
 }
@@ -277,6 +302,7 @@ void ChatClient::ShowChat()
 }
 void ChatClient::PushChat(const std::string& str)
 {
+	fd_set;
 	if (mChatLog.size() >= 22)
 	{
 		mChatLog.pop_back();
@@ -288,6 +314,7 @@ void ChatClient::QuitProgram()
 {
 	CloseHandle(mMutex);
 	closesocket(mhSock);
+	CloseHandle(mEvent);
 	WSACleanup();
 	system("cls");
 	std::cout << mBanMsg << std::endl;

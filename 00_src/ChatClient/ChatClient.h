@@ -23,6 +23,7 @@ private:
 private:
 	static UINT WINAPI ConnectFunc(LPVOID arg);
 	static UINT WINAPI ThreadFunc(LPVOID arg);
+	static UINT WINAPI ShowChat(LPVOID arg);
 	static void CALLBACK CompRoutine(DWORD, DWORD, LPWSAOVERLAPPED, DWORD);
 private:
 	std::vector<UPACKET> mPacketList;
@@ -33,6 +34,7 @@ private:
 	WSAOVERLAPPED mWsaOverlapped;
 	std::list<std::string> mChatLog;
 	HANDLE mMutex;
+	HANDLE mEvent;
 	SOCKET mhSock;
 	SOCKADDR_IN msockAdr;
 };

@@ -1,29 +1,23 @@
 #include "ChatServer.h"
 
-std::istream& operator >> (std::istream& is, MENU& type)
-{
-	int num;
-	is >> num;
-	type = static_cast<MENU>(num);
-	return is;
-}
-
 u_short	ChatServer::PortSet()
 {
 	u_short port;
 	while (1)
 	{
+		char buf[256] = { 0, };
 		std::cout << "포트번호를 입력하세요(1024 ~ 49151): ";
-		std::cin >> port;
-		if (port <= 1024 || port > 49151)
+		std::cin.getline(buf, 256);
+		port = std::stoi(buf);
+		if (port > 1024 && port <= 49151)
 		{
 			system("cls");
-			std::cout << "잘못된 번호입니다." << std::endl;
+			return port;
 		}
 		else
 		{
 			system("cls");
-			return port;
+			std::cout << "잘못된 번호입니다." << std::endl;
 		}
 	}
 }
@@ -32,12 +26,14 @@ void ChatServer::Run()
 	while (!isExit)
 	{
 		MENU Select = MENU::USERINFO;
+		char buf[256] = { 0, };
 		std::cout << "[채팅서버 프로그램]" << std::endl;
 		std::cout << "1.접속한 유저 보기" << std::endl;
 		std::cout << "2.유저 추방" << std::endl;
 		std::cout << "0.서버 종료" << std::endl;
 		std::cout << "입력: ";
-		std::cin >> Select;
+		std::cin.getline(buf, sizeof(buf));
+		Select = (MENU)std::stoi(buf);
 		switch (Select)
 		{
 		case MENU::USERINFO:
@@ -86,12 +82,14 @@ void ChatServer::UserBan()
 	{
 		ShowUser();
 		int iSelect = 0;
+		char buf[256] = { 0, };
 		char IPAddr[INET_ADDRSTRLEN];
 		std::cout << Msg << std::endl;
 		Msg.clear();
 		std::cout << "1.ID로 검색, 2.Port번호로 검색, 3.IP로 검색, 0.뒤로가기" << std::endl;
 		std::cout << "입력: ";
-		std::cin >> iSelect;
+		std::cin.getline(buf, 256);
+		iSelect = std::stoi(buf);
 		switch (iSelect)
 		{
 		case 1:
@@ -177,8 +175,10 @@ User* ChatServer::SearchByID(char * IPAddr)
 User* ChatServer::SearchByPort(char * IPAddr)
 {
 	u_short port;
+	char buf[256];
 	std::cout << "검색할 포트번호를 입력하세요." << std::endl;
-	std::cout << "입력: "; std::cin >> port;
+	std::cout << "입력: "; std::cin.getline(buf, 256);
+	port = std::atoi(buf);
 	auto Search = [port, &IPAddr](const UserPtr& rhs)
 	{
 		InetNtopA(AF_INET, &rhs->mUserAdr.sin_addr, IPAddr, INET_ADDRSTRLEN);

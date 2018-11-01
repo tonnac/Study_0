@@ -14,6 +14,5 @@ private:
 	bool ClientPermission(const SOCKET& sock, const SOCKADDR_IN& sockAdr);
 	bool Run() override;
 private:
-	WSAEVENT mAcceptEvent;
 	SOCKET mlistenSock;
 };

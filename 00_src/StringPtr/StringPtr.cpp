@@ -2,6 +2,7 @@
 #include <string>
 #include <memory>
 #include <Windows.h>
+#include <sstream>
 
 using namespace std;
 
@@ -22,10 +23,14 @@ string retchar(const wchar_t* src)
 
 int main()
 {
-	char buf[10];
-	cin.getline(buf, 10);
+	char buf[10] = { 0, };
+	char buf1[5];
+	
+	cin >> noskipws >> buf;
+	cout << buf;
 
-	cout << buf << endl;
+	
+
 
 	const wchar_t wide[] = L"dsssdddaa";
 	void * ptr;

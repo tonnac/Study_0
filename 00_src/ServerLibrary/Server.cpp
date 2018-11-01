@@ -40,7 +40,7 @@ void Server::Initialize()
 	mMutex = CreateMutex(nullptr, FALSE, nullptr);
 	mAcceptor.setIPAndPort(port);
 
-	mServerModel = std::make_shared<IOCP>();
+	mServerModel = ServerModel::CreateServerModel(IOMODEL::IOCP);
 	mServerModel->Initialize();
 }
 void Server::ServerRun()
@@ -79,14 +79,10 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 		UserPtr user = std::make_shared<User>(clntSock, clntAdr);
 		WaitForSingleObject(mMutex, INFINITE);
 		mUserList.push_back(user);
-		ReleaseMutex(mMutex);
 		mServerModel->AddUser(user.get());
+		ReleaseMutex(mMutex);
 		UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
 		SendPacket(user.get(), packet);
-		//CopyMemory(user->mBuf, &packet, packet.ph.len);
-		//user->mWsaBuf.len = packet.ph.len;
-		//user->mOverlappedex.mioState = IOState::SEND;
-		//WSASend(user->mUserSock, &user->mWsaBuf, 1, &Transfer, 0, &user->mOverlappedex.mOverlapped, nullptr);
 	}
 }
 void Server::RemoveUser(User* user)
