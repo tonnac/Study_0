@@ -12,6 +12,12 @@ void chww(char* ee)
 	ee[1] = 'q';
 }
 
+void sdsd(string& buf)
+{
+	const char buffer[256] = "qweqweqwe\nqweqweqwe";
+	buf = buffer;
+}
+
 string retchar(const wchar_t* src)
 {
 	string retstr;
@@ -26,11 +32,20 @@ int main()
 	char buf[10] = { 0, };
 	char buf1[5];
 	
-	cin >> noskipws >> buf;
-	cout << buf;
+//	cin >> noskipws >> buf;
+//	cout << buf;
 
+	string ff;
+	sdsd(ff);
 	
+	char buf2[256] = "qweqwe\nabcdef";
+	string ffff;
+	ffff = buf2;
 
+	string id;
+	string pw;
+	id.assign(ffff, 0, ffff.find_first_of('\n'));
+	pw.assign(ffff, ffff.find_first_of('\n') + 1, ffff.length());
 
 	const wchar_t wide[] = L"dsssdddaa";
 	void * ptr;

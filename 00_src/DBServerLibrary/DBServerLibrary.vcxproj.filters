@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\ServerModel">
+      <UniqueIdentifier>{bf189393-6c1d-4ecf-8745-bc8a4f39d399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ServerModel">
+      <UniqueIdentifier>{fb494f09-9c31-46a9-86ab-881bc624756e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SrvUtil.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.h">
+      <Filter>헤더 파일\ServerModel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.h">
+      <Filter>헤더 파일\ServerModel</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.cpp">
+      <Filter>소스 파일\ServerModel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.cpp">
+      <Filter>소스 파일\ServerModel</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
