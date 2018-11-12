@@ -19,29 +19,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SrvUtil.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.h" />
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.h" />
+    <ClInclude Include="Acceptor.h" />
+    <ClInclude Include="IOCP.h" />
+    <ClInclude Include="Protocol.h" />
+    <ClInclude Include="Server.h" />
+    <ClInclude Include="ServerModel.h" />
+    <ClInclude Include="ServerObj.h" />
+    <ClInclude Include="SQLServer.h" />
+    <ClInclude Include="SrvUtil.h" />
+    <ClInclude Include="StreamPacket.h" />
+    <ClInclude Include="Synchronize.h" />
+    <ClInclude Include="Thread.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.cpp" />
+    <ClCompile Include="Acceptor.cpp" />
+    <ClCompile Include="IOCP.cpp" />
+    <ClCompile Include="Protocol.cpp" />
+    <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerModel.cpp" />
+    <ClCompile Include="ServerObj.cpp" />
+    <ClCompile Include="SQLServer.cpp" />
+    <ClCompile Include="StreamPacket.cpp" />
+    <ClCompile Include="Synchronize.cpp" />
+    <ClCompile Include="Thread.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

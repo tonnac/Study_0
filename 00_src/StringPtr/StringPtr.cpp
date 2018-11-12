@@ -3,6 +3,7 @@
 #include <memory>
 #include <Windows.h>
 #include <sstream>
+#include <tchar.h>
 
 using namespace std;
 
@@ -32,6 +33,18 @@ int main()
 	char buf[10] = { 0, };
 	char buf1[5];
 	
+	const char* ee = "한글도 되겟느냐";
+	wchar_t mmm[256] = { 0, };
+	int iLength = MultiByteToWideChar(CP_ACP, 0, ee, -1, nullptr, 0);
+	MultiByteToWideChar(CP_ACP, 0, ee, -1, mmm, iLength);
+
+	TCHAR ddd[256] = _T("qweqweqwe");
+	TCHAR eee[256] = { 0, };
+	_stprintf_s(eee, sizeof(eee), _T("dd : %s"), mmm);
+	
+	_tprintf(_T("%s"), eee);
+	
+
 //	cin >> noskipws >> buf;
 //	cout << buf;
 

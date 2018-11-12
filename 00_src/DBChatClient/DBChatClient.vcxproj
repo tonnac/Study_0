@@ -19,11 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBChatClient\DBChatClient.h" />
+    <ClInclude Include="DBChatClient.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBChatClient\DBChatClient.cpp" />
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBChatClient\Sample.cpp" />
+    <ClCompile Include="DBChatClient.cpp" />
+    <ClCompile Include="Sample.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

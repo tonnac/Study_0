@@ -12,10 +12,10 @@ public:
 	void Release();
 
 	bool SearchUser(const std::string& UserID);
-	void AddUser(const std::string& UserID, const std::string& UserPW);
-	void DelUser(const std::string& UserID);
-	void EditUser(const std::string& befUserID, const std::string& afUserID);
-	void EditPassword(const std::string& UserID, const std::string& Password);
+	bool AddUser(const std::string& UserID, const std::string& UserPW);
+	bool DelUser(const std::string& UserID);
+	bool EditUser(const std::string& befUserID, const std::string& afUserID);
+	bool EditPassword(const std::string& UserID, const std::string& Password);
 	bool LoginUser(const std::string& UserID, const std::string& UserPW);
 	void ShowDatabase();
 private:

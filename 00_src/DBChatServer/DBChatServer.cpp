@@ -1,4 +1,4 @@
-#include "ChatServer.h"
+#include "DBChatServer.h"
 
 u_short	ChatServer::PortSet()
 {
@@ -309,9 +309,14 @@ void ChatServer::AddDB()
 			Msg = "패스워드는 6자 이상 10자 이하여야 합니다.";
 			continue;
 		}
-		mSql.AddUser(std::string(IDBuf), std::string(PWBuf));
+		if (!mSql.SearchUser(IDBuf))
+		{
+			system("cls");
+			std::cout << "해당하는 ID가 이미 존재합니다." << std::endl;
+		}
+		mSql.AddUser(IDBuf, PWBuf);
 		system("cls");
-		std::cout << "데이터가 추가됐습니다" << std::endl;
+		std::cout << "데이터가 추가됐습니다." << std::endl;
 		return;
 	}
 }

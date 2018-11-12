@@ -154,6 +154,7 @@ void Select()
 	SQLBindCol(g_hStmt, 1, SQL_C_CHAR, Name, sizeof(Name), &lName);
 	SQLBindCol(g_hStmt, 2, SQL_C_CHAR, Pass, sizeof(Pass), &lPass);
 	TIMESTAMP_STRUCT tm;
+
 	SQLBindCol(g_hStmt, 3, SQL_C_TYPE_TIMESTAMP, &tm, sizeof(tm), &lTm);
 
 	printf("찾을 ID입력: ");

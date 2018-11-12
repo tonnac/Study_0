@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBChatServer\DBChatServer.h">
+    <ClInclude Include="DBChatServer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBChatServer\DBChatServer.cpp">
+    <ClCompile Include="DBChatServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

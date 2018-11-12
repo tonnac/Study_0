@@ -21,69 +21,69 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.h">
+    <ClInclude Include="ServerObj.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.h">
+    <ClInclude Include="SQLServer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SrvUtil.h">
+    <ClInclude Include="SrvUtil.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.h">
+    <ClInclude Include="StreamPacket.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.h">
+    <ClInclude Include="Synchronize.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.h">
+    <ClInclude Include="Thread.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.h">
+    <ClInclude Include="Acceptor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.h">
+    <ClInclude Include="Protocol.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.h">
+    <ClInclude Include="Server.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.h">
+    <ClInclude Include="ServerModel.h">
       <Filter>헤더 파일\ServerModel</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.h">
+    <ClInclude Include="IOCP.h">
       <Filter>헤더 파일\ServerModel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\SQLServer.cpp">
+    <ClCompile Include="ServerObj.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\StreamPacket.cpp">
+    <ClCompile Include="SQLServer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Synchronize.cpp">
+    <ClCompile Include="StreamPacket.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Thread.cpp">
+    <ClCompile Include="Synchronize.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Acceptor.cpp">
+    <ClCompile Include="Thread.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Protocol.cpp">
+    <ClCompile Include="Acceptor.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\Server.cpp">
+    <ClCompile Include="Protocol.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerObj.cpp">
+    <ClCompile Include="Server.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\ServerModel.cpp">
+    <ClCompile Include="IOCP.cpp">
       <Filter>소스 파일\ServerModel</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Desktop\00_src\DBServerLibrary\IOCP.cpp">
+    <ClCompile Include="ServerModel.cpp">
       <Filter>소스 파일\ServerModel</Filter>
     </ClCompile>
   </ItemGroup>
