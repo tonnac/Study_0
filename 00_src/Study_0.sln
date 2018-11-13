@@ -802,6 +802,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBChatServer", "DBChatServe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBServerLibrary", "DBServerLibrary\DBServerLibrary.vcxproj", "{11F03F01-FA3A-40AC-B2C4-3BA138DA2763}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "String+", "String+\String+.vcxproj", "{027DAE02-9A35-41CC-9F17-CB85D329EDD2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -3010,6 +3012,14 @@ Global
 		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763}.Release|x64.Build.0 = Release|x64
 		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763}.Release|x86.ActiveCfg = Release|Win32
 		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763}.Release|x86.Build.0 = Release|Win32
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Debug|x64.ActiveCfg = Debug|x64
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Debug|x64.Build.0 = Debug|x64
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Debug|x86.ActiveCfg = Debug|Win32
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Debug|x86.Build.0 = Debug|Win32
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Release|x64.ActiveCfg = Release|x64
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Release|x64.Build.0 = Release|x64
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Release|x86.ActiveCfg = Release|Win32
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -3388,9 +3398,10 @@ Global
 		{49618FA0-E939-4191-9AE8-0A82E6DE9F3E} = {A9057D56-7C4B-4E49-BB70-B2A065C393C3}
 		{9AED642E-9D20-44FE-9A74-7E4EDFE6DB90} = {A9057D56-7C4B-4E49-BB70-B2A065C393C3}
 		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763} = {A9057D56-7C4B-4E49-BB70-B2A065C393C3}
+		{027DAE02-9A35-41CC-9F17-CB85D329EDD2} = {60973FBE-E48F-46FB-B66F-19C64965F278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
 	EndGlobalSection
 EndGlobal

@@ -3,6 +3,7 @@
 #include <sql.h>
 #include <sqlext.h>
 #include <string>
+#include <array>
 
 class SQLServer
 {
@@ -16,12 +17,16 @@ public:
 	bool EditUser(const std::string& befUserID, const std::string& afUserID);
 	bool EditPassword(const std::string& UserID, const std::string& Password);
 	bool LoginUser(const std::string& UserID, const std::string& UserPW);
+	void Logout(const std::string& UserID);
 	void ShowDatabase();
 
 private:
-	std::string Text();
+	void CreateText(const SQLCHAR* ID, const SQLCHAR* Password,
+					const TIMESTAMP_STRUCT& Create, const TIMESTAMP_STRUCT& Login, const TIMESTAMP_STRUCT& Logout);
 
 private:
+	std::array<std::string, 5> m_Text;
+
 	SQLHENV		 m_hEnv;
 	SQLHDBC		 m_hDbc;
 	SQLHSTMT	 m_hStmt;

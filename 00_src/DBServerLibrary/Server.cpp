@@ -75,16 +75,19 @@ bool Server::Initialize()
 	}
 	return true;
 }
+
 void Server::ServerRun()
 {
 	mAcceptor.CreateThreadandRun();
 	mServerModel->Run();
 	Run();
 }
+
 void Server::Run()
 {
 	return;
 }
+
 void Server::AddInfo(User * pUser, P_UPACKET pPacket, DWORD flag)
 {
 	std::string temp;
@@ -105,6 +108,7 @@ void Server::AddInfo(User * pUser, P_UPACKET pPacket, DWORD flag)
 	UPACKET packet = (Packet(PACKET_CHAT_MSG) << temp).getPacket();
 	*pPacket = packet;
 }
+
 void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 {
 	{
@@ -112,11 +116,13 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 		WaitForSingleObject(mMutex, INFINITE);
 		mUserList.push_back(user);
 		mServerModel->AddUser(user.get());
+		char IPAddr[INET_ADDRSTRLEN];
 		ReleaseMutex(mMutex);
 		//UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
 		//SendPacket(user.get(), packet);
 	}
 }
+
 void Server::EditID(const std::string& befUserID, const std::string& aftUserID)
 {
 	{
@@ -133,6 +139,7 @@ void Server::EditID(const std::string& befUserID, const std::string& aftUserID)
 		ReleaseMutex(mMutex);
 	}
 }
+
 void Server::RemoveUser(User* user)
 {
 	{
@@ -146,6 +153,7 @@ void Server::RemoveUser(User* user)
 			UPACKET packet = (PacketUtil::Packet(PACKET_LEAVE) << buf).getPacket();
 			tpacket.mPacket = packet;
 			tpacket.mUser = user;
+			mSql.Logout(user->mUserID);
 			S_Server->AddPacket(tpacket);
 			mUserList.erase(iter);
 		}
@@ -192,7 +200,7 @@ void Server::ProcessPacket()
 					std::string packetmsg = packet.msg;
 					ID.assign(packetmsg, 0, packetmsg.find_first_of('\n'));
 
-					if (mSql.SearchUser(ID) == true)
+					if (!mSql.SearchUser(ID))
 					{
 						packet = (Packet(PACKET_ID_EXIST) << "해당하는 ID가 존재합니다. 다시 입력해주세요.\n").getPacket();
 					}
@@ -234,6 +242,7 @@ void Server::ProcessPacket()
 		ReleaseMutex(mMutex);
 	}
 }
+
 void Server::AddPacket(TPACKET& pack)
 {
 	WaitForSingleObject(mMutex, INFINITE);
@@ -251,6 +260,7 @@ void Server::AddPacket(TPACKET& pack)
 	mStreamPacket.AddPacket(pack);
 	ReleaseMutex(mMutex);
 }
+
 bool Server::CheckUser(const std::string& IPaddr)
 {
 	auto SearchIP = [IPaddr](const std::string rhs) 
@@ -269,6 +279,7 @@ bool Server::CheckUser(const std::string& IPaddr)
 	}
 	return true;
 }
+
 int Server::SendPacket(User* pUser, const UPACKET& packetMsg)
 {
 	CopyMemory(pUser->mBuf, &packetMsg, packetMsg.ph.len);
@@ -284,6 +295,7 @@ int Server::SendPacket(User* pUser, const UPACKET& packetMsg)
 	}
 	return 1;
 }
+
 u_short	Server::PortSet()
 {
 	return 1;
