@@ -231,6 +231,7 @@ User* ChatServer::SearchByIP(char * IPAddr)
 
 void ChatServer::DataBase()
 {
+	system("cls");
 	std::string Msg;
 	while (1)
 	{

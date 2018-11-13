@@ -796,6 +796,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBChatClient", "DBChatClient\DBChatClient.vcxproj", "{49618FA0-E939-4191-9AE8-0A82E6DE9F3E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBChatServer", "DBChatServer\DBChatServer.vcxproj", "{9AED642E-9D20-44FE-9A74-7E4EDFE6DB90}"
+	ProjectSection(ProjectDependencies) = postProject
+		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763} = {11F03F01-FA3A-40AC-B2C4-3BA138DA2763}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DBServerLibrary", "DBServerLibrary\DBServerLibrary.vcxproj", "{11F03F01-FA3A-40AC-B2C4-3BA138DA2763}"
 EndProject
@@ -3387,7 +3390,7 @@ Global
 		{11F03F01-FA3A-40AC-B2C4-3BA138DA2763} = {A9057D56-7C4B-4E49-BB70-B2A065C393C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
 		SolutionGuid = {80F563A3-B508-4F73-B434-077884E04915}
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal

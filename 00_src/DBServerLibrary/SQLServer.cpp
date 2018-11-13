@@ -47,6 +47,8 @@ bool SQLServer::AddUser(const std::string& UserID, const std::string& UserPW)
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLCloseCursor(m_hStmt);
+
+	return true;
 }
 
 bool SQLServer::DelUser(const std::string& UserID)
@@ -62,6 +64,8 @@ bool SQLServer::DelUser(const std::string& UserID)
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLCloseCursor(m_hStmt);
+
+	return true;
 }
 
 bool SQLServer::EditUser(const std::string& befUserID, const std::string& afUserID)
@@ -79,6 +83,8 @@ bool SQLServer::EditUser(const std::string& befUserID, const std::string& afUser
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLCloseCursor(m_hStmt);
+
+	return true;
 }
 
 bool SQLServer::EditPassword(const std::string& UserID, const std::string& Password)
@@ -96,6 +102,8 @@ bool SQLServer::EditPassword(const std::string& UserID, const std::string& Passw
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLCloseCursor(m_hStmt);
+
+	return true;
 }
 
 bool SQLServer::LoginUser(const std::string& UserID, const std::string& UserPW)
@@ -105,30 +113,34 @@ bool SQLServer::LoginUser(const std::string& UserID, const std::string& UserPW)
 
 void SQLServer::ShowDatabase()
 {
-	SQLTCHAR ID[20] = { 0, };
-	SQLTCHAR Password[20] = { 0, };
-	SQLTCHAR Login[20] = { 0, };
-	SQLTCHAR Logout[20] = { 0, };
-	SQLTCHAR IP[20] = { 0, };
+	SQLCHAR ID[20] = { 0, };
+	SQLCHAR Password[20] = { 0, };
+	SQLCHAR IP[20] = { 0, };
 
-	SQLLEN lID, lPassword, lLogin, lLogout, lIP;
+	TIMESTAMP_STRUCT CreateTime;
+	TIMESTAMP_STRUCT Login;
+	TIMESTAMP_STRUCT Logout;
+
+	SQLLEN lID, lPassword, lLogin, lLogout, lIP, lCr;
 	SQLBindCol(m_hStmt, 1, SQL_C_CHAR, ID, sizeof(ID), &lID);
 	SQLBindCol(m_hStmt, 2, SQL_C_CHAR, Password, sizeof(Password), &lPassword);
-	SQLBindCol(m_hStmt, 3, SQL_C_CHAR, Login, sizeof(Login), &lLogin);
-	SQLBindCol(m_hStmt, 4, SQL_C_CHAR, Logout, sizeof(Logout), &lLogout);
-	SQLBindCol(m_hStmt, 4, SQL_C_CHAR, IP, sizeof(IP), &lIP);
+	SQLBindCol(m_hStmt, 3, SQL_C_CHAR, IP, sizeof(IP), &lIP);
+	SQLBindCol(m_hStmt, 4, SQL_C_TYPE_TIMESTAMP, &CreateTime, sizeof(CreateTime), &lCr);
+	SQLBindCol(m_hStmt, 5, SQL_C_TYPE_TIMESTAMP, &Login, sizeof(Login), &lLogin);
+	SQLBindCol(m_hStmt, 6, SQL_C_TYPE_TIMESTAMP, &Logout, sizeof(Logout), &lLogout);
 
-	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("{CALL usp_Select(?)}"), SQL_NTS);
+	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("SELECT * FROM dbo.USERLIST"), SQL_NTS);
 
 	system("cls");
-	_tprintf(_T("====================================================="));
-	_tprintf(_T("ID\tPassword\tLogin Date\tLogout Date\t Created IP"));
+	_tprintf(_T("================================================================\n"));
+	_tprintf(_T("ID\tPassword\tCreated IP\tCreate Time\tLogin Date\tLogout Date\n"));
 	while (SQLFetch(m_hStmt) != SQL_NO_DATA)
 	{
-		TCHAR buf[256] = { 0, };
-		_stprintf_s(buf, sizeof(buf), _T("%s\t%s\t%s\t%s\t%s"), ID, Password, Login, Logout, IP);
+
+//		sprintf_s(buf, sizeof(buf), "%s%s%s%d½Ã%dºÐ", ID, Password, IP, CreateTime.hour, CreateTime.minute);
+//		printf(buf);
 	}
-	_tprintf(_T("====================================================="));
+	_tprintf(_T("================================================================"));
 	SQLCloseCursor(m_hStmt);
 }
 

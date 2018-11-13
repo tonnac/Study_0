@@ -7,6 +7,7 @@
 class SQLServer
 {
 public:
+
 	bool Initialize();
 	void Release();
 
@@ -17,10 +18,6 @@ public:
 	bool EditPassword(const std::string& UserID, const std::string& Password);
 	bool LoginUser(const std::string& UserID, const std::string& UserPW);
 	void ShowDatabase();
-
-private:
-	std::string Text();
-
 private:
 	SQLHENV		 m_hEnv;
 	SQLHDBC		 m_hDbc;

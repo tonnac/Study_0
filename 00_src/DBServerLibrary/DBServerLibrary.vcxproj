@@ -144,6 +144,10 @@ copy "$(TargetDir)/$(TargetName)$(TargetExt)" "$(SolutionDir)../lib/Svr/"</Comma
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>copy "*.h" "$(SolutionDir)../include/Svr/x86/"
+copy "$(TargetDir)/$(TargetName)$(TargetExt)" "$(SolutionDir)../lib/Svr/x86/"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
