@@ -272,6 +272,7 @@ void ChatServer::DataBase()
 			}break;
 			case 0:
 			{
+				system("cls");
 				return;
 			}break;
 			default:
@@ -327,12 +328,12 @@ void ChatServer::EditDB()
 	while (1)
 	{
 		system("cls");
+		mSql.ShowDatabase();
 		if (!Msg.empty())
 		{
 			std::cout << Msg << std::endl;
 			Msg.clear();
 		}
-		mSql.ShowDatabase();
 		char IDBuf[256] = { 0, };
 		char PWBuf[256] = { 0, };
 		std::cout << "검색 ID 입력(6~10자): ";
@@ -342,7 +343,7 @@ void ChatServer::EditDB()
 			Msg = "ID는 6자 이상 10자 이하여야 합니다.";
 			continue;
 		}
-		if (!mSql.SearchUser(std::string(IDBuf)))
+		if (mSql.SearchUser(std::string(IDBuf)))
 		{
 			Msg = "해당하는 ID가 존재하지 않습니다.";
 			continue;
@@ -361,6 +362,7 @@ void ChatServer::DeleteDB()
 	{
 		char IDBuf[256] = { 0, };
 		system("cls");
+		mSql.ShowDatabase();
 		if (!Msg.empty())
 		{
 			std::cout << Msg << std::endl;
@@ -371,6 +373,11 @@ void ChatServer::DeleteDB()
 		if (strlen(IDBuf) < 6 || strlen(IDBuf) > 10)
 		{
 			Msg = "ID는 6자 이상 10자 이하여야 합니다.";
+			continue;
+		}
+		if (mSql.SearchUser(std::string(IDBuf)))
+		{
+			Msg = "해당하는 ID가 존재하지 않습니다.";
 			continue;
 		}
 		mSql.DelUser(std::string(IDBuf));
@@ -417,6 +424,11 @@ bool ChatServer::EditUser(const std::string ID)
 					if (strlen(aftID) < 6 || strlen(aftID) > 10)
 					{
 						Msg = "ID는 6자 이상 10자 이하여야 합니다.";
+						continue;
+					}
+					if (!mSql.SearchUser(std::string(aftID)))
+					{
+						Msg = "해당하는 ID가 이미 존재합니다.";
 						continue;
 					}
 					mSql.EditUser(ID, std::string(aftID));

@@ -116,7 +116,7 @@ void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 		WaitForSingleObject(mMutex, INFINITE);
 		mUserList.push_back(user);
 		mServerModel->AddUser(user.get());
-		char IPAddr[INET_ADDRSTRLEN];
+//		char IPAddr[INET_ADDRSTRLEN];
 		ReleaseMutex(mMutex);
 		//UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
 		//SendPacket(user.get(), packet);

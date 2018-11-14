@@ -39,27 +39,31 @@ bool SQLServer::SearchUser(const std::string& UserID)
 
 	MultiByteToWideChar(CP_ACP, 0, UserID.c_str(), -1, ID, sizeof(ID));
 
+	char buf[256] = { 0, };
+	memcpy(buf, UserID.c_str(), UserID.length());
+
 	SQLLEN lBytes;
 	SWORD sReturn;
 	SQLLEN cbRetParam = SQL_NTS;
 	lBytes = (SDWORD)12000;
 	SQLBindParameter(m_hStmt, 1, SQL_PARAM_OUTPUT, SQL_C_SSHORT, SQL_INTEGER, 0, 0, &sReturn, 0, &cbRetParam);
-	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, ID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, ID, 0, nullptr);
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{?=CALL usp_Search(?)}"));
+	_stprintf_s(szSQL, _T("{?=CALL usp_Search(?)}"));
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLRETURN sRet;
 	while ((sRet = SQLMoreResults(m_hStmt)) != SQL_NO_DATA_FOUND);
 
-	if (sRet == 0)
+	if (sReturn != 0)
 	{
 		SQLCloseCursor(m_hStmt);
 		return false;
 	}
 
 	SQLCloseCursor(m_hStmt);
+	SQLFreeStmt(m_hStmt, SQL_UNBIND);
 	return true;
 }
 
@@ -74,10 +78,10 @@ bool SQLServer::AddUser(const std::string& UserID, const std::string& UserPW)
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
-	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, ID, 0, nullptr);
-	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, Password, 0, nullptr);
+	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, ID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, Password, 0, nullptr);
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{CALL usp_Add(?,?)}"));
+	_stprintf_s(szSQL, _T("{CALL usp_Add(?,?)}"));
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -94,11 +98,11 @@ bool SQLServer::DelUser(const std::string& UserID)
 
 	SQLTCHAR szSQL[256] = { 0, };
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{CALL usp_Del(?)}"));
+	_stprintf_s(szSQL, _T("{CALL usp_Delete(?)}"));
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
-	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, ID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, ID, 0, nullptr);
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -119,10 +123,10 @@ bool SQLServer::EditUser(const std::string& befUserID, const std::string& afUser
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
-	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, wbefID, 0, nullptr);
-	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, waftID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, wbefID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, waftID, 0, nullptr);
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{CALL usp_EditID(?,?)}"));
+	_stprintf_s(szSQL, _T("{CALL usp_EditID(?,?)}"));
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -216,26 +220,26 @@ void SQLServer::ShowDatabase()
 {
 	SQLCHAR ID[20] = { 0, };
 	SQLCHAR Password[20] = { 0, };
-	SQLCHAR IP[20] = { 0, };
 
 	TIMESTAMP_STRUCT CreateTime;
 	TIMESTAMP_STRUCT Login;
 	TIMESTAMP_STRUCT Logout;
 
-	SQLLEN lID, lPassword, lLogin, lLogout, lIP, lCr;
+	SQLLEN lID, lPassword, lLogin, lLogout, lCr;
 	SQLBindCol(m_hStmt, 1, SQL_C_CHAR, ID, sizeof(ID), &lID);
 	SQLBindCol(m_hStmt, 2, SQL_C_CHAR, Password, sizeof(Password), &lPassword);
 	SQLBindCol(m_hStmt, 3, SQL_C_TYPE_TIMESTAMP, &CreateTime, sizeof(CreateTime), &lCr);
 	SQLBindCol(m_hStmt, 4, SQL_C_TYPE_TIMESTAMP, &Login, sizeof(Login), &lLogin);
 	SQLBindCol(m_hStmt, 5, SQL_C_TYPE_TIMESTAMP, &Logout, sizeof(Logout), &lLogout);
 
-	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("SELECT * FROM dbo.USERLIST"), SQL_NTS);
+//	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("SELECT * FROM dbo.USERLIST"), SQL_NTS);
+	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("{CALL usp_Select}"), SQL_NTS);
 
 	system("cls");
 	cout << cout.fill('=') << cout.width(121) << '\r';
 	cout.fill(' ');
 	cout << setw(20) << "ID" << setw(20) << "Password"
-		<< setw(20) << "Create Time" << setw(20) << "Login Date" << setw(20) << "Logout Date";
+		<< setw(20) << "Create Time" << setw(20) << "Login Date" << setw(20) << "Logout Date" << endl;
 	while (SQLFetch(m_hStmt) != SQL_NO_DATA)
 	{
 		CreateText(ID, Password, CreateTime, Login, Logout);
@@ -243,7 +247,7 @@ void SQLServer::ShowDatabase()
 				setw(20) << m_Text[1] << setw(20) << m_Text[2] <<
 				setw(20) << m_Text[3] << setw(20) << m_Text[4] << endl;
 	}
-	cout.fill('=');cout.width(121);	cout << '\r';
+	cout.fill('=');cout.width(121);	cout << '\n';
 	SQLCloseCursor(m_hStmt);
 }
 
@@ -257,8 +261,14 @@ void SQLServer::CreateText(const SQLCHAR* ID, const SQLCHAR* Password,
 	m_Text[1].assign(_Password, 0, _Password.find_first_of(' '));
 
 	m_Text[2] = to_string(Create.hour) + "시 " + to_string(Create.minute) + "분 ";
-	m_Text[3] = to_string(Login.hour) + "시 " + to_string(Login.minute) + "분 ";
-	m_Text[4] = to_string(Logout.hour) + "시 " + to_string(Logout.minute) + "분 ";
+	if (Login.year < 0)
+		m_Text[3] = "-----";
+	else
+		m_Text[3] = to_string(Login.hour) + "시 " + to_string(Login.minute) + "분 ";
+	if (Logout.year < 0)
+		m_Text[4] = "-----";
+	else
+		m_Text[4] = to_string(Logout.hour) + "시 " + to_string(Logout.minute) + "분 ";
 }
 
 void SQLServer::Release()
