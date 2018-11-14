@@ -112,14 +112,14 @@ void Server::AddInfo(User * pUser, P_UPACKET pPacket, DWORD flag)
 void Server::AddUser(const SOCKET& clntSock, const SOCKADDR_IN clntAdr)
 {
 	{
+		DWORD flags = 0;
+		DWORD cbTransferred;
 		UserPtr user = std::make_shared<User>(clntSock, clntAdr);
 		WaitForSingleObject(mMutex, INFINITE);
 		mUserList.push_back(user);
 		mServerModel->AddUser(user.get());
-//		char IPAddr[INET_ADDRSTRLEN];
+		WSARecv(user->mUserSock, &user->mWsaBuf, 1, &cbTransferred, &flags, &user->mOverlappedex.mOverlapped, nullptr);
 		ReleaseMutex(mMutex);
-		//UPACKET packet = (Packet(PACKET_CHAT_NAME_REQ) << "ID를 입력하세요.(6자 이상 20자 이하)\n").getPacket();
-		//SendPacket(user.get(), packet);
 	}
 }
 
@@ -130,7 +130,7 @@ void Server::EditID(const std::string& befUserID, const std::string& aftUserID)
 		UserIter iter = mUserList.begin();
 		for (;iter != mUserList.end(); ++iter)
 		{
-			User * pUser = (User*)&iter;
+			User * pUser = iter->get();
 			if (pUser->mUserID == befUserID)
 			{
 				pUser->mUserID = aftUserID;
@@ -196,16 +196,16 @@ void Server::ProcessPacket()
 					UPACKET packet;
 					User * pUser = tPacket->mUser;
 
-					std::string ID;
-					std::string packetmsg = packet.msg;
-					ID.assign(packetmsg, 0, packetmsg.find_first_of('\n'));
-
+					std::string packetmsg = tPacket->mPacket.msg;
+					std::string ID(packetmsg, 0, packetmsg.find_first_of('\n'));
+					std::string PW(packetmsg, packetmsg.find_first_of('\n') + 1, packetmsg.length());
 					if (!mSql.SearchUser(ID))
 					{
 						packet = (Packet(PACKET_ID_EXIST) << "해당하는 ID가 존재합니다. 다시 입력해주세요.\n").getPacket();
 					}
 					else
 					{
+						mSql.AddUser(ID, PW);
 						packet = (Packet(PACKET_CHAT_MSG) << "ID 생성이 완료됐습니다.").getPacket();
 					}
 					SendPacket(pUser, packet);
@@ -218,10 +218,9 @@ void Server::ProcessPacket()
 
 					std::string ID;
 					std::string Password;
-					std::string packetmsg = packet.msg;
+					std::string packetmsg = tPacket->mPacket.msg;
 					ID.assign(packetmsg, 0, packetmsg.find_first_of('\n'));
 					Password.assign(packetmsg, packetmsg.find_first_of('\n') + 1, packetmsg.length());
-
 					if (!mSql.LoginUser(ID, Password))
 					{
 						packet = (Packet(PACKET_ID_EXIST) << "ID 또는 비밀번호가 틀렸습니다.").getPacket();
@@ -229,7 +228,7 @@ void Server::ProcessPacket()
 					else
 					{
 						char buf[256] = { 0, };
-						sprintf_s(buf, sizeof(buf), "환영합니다 %s님\n", pPacket->msg);
+						sprintf_s(buf, sizeof(buf), "환영합니다 %s님\n", ID.c_str());
 						packet = (Packet(PACKET_CHAT_MSG) << buf).getPacket();
 						pUser->mUserID.append(ID);
 						pUser->misActive = true;

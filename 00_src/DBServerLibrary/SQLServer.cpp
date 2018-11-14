@@ -39,9 +39,6 @@ bool SQLServer::SearchUser(const std::string& UserID)
 
 	MultiByteToWideChar(CP_ACP, 0, UserID.c_str(), -1, ID, sizeof(ID));
 
-	char buf[256] = { 0, };
-	memcpy(buf, UserID.c_str(), UserID.length());
-
 	SQLLEN lBytes;
 	SWORD sReturn;
 	SQLLEN cbRetParam = SQL_NTS;
@@ -147,10 +144,10 @@ bool SQLServer::EditPassword(const std::string& UserID, const std::string& Passw
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
-	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, wID, 0, nullptr);
-	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, wPassword, 0, nullptr);
+	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, wID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, wPassword, 0, nullptr);
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{CALL usp_Editpass(?,?)}"));
+	_stprintf_s(szSQL, _T("{CALL usp_Editpass(?,?)}"));
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -173,10 +170,10 @@ bool SQLServer::LoginUser(const std::string& UserID, const std::string& UserPW)
 	SWORD sReturn;
 	SQLLEN cbRetParam = SQL_NTS;
 	SQLBindParameter(m_hStmt, 1, SQL_PARAM_OUTPUT, SQL_C_SSHORT, SQL_INTEGER, 0, 0, &sReturn, 0, &cbRetParam);
-	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, ID, 0, nullptr);
-	SQLBindParameter(m_hStmt, 3, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, Password, 0, nullptr);
+	SQLBindParameter(m_hStmt, 2, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, ID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 3, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, Password, 0, nullptr);
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{?=CALL usp_Login(?,?)}"));
+	_stprintf_s(szSQL, _T("{?=CALL usp_Login(?,?)}"));
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -188,10 +185,6 @@ bool SQLServer::LoginUser(const std::string& UserID, const std::string& UserPW)
 		SQLCloseCursor(m_hStmt);
 		return false;
 	}
-
-	_stprintf_s(szSQL, sizeof(szSQL), _T("Update USERLIST set LOGIN=getdata() where name='%s'"), ID);
-
-	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
 	SQLCloseCursor(m_hStmt);
 	return true;
@@ -205,7 +198,7 @@ void SQLServer::Logout(const std::string& UserID)
 
 	SQLTCHAR szSQL[256] = { 0, };
 
-	_stprintf_s(szSQL, sizeof(szSQL), _T("{CALL usp_Logout(?)}"));
+	_stprintf_s(szSQL, _T("{CALL usp_Logout(?)}"));
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
@@ -232,7 +225,6 @@ void SQLServer::ShowDatabase()
 	SQLBindCol(m_hStmt, 4, SQL_C_TYPE_TIMESTAMP, &Login, sizeof(Login), &lLogin);
 	SQLBindCol(m_hStmt, 5, SQL_C_TYPE_TIMESTAMP, &Logout, sizeof(Logout), &lLogout);
 
-//	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("SELECT * FROM dbo.USERLIST"), SQL_NTS);
 	SQLExecDirect(m_hStmt, (SQLTCHAR*)_T("{CALL usp_Select}"), SQL_NTS);
 
 	system("cls");

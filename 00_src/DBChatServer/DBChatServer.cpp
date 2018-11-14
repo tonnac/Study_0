@@ -314,7 +314,8 @@ void ChatServer::AddDB()
 		if (!mSql.SearchUser(IDBuf))
 		{
 			system("cls");
-			std::cout << "해당하는 ID가 이미 존재합니다." << std::endl;
+			Msg = "해당하는 ID가 이미 존재합니다.";
+			continue;
 		}
 		mSql.AddUser(IDBuf, PWBuf);
 		system("cls");
@@ -429,7 +430,7 @@ bool ChatServer::EditUser(const std::string ID)
 					if (!mSql.SearchUser(std::string(aftID)))
 					{
 						Msg = "해당하는 ID가 이미 존재합니다.";
-						continue;
+						break;
 					}
 					mSql.EditUser(ID, std::string(aftID));
 					EditID(ID, std::string(aftID));

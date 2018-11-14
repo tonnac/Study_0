@@ -246,8 +246,8 @@ bool ChatClient::Lobby()
 			Msg.clear();
 		}
 		std::cout << "[채팅서버 프로그램]" << std::endl;
-		std::cout << "1.ID 생성" << std::endl;
-		std::cout << "2.로그인" << std::endl;
+		std::cout << "1.로그인" << std::endl;
+		std::cout << "2.ID 생성" << std::endl;
 		std::cout << "0.종료" << std::endl;
 		std::cout << "입력: ";
 		std::cin.getline(buf, sizeof(buf));
@@ -390,6 +390,13 @@ void ChatClient::CreateID()
 			Msg = "ID는 6자 이상 10자 이하여야 합니다.";
 			continue;
 		}
+
+		if ((int)std::string(IDBuf).find_first_of(' ') > 0)
+		{
+			Msg = "ID 또는 패스워드에 공백문자를 사용할 수 없습니다.";
+			continue;
+		}
+
 		std::cout << "패스워드 입력(6~10자): ";
 		std::cin.getline(PWBuf, sizeof(PWBuf));
 		if (strlen(PWBuf) < 6 || strlen(PWBuf) > 10)
@@ -397,9 +404,13 @@ void ChatClient::CreateID()
 			Msg = "패스워드는 6자 이상 10자 이하여야 합니다.";
 			continue;
 		}
+		if ((int)std::string(PWBuf).find_first_of(' ') > 0)
+		{
+			Msg = "ID 또는 패스워드에 공백문자를 사용할 수 없습니다.";
+			continue;
+		}
 		std::string IDPWBuffer;
-		IDPWBuffer = IDBuf + '\n';
-		IDPWBuffer += PWBuf;
+		IDPWBuffer = std::string(IDBuf) + '\n' + std::string(PWBuf);
 		UPACKET sendpacket = (Packet(PACKET_ID_CREATE) << IDPWBuffer).getPacket();
 		SendPacket(mhSock, sendpacket);
 		UPACKET recvPacket;
@@ -411,6 +422,7 @@ void ChatClient::CreateID()
 		}
 		else
 		{		
+			system("cls");
 			break;
 		}
 	}
@@ -418,9 +430,9 @@ void ChatClient::CreateID()
 
 bool ChatClient::Login()
 {
+	std::string Msg;
 	while (1)
 	{
-		std::string Msg;
 		char IDBuf[256] = { 0, };
 		char PWBuf[256] = { 0, };
 		system("cls");
@@ -445,8 +457,7 @@ bool ChatClient::Login()
 		}
 
 		std::string IDPWBuffer;
-		IDPWBuffer = IDBuf + '\n';
-		IDPWBuffer += PWBuf;
+		IDPWBuffer = std::string(IDBuf) + '\n' + std::string(PWBuf);
 		UPACKET sendpacket = (Packet(PACKET_ID_LOGIN) << IDPWBuffer).getPacket();
 		SendPacket(mhSock, sendpacket);
 		UPACKET recvPacket;
@@ -458,6 +469,8 @@ bool ChatClient::Login()
 		}
 		else
 		{
+			system("cls");
+			std::cout << recvPacket.msg << std::endl;
 			return true;
 		}
 	}
