@@ -202,7 +202,7 @@ void SQLServer::Logout(const std::string& UserID)
 
 	SQLLEN lBytes;
 	lBytes = (SDWORD)12000;
-	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_VARCHAR, lBytes, 0, ID, 0, nullptr);
+	SQLBindParameter(m_hStmt, 1, SQL_PARAM_INPUT, SQL_UNICODE_CHAR, SQL_LONGVARCHAR, lBytes, 0, ID, 0, nullptr);
 
 	SQLExecDirect(m_hStmt, szSQL, SQL_NTS);
 
@@ -234,7 +234,7 @@ void SQLServer::ShowDatabase()
 		<< setw(20) << "Create Time" << setw(20) << "Login Date" << setw(20) << "Logout Date" << endl;
 	while (SQLFetch(m_hStmt) != SQL_NO_DATA)
 	{
-		CreateText(ID, Password, CreateTime, Login, Logout);
+		CreateText(ID, Password, CreateTime, Login, Logout, lLogin, lLogout);
 		cout << setiosflags(ios::right) << setw(20) << m_Text[0] <<
 				setw(20) << m_Text[1] << setw(20) << m_Text[2] <<
 				setw(20) << m_Text[3] << setw(20) << m_Text[4] << endl;
@@ -244,7 +244,8 @@ void SQLServer::ShowDatabase()
 }
 
 void SQLServer::CreateText(const SQLCHAR* ID, const SQLCHAR* Password,
-	const TIMESTAMP_STRUCT& Create, const TIMESTAMP_STRUCT& Login, const TIMESTAMP_STRUCT& Logout)
+	const TIMESTAMP_STRUCT& Create, const TIMESTAMP_STRUCT& Login, const TIMESTAMP_STRUCT& Logout,
+	SQLLEN lLogin, SQLLEN lLogout)
 {
 	string _ID = (char*)ID;
 	string _Password = (char*)Password;
@@ -253,11 +254,11 @@ void SQLServer::CreateText(const SQLCHAR* ID, const SQLCHAR* Password,
 	m_Text[1].assign(_Password, 0, _Password.find_first_of(' '));
 
 	m_Text[2] = to_string(Create.hour) + "시 " + to_string(Create.minute) + "분 ";
-	if (Login.year < 0)
+	if (lLogin < 0)
 		m_Text[3] = "-----";
 	else
 		m_Text[3] = to_string(Login.hour) + "시 " + to_string(Login.minute) + "분 ";
-	if (Logout.year < 0)
+	if (lLogout < 0)
 		m_Text[4] = "-----";
 	else
 		m_Text[4] = to_string(Logout.hour) + "시 " + to_string(Logout.minute) + "분 ";

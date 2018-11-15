@@ -22,7 +22,8 @@ public:
 
 private:
 	void CreateText(const SQLCHAR* ID, const SQLCHAR* Password,
-					const TIMESTAMP_STRUCT& Create, const TIMESTAMP_STRUCT& Login, const TIMESTAMP_STRUCT& Logout);
+					const TIMESTAMP_STRUCT& Create, const TIMESTAMP_STRUCT& Login, const TIMESTAMP_STRUCT& Logout,
+					SQLLEN lLogin, SQLLEN lLogout);
 
 private:
 	std::array<std::string, 5> m_Text;
