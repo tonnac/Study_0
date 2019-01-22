@@ -45,6 +45,13 @@ int main()
 {
 	string pe(__FUNCTION__);
 	Func(FuncName("jkqwewq",4));
+
+	Vertex d;
+
+	vector<int> a;
+	a.push_back(3);
+	vector<int>::iterator citer = a.begin();
+	std::iterator_traits<vector<int>::iterator>::value_type e(*citer);
 //	vector<int*> p;
 //	int * ptr = new int[6];
 //	*ptr = 45;

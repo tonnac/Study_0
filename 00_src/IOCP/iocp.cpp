@@ -48,7 +48,7 @@ void Iocp::Init()
 	::ResetEvent(m_hEventKillThread);
 
 	m_hFileRead = CreateFile(
-	L"Momodora.zip", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
+	L"hhhg.zip", GENERIC_READ, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
 	m_hFileWrite = CreateFile(
 	L"copy.zip", GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, 0);
 

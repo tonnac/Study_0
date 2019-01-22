@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 using namespace std;
-template <class T>
+template <typename T>
 class Arrayee
 {
 private:
